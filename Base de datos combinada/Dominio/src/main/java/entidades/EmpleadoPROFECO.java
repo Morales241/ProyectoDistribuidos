@@ -1,14 +1,15 @@
 package entidades;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "EmpleadosPROFECO")
 public class EmpleadoPROFECO {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -18,14 +19,41 @@ public class EmpleadoPROFECO {
     private String correo;
 
     @Column(nullable = false)
-    private String contraseña;
+    private String contrasena;
 
-    public EmpleadoPROFECO() {}
+    @OneToMany(mappedBy = "Revisor")
+    private List<Reporte> reportes;
 
-    public EmpleadoPROFECO(String nombre, String correo, String contraseña) {
+    @OneToMany(mappedBy = "empleado")
+    private List<Multa> multas;
+
+    public EmpleadoPROFECO() {
+        this.reportes = new ArrayList<>();
+        this.multas = new ArrayList<>();
+    }
+
+    public EmpleadoPROFECO(String nombre, String correo, String contrasena) {
         this.nombre = nombre;
         this.correo = correo;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
+        this.reportes = new ArrayList<>();
+        this.multas = new ArrayList<>();
+    }
+
+    public List<Reporte> getReportes() {
+        return reportes;
+    }
+
+    public void setReportes(List<Reporte> reportes) {
+        this.reportes = reportes;
+    }
+
+    public List<Multa> getMultas() {
+        return multas;
+    }
+
+    public void setMultas(List<Multa> multas) {
+        this.multas = multas;
     }
 
     public String getNombre() {
@@ -44,12 +72,12 @@ public class EmpleadoPROFECO {
         this.correo = correo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public void setId(Long id) {

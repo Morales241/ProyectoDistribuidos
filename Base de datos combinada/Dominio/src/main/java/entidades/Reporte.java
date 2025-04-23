@@ -6,25 +6,27 @@ import jakarta.persistence.*;
 @Table(name = "Reportes")
 public class Reporte {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Comercio comercio;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Consumidor consumidor;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Producto producto;
 
     @ManyToOne
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private EmpleadoPROFECO Revisor;
 
-    public Reporte() {}
+    public Reporte() {
+    }
 
     public Reporte(Comercio comercio, Consumidor consumidor, Producto producto) {
         this.comercio = comercio;
