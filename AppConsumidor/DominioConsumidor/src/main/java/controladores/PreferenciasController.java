@@ -1,40 +1,40 @@
 package controladores;
 
 import entidades.Preferencias;
+import excepciones.ConsumidorServiciosException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import repositorios.PreferenciasRepository;
+import servicios.PreferenciasService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/preferencias")
-@RequiredArgsConstructor
 public class PreferenciasController {
 
-    private final PreferenciasRepository preferenciasRepository;
+    private PreferenciasService servicio;
 
     @PostMapping
     public ResponseEntity<Preferencias> agregarPreferencia(@RequestBody Preferencias preferencia) {
-        if (preferenciasRepository.existsByConsumidorIdAndIdComercio(
-                preferencia.getConsumidor().getId(),
-                preferencia.getIdComercio())) {
+        try {
+            Preferencias preferencias = servicio.agregarPreferencia(preferencia);
+            return ResponseEntity.ok(preferencias);
+        } catch (ConsumidorServiciosException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-
-        return ResponseEntity.ok(preferenciasRepository.save(preferencia));
     }
 
     @GetMapping("/consumidor/{idConsumidor}")
     public ResponseEntity<List<Preferencias>> obtenerPreferencias(@PathVariable Long idConsumidor) {
-        return ResponseEntity.ok(preferenciasRepository.findByConsumidorId(idConsumidor));
+        return ResponseEntity.ok(servicio.obtenerPreferencias(idConsumidor));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarPreferencia(@PathVariable Long id) {
-        preferenciasRepository.deleteById(id);
+        servicio.eliminarPreferencia(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -2,30 +2,28 @@ package controladores;
 
 import entidades.Carrito;
 import entidades.ProductoCarrito;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import repositorios.CarritoRepository;
-import repositorios.ProductoCarritoRepository;
+import servicios.CarritoService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/carritos")
-@RequiredArgsConstructor
 public class CarritoController {
 
-    private final CarritoRepository carritoRepository;
-    private final ProductoCarritoRepository productoCarritoRepository;
+    @Autowired
+    private CarritoService servicio;
 
     @PostMapping
     public ResponseEntity<Carrito> crearCarrito(@RequestBody Carrito carrito) {
-        return ResponseEntity.ok(carritoRepository.save(carrito));
+        return ResponseEntity.ok(servicio.crearCarrito(carrito));
     }
 
     @GetMapping("/consumidor/{idConsumidor}")
     public ResponseEntity<List<Carrito>> obtenerCarritosPorConsumidor(@PathVariable Long idConsumidor) {
-        return ResponseEntity.ok(carritoRepository.findByConsumidorId(idConsumidor));
+        return ResponseEntity.ok(servicio.obtenerCarritosPorConsumidor(idConsumidor));
     }
 
     @PostMapping("/{idCarrito}/productos")
@@ -33,12 +31,11 @@ public class CarritoController {
             @PathVariable Long idCarrito,
             @RequestBody ProductoCarrito productoCarrito) {
 
-        productoCarrito.setIdCarrito(idCarrito);
-        return ResponseEntity.ok(productoCarritoRepository.save(productoCarrito));
+        return ResponseEntity.ok(servicio.agregarProducto(idCarrito, productoCarrito));
     }
 
     @GetMapping("/{idCarrito}/productos")
     public ResponseEntity<List<ProductoCarrito>> obtenerProductos(@PathVariable Long idCarrito) {
-        return ResponseEntity.ok(productoCarritoRepository.findByCarritoId(idCarrito));
+        return ResponseEntity.ok(servicio.obtenerProductos(idCarrito));
     }
 }
