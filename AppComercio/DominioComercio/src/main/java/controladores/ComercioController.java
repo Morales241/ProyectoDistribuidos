@@ -13,13 +13,14 @@ public class ComercioController {
     @Autowired
     private ComercioService comercioService;
 
-    @PostMapping
+    @PostMapping("/guardar")
     public ResponseEntity<Comercio> crearComercio(@RequestBody Comercio comercio) {
         return ResponseEntity.ok(comercioService.crearComercio(comercio));
     }
 
-    @PostMapping
-    public void eliminarComercio(@RequestBody Comercio comercio) {
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<Void> eliminarComercio(@RequestBody Comercio comercio) {
         comercioService.eliminarComercio(comercio.getId());
+        return ResponseEntity.ok().build();
     }
 }

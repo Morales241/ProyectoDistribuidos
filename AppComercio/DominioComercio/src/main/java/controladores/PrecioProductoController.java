@@ -18,30 +18,32 @@ public class PrecioProductoController {
     @Autowired
     private PrecioProductoService precioProductoService;
 
-    @GetMapping
-    public ResponseEntity<List<PrecioProducto>> findByComercioId(@RequestBody Comercio comercio) {
-        return ResponseEntity.ok(precioProductoService.findByComercioId(comercio.getId()));
+    @GetMapping("/buscarPorComercioId/{comercioid}")
+    public ResponseEntity<List<PrecioProducto>> findByComercioId(@PathVariable Long comercioid) {
+        return ResponseEntity.ok(precioProductoService.findByComercioId(comercioid));
     }
 
-    @GetMapping
-    public ResponseEntity<List<PrecioProducto>> findByProductoId(@RequestBody Producto producto) {
-        return ResponseEntity.ok(precioProductoService.findByProductoId(producto.getId()));
+    @GetMapping("/buscarPorProductoId/{productoid}")
+    public ResponseEntity<List<PrecioProducto>> findByProductoId(@PathVariable  Long productoid) {
+        return ResponseEntity.ok(precioProductoService.findByProductoId(productoid));
     }
 
-    @GetMapping
-    public ResponseEntity<Optional<PrecioProducto>> findEspecificPrecioProducto(@PathVariable Producto producto, @PathVariable Comercio comercio) {
-
-        return ResponseEntity.ok(precioProductoService.findEspecificPrecioProducto(producto.getId(), comercio.getId()));
+    @GetMapping("/buscarEspecificamente/{productoid}/{comercioid}")
+    public ResponseEntity<PrecioProducto> findEspecificPrecioProducto(@PathVariable Long productoid, @PathVariable Long comercioid) {
+        return precioProductoService.findEspecificPrecioProducto(productoid, comercioid)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public void addPrecioProducto(@RequestBody PrecioProducto precioProducto) {
-        precioProductoService.crearPrecioProducto(precioProducto);
+    @PostMapping("/guardar")
+    public ResponseEntity<PrecioProducto> addPrecioProducto(@RequestBody PrecioProducto precioProducto) {
+        return ResponseEntity.ok(precioProductoService.crearPrecioProducto(precioProducto));
     }
 
-    @PostMapping
-    public void removePrecioProducto(@RequestBody PrecioProducto precioProducto) {
-        precioProductoService.eliminarPrecioProducto(precioProducto);
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<Void> removePrecioProducto(@PathVariable Long precioProductoid) {
+        precioProductoService.eliminarPrecioProducto(precioProductoid);
+        return ResponseEntity.noContent().build();
     }
 
 }

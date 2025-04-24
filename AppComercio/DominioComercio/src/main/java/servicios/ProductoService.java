@@ -30,8 +30,8 @@ public class ProductoService {
         return productoRepository.save(producto);
     }
 
-    public void removeProducto(Producto producto) {
-        productoRepository.delete(producto);
+    public void removeProducto(Long productoId) {
+        productoRepository.deleteById(productoId);
     }
 
     public List<Producto> findAll() {

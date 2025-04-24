@@ -2,6 +2,7 @@ package entidades;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,11 +22,11 @@ public class Multa {
     private Double totalMulta;
 
     @Column(nullable = false)
-    private LocalDateTime fecha;
+    private LocalDate fecha;
 
     public Multa() {}
 
-    public Multa(Long idComercio, String motivo, Double totalMulta, LocalDateTime fecha) {
+    public Multa(Long idComercio, String motivo, Double totalMulta, LocalDate fecha) {
         this.idComercio = idComercio;
         this.motivo = motivo;
         this.totalMulta = totalMulta;
@@ -64,11 +65,11 @@ public class Multa {
         this.totalMulta = totalMulta;
     }
 
-    public LocalDateTime getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 }

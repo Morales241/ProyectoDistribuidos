@@ -19,9 +19,9 @@ public class OfertaService {
         return ofertaRepository.save(oferta);
     }
 
-    public void eliminarOferta(Oferta oferta) {
+    public void eliminarOferta(Long ofertaId) {
 
-        ofertaRepository.delete(oferta);
+        ofertaRepository.deleteById(ofertaId);
     }
 
     public List<Oferta> listarOfertas() {

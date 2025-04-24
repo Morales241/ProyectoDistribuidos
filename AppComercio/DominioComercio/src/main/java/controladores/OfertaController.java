@@ -16,40 +16,42 @@ public class OfertaController {
     @Autowired
     private OfertaService ofertaService;
 
-    @PostMapping
+    @PostMapping("/guardar")
     public ResponseEntity<Oferta> create(@RequestBody Oferta oferta) {
         return ResponseEntity.ok(ofertaService.crearOferta(oferta));
     }
 
-    @GetMapping
+    @GetMapping("/buscarTodas")
     public ResponseEntity<List<Oferta>> listarOfertas() {
         return ResponseEntity.ok(ofertaService.listarOfertas());
     }
 
-    @GetMapping
+    @GetMapping("/buscarPorRangoDePrecio/{min}/{max}")
     public ResponseEntity<List<Oferta>> listarOfertasPorRangoDePrecios(@PathVariable Double min, @PathVariable Double max) {
-
+        if (min > max) {
+            return ResponseEntity.badRequest().body(null);
+        }
         return ResponseEntity.ok(ofertaService.listarOfertasPorRangoDePrecios(min, max));
     }
 
-    @GetMapping
+    @GetMapping("/buscarPorProductoId/{produtoId}")
     public ResponseEntity<List<Oferta>> listarOfertaPorProdutoId(@PathVariable Long produtoId) {
         return ResponseEntity.ok(ofertaService.listarOfertaPorProdutoId(produtoId));
     }
 
-    @GetMapping
+    @GetMapping("/buscarPorComercioId/{comercioId}")
     public ResponseEntity<List<Oferta>> listarOfertaPorComercioId(@PathVariable Long comercioId) {
         return ResponseEntity.ok(ofertaService.listarOfertaPorComercioId(comercioId));
     }
 
-    @GetMapping
+    @GetMapping("/buscarDisponibles")
     public ResponseEntity<List<Oferta>> listarOfertasDisponibles(){
-
         return ResponseEntity.ok(ofertaService.listarOfertasDisponibles(LocalDateTime.now()));
     }
 
-    @PostMapping
-    public void removerOferta(@RequestBody Oferta oferta) {
-        ofertaService.eliminarOferta(oferta);
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<Void> removerOferta(@PathVariable Long ofertaId) {
+        ofertaService.eliminarOferta(ofertaId);
+        return ResponseEntity.ok().build();
     }
 }

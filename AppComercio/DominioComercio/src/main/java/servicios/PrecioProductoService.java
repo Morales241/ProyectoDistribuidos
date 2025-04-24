@@ -26,11 +26,11 @@ public class PrecioProductoService {
         return precioProductoRepository.findByProductoAndComercio(productoId, comercioId);
     }
 
-    public void crearPrecioProducto(PrecioProducto precioProducto) {
-        precioProductoRepository.save(precioProducto);
+    public PrecioProducto crearPrecioProducto(PrecioProducto precioProducto) {
+        return precioProductoRepository.save(precioProducto);
     }
 
-    public void eliminarPrecioProducto(PrecioProducto precioProducto) {
-        precioProductoRepository.delete(precioProducto);
+    public void eliminarPrecioProducto(Long precioProducto) {
+        precioProductoRepository.deleteById(precioProducto);
     }
 }
