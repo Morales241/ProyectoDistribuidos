@@ -21,36 +21,30 @@ public class Comercio {
     @Column(nullable = false)
     private String contrasena;
 
-    @OneToMany(mappedBy = "comercio", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Producto> productos;
-
-    @OneToMany(mappedBy = "comercio", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Multa> multas;
+    @Column(nullable = false)
+    private String tipo;
 
     public Comercio() {
-        this.productos = new ArrayList<>();
-        this.multas = new ArrayList<>();
-    }
-
-    public Comercio(String nombre) {
-        this.nombre = nombre;
-        this.productos = new ArrayList<>();
-        this.multas = new ArrayList<>();
     }
 
     public Comercio(String usuario, String contrasena) {
         this.usuario = usuario;
         this.contrasena = contrasena;
-        this.productos = new ArrayList<>();
-        this.multas = new ArrayList<>();
     }
 
-    public List<Multa> getMultas() {
-        return multas;
+    public Comercio(String nombre, String usuario, String contrasena, String tipo) {
+        this.nombre = nombre;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
+        this.tipo = tipo;
     }
 
-    public void setMultas(List<Multa> multas) {
-        this.multas = multas;
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public void setId(Long id) {
@@ -59,14 +53,6 @@ public class Comercio {
 
     public Long getId() {
         return id;
-    }
-
-    public List<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
     }
 
     public String getNombre() {

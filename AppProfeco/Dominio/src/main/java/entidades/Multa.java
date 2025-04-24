@@ -2,6 +2,8 @@ package entidades;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Multas")
 public class Multa {
@@ -9,55 +11,64 @@ public class Multa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private EmpleadoPROFECO empleado;
-
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Comercio comercio;
+    @Column(nullable = false)
+    private Long idComercio;
 
     @Column(nullable = false)
-    private double montoMUlta;
+    private String motivo;
+
+    @Column(nullable = false)
+    private Double totalMulta;
+
+    @Column(nullable = false)
+    private LocalDateTime fecha;
 
     public Multa() {}
 
-    public Multa(EmpleadoPROFECO empleado, Comercio comercio, double montoMUlta) {
-        this.empleado = empleado;
-        this.comercio = comercio;
-        this.montoMUlta = montoMUlta;
+    public Multa(Long idComercio, String motivo, Double totalMulta, LocalDateTime fecha) {
+        this.idComercio = idComercio;
+        this.motivo = motivo;
+        this.totalMulta = totalMulta;
+        this.fecha = fecha;
     }
 
-    public EmpleadoPROFECO getEmpleado() {
-        return empleado;
-    }
-
-    public void setEmpleado(EmpleadoPROFECO empleado) {
-        this.empleado = empleado;
-    }
-
-    public Comercio getComercio() {
-        return comercio;
-    }
-
-    public void setComercio(Comercio comercio) {
-        this.comercio = comercio;
-    }
-
-    public double getMontoMUlta() {
-        return montoMUlta;
-    }
-
-    public void setMontoMUlta(double montoMUlta) {
-        this.montoMUlta = montoMUlta;
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdComercio() {
+        return idComercio;
+    }
+
+    public void setIdComercio(Long idComercio) {
+        this.idComercio = idComercio;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    public Double getTotalMulta() {
+        return totalMulta;
+    }
+
+    public void setTotalMulta(Double totalMulta) {
+        this.totalMulta = totalMulta;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 }

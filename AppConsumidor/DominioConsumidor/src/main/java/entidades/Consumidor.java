@@ -2,12 +2,13 @@ package entidades;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "EmpleadosPROFECO")
-public class EmpleadoPROFECO {
+@Table(name = "Consumidores")
+public class Consumidor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,39 +22,21 @@ public class EmpleadoPROFECO {
     @Column(nullable = false)
     private String contrasena;
 
-    @OneToMany(mappedBy = "Revisor")
-    private List<Reporte> reportes;
+    @Column(nullable = false)
+    private LocalDate fechaRegistro;
 
-    @OneToMany(mappedBy = "empleado")
-    private List<Multa> multas;
+    public Consumidor() {}
 
-    public EmpleadoPROFECO() {
-        this.reportes = new ArrayList<>();
-        this.multas = new ArrayList<>();
-    }
-
-    public EmpleadoPROFECO(String nombre, String correo, String contrasena) {
+    public Consumidor(String nombre, String correo, String contrasena) {
         this.nombre = nombre;
         this.correo = correo;
         this.contrasena = contrasena;
-        this.reportes = new ArrayList<>();
-        this.multas = new ArrayList<>();
+        this.fechaRegistro = LocalDate.now();
     }
 
-    public List<Reporte> getReportes() {
-        return reportes;
-    }
-
-    public void setReportes(List<Reporte> reportes) {
-        this.reportes = reportes;
-    }
-
-    public List<Multa> getMultas() {
-        return multas;
-    }
-
-    public void setMultas(List<Multa> multas) {
-        this.multas = multas;
+    public Consumidor(String correo, String contrasena) {
+        this.correo = correo;
+        this.contrasena = contrasena;
     }
 
     public String getNombre() {
@@ -80,11 +63,11 @@ public class EmpleadoPROFECO {
         this.contrasena = contrasena;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public LocalDate getFechaRegistro() {
+        return fechaRegistro;
     }
 
-    public Long getId() {
-        return id;
+    public void setFechaRegistro(LocalDate fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }
