@@ -1,0 +1,40 @@
+package servicios;
+
+import entidades.Producto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import repositorios.ProductoRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ProductoService {
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    public List<Producto> findByNombreLike(String nombre) {
+        return productoRepository.findByNombreLike(nombre);
+    }
+
+    public Optional<Producto> findByNombre(String nombre) {
+        return productoRepository.findByNombre(nombre);
+    }
+
+    public List<Producto> findByCategoria(String categoria) {
+        return productoRepository.findByCategoria(categoria);
+    }
+
+    public Producto saveProducto(Producto producto) {
+        return productoRepository.save(producto);
+    }
+
+    public void removeProducto(Producto producto) {
+        productoRepository.delete(producto);
+    }
+
+    public List<Producto> findAll() {
+        return productoRepository.findAll();
+    }
+}

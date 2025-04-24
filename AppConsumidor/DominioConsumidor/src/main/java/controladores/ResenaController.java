@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/resena")
+@RequestMapping("/resenas")
 public class ResenaController {
 
     @Autowired

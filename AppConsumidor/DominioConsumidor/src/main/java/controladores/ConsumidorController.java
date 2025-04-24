@@ -11,7 +11,7 @@ import servicios.ConsumidorService;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/consumidor")
+@RequestMapping("/consumidores")
 public class ConsumidorController {
 
     @Autowired
