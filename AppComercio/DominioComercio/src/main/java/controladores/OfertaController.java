@@ -1,13 +1,18 @@
 package controladores;
 
+import dtos.OfertaDTO;
 import entidades.Oferta;
+import mappers.OfertaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import servicios.ComercioService;
 import servicios.OfertaService;
+import servicios.ProductoService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/ofertas")
@@ -15,38 +20,58 @@ public class OfertaController {
 
     @Autowired
     private OfertaService ofertaService;
+    @Autowired
+    private ComercioService comercioService;
+    @Autowired
+    private ProductoService productoService;
 
     @PostMapping("/guardar")
-    public ResponseEntity<Oferta> create(@RequestBody Oferta oferta) {
-        return ResponseEntity.ok(ofertaService.crearOferta(oferta));
+    public ResponseEntity<OfertaDTO> create(@RequestBody OfertaDTO ofertaDTO) {
+        Oferta oferta = ofertaService.crearOferta(OfertaMapper.toEntity(ofertaDTO));
+        return ResponseEntity.ok(OfertaMapper.toDTO(oferta, comercioService, productoService));
     }
 
     @GetMapping("/buscarTodas")
-    public ResponseEntity<List<Oferta>> listarOfertas() {
-        return ResponseEntity.ok(ofertaService.listarOfertas());
+    public ResponseEntity<List<OfertaDTO>> listarOfertas() {
+        List<Oferta> ofertas = ofertaService.listarOfertas();
+        List<OfertaDTO> ofertasDTO = ofertas.stream().map(oferta -> OfertaMapper.toDTO(oferta, comercioService, productoService)).collect(Collectors.toList());
+
+        return ResponseEntity.ok(ofertasDTO);
     }
 
     @GetMapping("/buscarPorRangoDePrecio/{min}/{max}")
-    public ResponseEntity<List<Oferta>> listarOfertasPorRangoDePrecios(@PathVariable Double min, @PathVariable Double max) {
+    public ResponseEntity<List<OfertaDTO>> listarOfertasPorRangoDePrecios(@PathVariable Double min, @PathVariable Double max) {
         if (min > max) {
             return ResponseEntity.badRequest().body(null);
         }
-        return ResponseEntity.ok(ofertaService.listarOfertasPorRangoDePrecios(min, max));
+        List<Oferta> ofertas = ofertaService.listarOfertasPorRangoDePrecios(min, max);
+        List<OfertaDTO> ofertasDTO = ofertas.stream().map(oferta -> OfertaMapper.toDTO(oferta, comercioService, productoService)).collect(Collectors.toList());
+
+        return ResponseEntity.ok(ofertasDTO);
     }
 
     @GetMapping("/buscarPorProductoId/{produtoId}")
-    public ResponseEntity<List<Oferta>> listarOfertaPorProdutoId(@PathVariable Long produtoId) {
-        return ResponseEntity.ok(ofertaService.listarOfertaPorProdutoId(produtoId));
+    public ResponseEntity<List<OfertaDTO>> listarOfertaPorProdutoId(@PathVariable Long produtoId) {
+        List<Oferta> ofertas = ofertaService.listarOfertaPorProdutoId(produtoId);
+        List<OfertaDTO> ofertasDTO = ofertas.stream().map(oferta -> OfertaMapper.toDTO(oferta, comercioService, productoService)).collect(Collectors.toList());
+
+        return ResponseEntity.ok(ofertasDTO);
     }
 
     @GetMapping("/buscarPorComercioId/{comercioId}")
-    public ResponseEntity<List<Oferta>> listarOfertaPorComercioId(@PathVariable Long comercioId) {
-        return ResponseEntity.ok(ofertaService.listarOfertaPorComercioId(comercioId));
+    public ResponseEntity<List<OfertaDTO>> listarOfertaPorComercioId(@PathVariable Long comercioId) {
+        List<Oferta> ofertas = ofertaService.listarOfertaPorComercioId(comercioId);
+        List<OfertaDTO> ofertasDTO = ofertas.stream().map(oferta -> OfertaMapper.toDTO(oferta, comercioService, productoService)).collect(Collectors.toList());
+
+        return ResponseEntity.ok(ofertasDTO);
     }
 
     @GetMapping("/buscarDisponibles")
-    public ResponseEntity<List<Oferta>> listarOfertasDisponibles(){
-        return ResponseEntity.ok(ofertaService.listarOfertasDisponibles(LocalDateTime.now()));
+    public ResponseEntity<List<OfertaDTO>> listarOfertasDisponibles(){
+        List<Oferta> ofertas = ofertaService.listarOfertasDisponibles(LocalDateTime.now());
+        List<OfertaDTO> ofertasDTO = ofertas.stream().map(oferta -> OfertaMapper.toDTO(oferta, comercioService, productoService)).collect(Collectors.toList());
+
+        return ResponseEntity.ok(ofertasDTO);
     }
 
     @DeleteMapping("/eliminar")

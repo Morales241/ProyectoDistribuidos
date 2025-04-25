@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ComercioResposity extends JpaRepository<Comercio, Long> {
 
-    Optional<Comercio> findByUsuarioAndContrasena(String usuario, String contrasena);
-
+    Optional<Comercio> findByNombre(String nombre);
 
 }

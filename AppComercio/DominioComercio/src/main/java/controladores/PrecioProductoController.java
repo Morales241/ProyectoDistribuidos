@@ -1,15 +1,20 @@
 package controladores;
 
+import dtos.PrecioProductoDTO;
 import entidades.Comercio;
 import entidades.PrecioProducto;
 import entidades.Producto;
+import mappers.PrecioProductoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import servicios.ComercioService;
 import servicios.PrecioProductoService;
+import servicios.ProductoService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/precioProductos")
@@ -17,27 +22,34 @@ public class PrecioProductoController {
 
     @Autowired
     private PrecioProductoService precioProductoService;
+    @Autowired
+    private ComercioService comercioService;
+    @Autowired
+    private ProductoService productoService;
 
     @GetMapping("/buscarPorComercioId/{comercioid}")
-    public ResponseEntity<List<PrecioProducto>> findByComercioId(@PathVariable Long comercioid) {
-        return ResponseEntity.ok(precioProductoService.findByComercioId(comercioid));
+    public ResponseEntity<List<PrecioProductoDTO>> findByComercioId(@PathVariable Long comercioid) {
+        List<PrecioProducto> pps = precioProductoService.findByComercioId(comercioid);
+        List<PrecioProductoDTO> ppsdto = pps.stream().map(precioProducto -> PrecioProductoMapper.toDTO(precioProducto, productoService, comercioService)).collect(Collectors.toList());
+        return ResponseEntity.ok(ppsdto);
     }
 
     @GetMapping("/buscarPorProductoId/{productoid}")
-    public ResponseEntity<List<PrecioProducto>> findByProductoId(@PathVariable  Long productoid) {
-        return ResponseEntity.ok(precioProductoService.findByProductoId(productoid));
+    public ResponseEntity<List<PrecioProductoDTO>> findByProductoId(@PathVariable  Long productoid) {
+        List<PrecioProducto> pps = precioProductoService.findByProductoId(productoid);
+        List<PrecioProductoDTO> ppsdto = pps.stream().map(precioProducto -> PrecioProductoMapper.toDTO(precioProducto, productoService, comercioService)).collect(Collectors.toList());
+        return ResponseEntity.ok(ppsdto);
     }
 
     @GetMapping("/buscarEspecificamente/{productoid}/{comercioid}")
-    public ResponseEntity<PrecioProducto> findEspecificPrecioProducto(@PathVariable Long productoid, @PathVariable Long comercioid) {
-        return precioProductoService.findEspecificPrecioProducto(productoid, comercioid)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<PrecioProductoDTO> findEspecificPrecioProducto(@PathVariable Long productoid, @PathVariable Long comercioid) {
+        Optional<PrecioProducto> pp = precioProductoService.findEspecificPrecioProducto(productoid, comercioid);
+        return pp.map(precioProducto -> PrecioProductoMapper.toDTO(precioProducto, productoService, comercioService)).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/guardar")
-    public ResponseEntity<PrecioProducto> addPrecioProducto(@RequestBody PrecioProducto precioProducto) {
-        return ResponseEntity.ok(precioProductoService.crearPrecioProducto(precioProducto));
+    public ResponseEntity<PrecioProductoDTO> addPrecioProducto(@RequestBody PrecioProductoDTO precioProductoDTO) {
+        return ResponseEntity.ok(PrecioProductoMapper.toDTO(precioProductoService.crearPrecioProducto(PrecioProductoMapper.toEntity(precioProductoDTO)),productoService, comercioService));
     }
 
     @DeleteMapping("/eliminar")

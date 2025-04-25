@@ -18,6 +18,10 @@ public class ProductoService {
         return productoRepository.findByNombreLike(nombre);
     }
 
+    public Producto findById(Long id) {
+        return productoRepository.findById(id).orElse(null);
+    }
+
     public Optional<Producto> findByNombre(String nombre) {
         return productoRepository.findByNombre(nombre);
     }
