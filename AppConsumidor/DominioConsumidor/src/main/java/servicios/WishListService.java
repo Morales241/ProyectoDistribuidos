@@ -1,6 +1,6 @@
 package servicios;
 
-import entidades.WishList;
+import entidades.Carrito;
 import excepciones.ConsumidorServiciosException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class WishListService {
     @Autowired
     private WishListRepository wishListRepository;
 
-    public WishList agregarAWishlist(WishList wish) throws ConsumidorServiciosException {
+    public Carrito agregarAWishlist(Carrito wish) throws ConsumidorServiciosException {
         // Evitar duplicados
         if (wishListRepository.existsByConsumidorIdAndProductoId(wish.getConsumidor().getId(), wish.getIdProducto())) {
             throw new ConsumidorServiciosException("El producto ya se encuentra en la wishlist");
@@ -25,7 +25,7 @@ public class WishListService {
         return wishListRepository.save(wish);
     }
 
-    public List<WishList> obtenerWishlist(Long idConsumidor) {
+    public List<Carrito> obtenerWishlist(Long idConsumidor) {
         return wishListRepository.findByConsumidorId(idConsumidor);
     }
 

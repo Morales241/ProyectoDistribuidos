@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ProductosCarritoS")
-public class ProductoCarrito {
+public class ProductoWishList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,15 +13,15 @@ public class ProductoCarrito {
     private Long idProducto;
 
     @Column(nullable = false)
-    private Long idCarrito;
+    private Long idWishList;
 
     @Column(nullable = false)
     private int cantidad;
 
-    public ProductoCarrito() {}
+    public ProductoWishList() {}
 
-    public ProductoCarrito(Long idCarrito, Long idProducto) {
-        this.idCarrito = idCarrito;
+    public ProductoWishList(Long idWishList, Long idProducto) {
+        this.idWishList = idWishList;
         this.idProducto = idProducto;
     }
 
@@ -41,12 +41,12 @@ public class ProductoCarrito {
         this.idProducto = idProducto;
     }
 
-    public Long getIdCarrito() {
-        return idCarrito;
+    public Long getIdWishList() {
+        return idWishList;
     }
 
-    public void setIdCarrito(Long idCarrito) {
-        this.idCarrito = idCarrito;
+    public void setIdWishList(Long idWishList) {
+        this.idWishList = idWishList;
     }
 
     public void setId(Long id) {

@@ -1,7 +1,7 @@
 package controladores;
 
-import entidades.Carrito;
-import entidades.ProductoCarrito;
+import entidades.WishList;
+import entidades.ProductoWishList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,25 +17,25 @@ public class CarritoController {
     private CarritoService servicio;
 
     @PostMapping
-    public ResponseEntity<Carrito> crearCarrito(@RequestBody Carrito carrito) {
-        return ResponseEntity.ok(servicio.crearCarrito(carrito));
+    public ResponseEntity<WishList> crearCarrito(@RequestBody WishList wishList) {
+        return ResponseEntity.ok(servicio.crearCarrito(wishList));
     }
 
     @GetMapping("/consumidor/{idConsumidor}")
-    public ResponseEntity<List<Carrito>> obtenerCarritosPorConsumidor(@PathVariable Long idConsumidor) {
+    public ResponseEntity<List<WishList>> obtenerCarritosPorConsumidor(@PathVariable Long idConsumidor) {
         return ResponseEntity.ok(servicio.obtenerCarritosPorConsumidor(idConsumidor));
     }
 
     @PostMapping("/{idCarrito}/productos")
-    public ResponseEntity<ProductoCarrito> agregarProducto(
+    public ResponseEntity<ProductoWishList> agregarProducto(
             @PathVariable Long idCarrito,
-            @RequestBody ProductoCarrito productoCarrito) {
+            @RequestBody ProductoWishList productoWishList) {
 
-        return ResponseEntity.ok(servicio.agregarProducto(idCarrito, productoCarrito));
+        return ResponseEntity.ok(servicio.agregarProducto(idCarrito, productoWishList));
     }
 
     @GetMapping("/{idCarrito}/productos")
-    public ResponseEntity<List<ProductoCarrito>> obtenerProductos(@PathVariable Long idCarrito) {
+    public ResponseEntity<List<ProductoWishList>> obtenerProductos(@PathVariable Long idCarrito) {
         return ResponseEntity.ok(servicio.obtenerProductos(idCarrito));
     }
 }

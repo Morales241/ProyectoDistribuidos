@@ -4,14 +4,14 @@ public class ComercioDTO {
 
     private Long id;
     private String nombre;
-    private String authId;
+    private String usurio;
     private String tipo;
 
     public ComercioDTO() {}
 
     public ComercioDTO(String nombre, String authId, String tipo) {
         this.nombre = nombre;
-        this.authId = authId;
+        this.usurio = authId;
         this.tipo = tipo;
     }
 
@@ -31,12 +31,12 @@ public class ComercioDTO {
         this.nombre = nombre;
     }
 
-    public String getAuthId() {
-        return authId;
+    public String getUsurio() {
+        return usurio;
     }
 
-    public void setAuthId(String authId) {
-        this.authId = authId;
+    public void setUsurio(String usurio) {
+        this.usurio = usurio;
     }
 
     public String getTipo() {

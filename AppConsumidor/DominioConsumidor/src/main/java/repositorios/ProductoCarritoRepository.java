@@ -1,12 +1,12 @@
 package repositorios;
 
-import entidades.ProductoCarrito;
+import entidades.ProductoWishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ProductoCarritoRepository extends JpaRepository<ProductoCarrito, Long> {
-    List<ProductoCarrito> findByCarritoId(Long carritoId);
+public interface ProductoCarritoRepository extends JpaRepository<ProductoWishList, Long> {
+    List<ProductoWishList> findByCarritoId(Long carritoId);
 }

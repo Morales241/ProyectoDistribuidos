@@ -2,10 +2,8 @@ package entidades;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "WishList")
+@Table(name = "Carrito")
 public class WishList {
 
     @Id
@@ -17,18 +15,21 @@ public class WishList {
     private Consumidor consumidor;
 
     @Column(nullable = false)
-    private Long idProducto;
+    private String nombre;
 
-    @Column(nullable = false)
-    private LocalDateTime fechaAgregado;
+    public WishList() {}
 
-    public WishList() {
+    public WishList(Consumidor consumidor, String nombre) {
+        this.consumidor = consumidor;
+        this.nombre = nombre;
     }
 
-    public WishList(LocalDateTime fechaAgregado, Long idProducto, Consumidor consumidor) {
-        this.fechaAgregado = fechaAgregado;
-        this.idProducto = idProducto;
-        this.consumidor = consumidor;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Consumidor getConsumidor() {
@@ -39,27 +40,11 @@ public class WishList {
         this.consumidor = consumidor;
     }
 
-    public Long getIdProducto() {
-        return idProducto;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public LocalDateTime getFechaAgregado() {
-        return fechaAgregado;
-    }
-
-    public void setFechaAgregado(LocalDateTime fechaAgregado) {
-        this.fechaAgregado = fechaAgregado;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

@@ -1,7 +1,7 @@
 package servicios;
 
-import entidades.Carrito;
-import entidades.ProductoCarrito;
+import entidades.WishList;
+import entidades.ProductoWishList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repositorios.CarritoRepository;
@@ -16,20 +16,20 @@ public class CarritoService {
     @Autowired
     private ProductoCarritoRepository productoCarritoRepository;
 
-    public Carrito crearCarrito(Carrito carrito) {
-        return carritoRepository.save(carrito);
+    public WishList crearCarrito(WishList wishList) {
+        return carritoRepository.save(wishList);
     }
 
-    public List<Carrito> obtenerCarritosPorConsumidor(Long idConsumidor) {
+    public List<WishList> obtenerCarritosPorConsumidor(Long idConsumidor) {
         return carritoRepository.findByConsumidorId(idConsumidor);
     }
 
-    public ProductoCarrito agregarProducto(Long idCarrito, ProductoCarrito productoCarrito) {
-        productoCarrito.setIdCarrito(idCarrito);
-        return productoCarritoRepository.save(productoCarrito);
+    public ProductoWishList agregarProducto(Long idCarrito, ProductoWishList productoWishList) {
+        productoWishList.setIdWishList(idCarrito);
+        return productoCarritoRepository.save(productoWishList);
     }
 
-    public List<ProductoCarrito> obtenerProductos(Long idCarrito) {
+    public List<ProductoWishList> obtenerProductos(Long idCarrito) {
         return productoCarritoRepository.findByCarritoId(idCarrito);
     }
 }

@@ -15,8 +15,11 @@ public class Comercio {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false, unique = true)
-    private String authId;
+    @Column(nullable = false)
+    private String usuario;
+
+    @Column(nullable = false)
+    private String contrasena;
 
     @Column(nullable = false)
     private String tipo;
@@ -24,17 +27,20 @@ public class Comercio {
     public Comercio() {
     }
 
-    public Comercio(String nombre, String tipo) {
-        this.nombre = nombre;
-        this.tipo = tipo;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public String getAuthId() {
-        return authId;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    public void setAuthId(String authId) {
-        this.authId = authId;
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getTipo() {

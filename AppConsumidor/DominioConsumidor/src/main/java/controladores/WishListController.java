@@ -1,13 +1,11 @@
 package controladores;
 
-import entidades.WishList;
+import entidades.Carrito;
 import excepciones.ConsumidorServiciosException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import repositorios.WishListRepository;
 import servicios.WishListService;
 
 import java.time.LocalDateTime;
@@ -21,18 +19,18 @@ public class WishListController {
     private WishListService servicio;
 
     @PostMapping
-    public ResponseEntity<WishList> agregarAWishlist(@RequestBody WishList wish) {
+    public ResponseEntity<Carrito> agregarAWishlist(@RequestBody Carrito wish) {
         try {
             wish.setFechaAgregado(LocalDateTime.now());
-            WishList wishList = servicio.agregarAWishlist(wish);
-            return ResponseEntity.ok(wishList);
+            Carrito carrito = servicio.agregarAWishlist(wish);
+            return ResponseEntity.ok(carrito);
         } catch (ConsumidorServiciosException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
     @GetMapping("/{idConsumidor}")
-    public ResponseEntity<List<WishList>> obtenerWishlist(@PathVariable Long idConsumidor) {
+    public ResponseEntity<List<Carrito>> obtenerWishlist(@PathVariable Long idConsumidor) {
         return ResponseEntity.ok(servicio.obtenerWishlist(idConsumidor));
     }
 

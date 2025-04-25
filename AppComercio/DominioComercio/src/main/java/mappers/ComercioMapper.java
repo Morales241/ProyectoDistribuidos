@@ -10,7 +10,7 @@ public class ComercioMapper {
         Comercio comercio = new Comercio();
         comercio.setId(dto.getId());
         comercio.setNombre(dto.getNombre());
-        comercio.setAuthId(dto.getAuthId());
+        comercio.setUsuario(dto.getUsurio());
         comercio.setTipo(dto.getTipo());
         return comercio;
     }
@@ -20,7 +20,7 @@ public class ComercioMapper {
         ComercioDTO comerciodto = new ComercioDTO();
         comerciodto.setId(comercio.getId());
         comerciodto.setNombre(comercio.getNombre());
-        comerciodto.setAuthId(comercio.getAuthId());
+        comerciodto.setUsurio(comercio.getUsuario());
         comerciodto.setTipo(comercio.getTipo());
         return comerciodto;
     }
