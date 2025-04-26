@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Mercado.css';
 
 function Mercado({ onVolver }) {
@@ -7,6 +7,7 @@ function Mercado({ onVolver }) {
   const [precio, setPrecio] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const [resultados, setResultados] = useState([]);
+  const [reseñas, setReseñas] = useState([]);
 
   const productosSimulados = [
     { nombre: 'Manzanas', precio: 25 },
@@ -15,7 +16,59 @@ function Mercado({ onVolver }) {
     { nombre: 'Huevos', precio: 30 }
   ];
 
-  // aqui va lo de la busqueda
+  // reseñas hechas por el chat pa probar
+  const reseñasSimuladas = [
+    {
+      usuario: 'Ana López',
+      fecha: '2025-04-20',
+      contenido: 'Producto fresco y de buena calidad.',
+      calificacion: 9,
+      producto: 'Manzanas'
+    },
+    {
+      usuario: 'Carlos Ramírez',
+      fecha: '2025-04-18',
+      contenido: 'El precio es justo, pero la leche llegó tibia.',
+      calificacion: 8,
+      producto: 'Leche'
+    },
+    {
+      usuario: 'Lucía Fernández',
+      fecha: '2025-04-15',
+      contenido: 'Muy buen pan, suave y fresco.',
+      calificacion: 10,
+      producto: 'Pan'
+    },
+    {
+      usuario: 'Lucía Fernández',
+      fecha: '2025-04-15',
+      contenido: 'Muy buen pan, suave y fresco.',
+      calificacion: 10,
+      producto: 'Pan'
+    },
+    {
+      usuario: 'Lucía Fernández',
+      fecha: '2025-04-15',
+      contenido: 'Muy buen pan, suave y fresco.',
+      calificacion: 10,
+      producto: 'Pan'
+    },
+    {
+      usuario: 'Lucía Fernández',
+      fecha: '2025-04-15',
+      contenido: 'Muy buen pan, suave y fresco.',
+      calificacion: 10,
+      producto: 'Pan'
+    },
+    {
+      usuario: 'Lucía Fernández',
+      fecha: '2025-04-15',
+      contenido: 'Muy buen pan, suave y fresco.',
+      calificacion: 10,
+      producto: 'Pan'
+    }
+  ];
+
   const manejarBusqueda = (e) => {
     if (e.key === 'Enter') {
       const coincidencias = productosSimulados.filter(p =>
@@ -41,8 +94,7 @@ function Mercado({ onVolver }) {
       <h1 className="titulo">Mercado</h1>
       <button className="buttonStyle" onClick={() => mostrarFormulario()}>Publicar Producto</button>
       <button className="buttonStyle" onClick={() => setPantalla('asignarPrecio')}>Asignar Precio</button>
-      <button className="buttonStyle" onClick={() => alert('el viernes queda krnal')}>Solicitar Reporte</button>
-      <button className="buttonStyle volverBtn" onClick={onVolver}>Volver al menú</button>
+      <button className="buttonStyle" onClick={() => setPantalla('reseñas')}>Ver Reseñas</button>
     </div>
   );
 
@@ -93,10 +145,38 @@ function Mercado({ onVolver }) {
     </div>
   );
 
+  // esto carga las reseñas cuando entraas a esa pagina
+  // aqui iria la llamada para que te lleguen las reseñas de donde tengan que llegar
+  useEffect(() => {
+    if (pantalla === 'reseñas') {
+      setReseñas(reseñasSimuladas);
+    }
+  }, [pantalla]);
+
+  const renderReseñas = () => (
+    <div className="contenedor">
+      <h2 className="titulo">Reseñas de los consumidores</h2>
+      <div className="cuadricula">
+        {reseñas.map((r, i) => (
+          <div key={i} className="cardStyle">
+            <h3>{r.usuario}</h3>
+            <p><strong>Producto:</strong> {r.producto}</p>
+            <p><strong>Fecha:</strong> {r.fecha}</p>
+            <p><strong>Calificación:</strong> {r.calificacion}</p>
+            <p><em>{r.contenido}</em></p>
+          </div>
+        ))}
+      </div>
+      <button className="buttonStyle volverBtn" onClick={() => setPantalla(null)}>Volver</button>
+    </div>
+  );
+
   if (pantalla === 'formulario') return renderFormulario();
   if (pantalla === 'asignarPrecio') return renderAsignarPrecio();
+  if (pantalla === 'reseñas') return renderReseñas();
 
   return renderPrincipal();
 }
 
 export default Mercado;
+
