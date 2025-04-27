@@ -1,0 +1,65 @@
+.contenedor {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #000;
+  padding: 2rem;
+}
+
+.titulo {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.botonera {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 250px;
+}
+
+.button-style {
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
+  color: black;
+  cursor: pointer;
+}
+
+.input-style {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+}
+
+.buscar-comercio {
+  position: relative;
+  width: 100%;
+}
+
+.resultados-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  background: white;
+  width: 100%;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.resultados-lista li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.resultados-lista li:hover {
+  background-color: #eee;
+}
+

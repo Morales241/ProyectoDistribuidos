@@ -1,0 +1,63 @@
+.inputStyle {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid black;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cuadricula {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .cardStyle {
+    padding: 1rem;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .cardSeleccionada {
+    padding: 1rem;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    background-color: #fafafa;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .buttonStyle {
+    padding: 8px;
+    margin-top: 0.5rem;
+    border: 1px solid black;
+    background: white;
+    color: black;
+    cursor: pointer;
+    width: 200px;
+  }
+  
+  .titulo {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .contenedor {
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: #fff;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
