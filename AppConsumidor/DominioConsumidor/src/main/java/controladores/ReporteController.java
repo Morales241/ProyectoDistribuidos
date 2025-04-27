@@ -1,5 +1,9 @@
 package controladores;
 
+import convertidores.Convertidor;
+import convertidores.ConvertidorReporte;
+import dtos.ConsumidorDTO;
+import dtos.ReporteDTO;
 import entidades.Reporte;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/reportes")
 public class ReporteController {
+
+    Convertidor<ReporteDTO, Reporte> convertidor = new ConvertidorReporte();
 
     @Autowired
     private ReporteService servicio;
@@ -31,6 +37,11 @@ public class ReporteController {
     @GetMapping("/comercio/{idComercio}")
     public ResponseEntity<List<Reporte>> obtenerPorComercio(@PathVariable Long idComercio) {
         return ResponseEntity.ok(servicio.obtenerPorComercio(idComercio));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReporteDTO> obtener(@PathVariable Long id) {
+        return ResponseEntity.ok(convertidor.convertFromEntity(servicio.obtener(id).get()));
     }
 
 }

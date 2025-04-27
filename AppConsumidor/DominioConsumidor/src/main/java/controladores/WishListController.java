@@ -1,7 +1,12 @@
 package controladores;
 
+import convertidores.Convertidor;
+import convertidores.ConvertidorCarrito;
+import dtos.CarritoDTO;
+import dtos.PrecioProductoDTO;
 import entidades.Carrito;
 import excepciones.ConsumidorServiciosException;
+import feings.ComercioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +23,9 @@ public class WishListController {
     @Autowired
     private WishListService servicio;
 
+    @Autowired
+    private ComercioClient clienteComercio;
+
     @PostMapping
     public ResponseEntity<Carrito> agregarAWishlist(@RequestBody Carrito wish) {
         try {
@@ -30,8 +38,10 @@ public class WishListController {
     }
 
     @GetMapping("/{idConsumidor}")
-    public ResponseEntity<List<Carrito>> obtenerWishlist(@PathVariable Long idConsumidor) {
-        return ResponseEntity.ok(servicio.obtenerWishlist(idConsumidor));
+    public ResponseEntity<List<CarritoDTO>> obtenerWishlist(@PathVariable Long idConsumidor) {
+        Convertidor<CarritoDTO, Carrito> convertidor = new ConvertidorCarrito();
+        List<CarritoDTO> dtos = convertidor.createFromEntities(servicio.obtenerWishlist(idConsumidor));
+        return ResponseEntity.ok(dtos);
     }
 
     @DeleteMapping("/{id}")

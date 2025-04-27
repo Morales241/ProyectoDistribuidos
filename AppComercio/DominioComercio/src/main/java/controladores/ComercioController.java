@@ -36,4 +36,9 @@ public class ComercioController {
 
         return  comercio.map(ComercioMapper::toDTO).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ComercioDTO> obtener(@PathVariable Long id) {
+        return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.buscarComercioPorId(id)));
+    }
 }

@@ -1,5 +1,8 @@
 package controladores;
 
+import convertidores.Convertidor;
+import convertidores.ConvertidorConsumidor;
+import dtos.ConsumidorDTO;
 import entidades.Consumidor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,8 @@ public class ConsumidorController {
     @Autowired
     private ConsumidorService servicio;
 
+    private Convertidor<ConsumidorDTO, Consumidor> convertidorConsumidor = new ConvertidorConsumidor();
+
     @PostMapping
     public ResponseEntity<Consumidor> registrar(@RequestBody Consumidor consumidor) {
         consumidor.setFechaRegistro(LocalDate.now());
@@ -24,10 +29,8 @@ public class ConsumidorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Consumidor> obtener(@PathVariable Long id) {
-        return servicio.obtener(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ConsumidorDTO> obtener(@PathVariable Long id) {
+        return ResponseEntity.ok(convertidorConsumidor.convertFromEntity(servicio.obtener(id).get()));
     }
 
     @DeleteMapping("/{id}")
