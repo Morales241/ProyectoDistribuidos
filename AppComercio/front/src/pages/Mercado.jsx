@@ -9,14 +9,13 @@ function Mercado({ onVolver }) {
   const [resultados, setResultados] = useState([]);
   const [reseñas, setReseñas] = useState([]);
 
-  const productosSimulados = [
+  const [productos, setProductos] = useState([
     { nombre: 'Manzanas', precio: 25 },
     { nombre: 'Leche', precio: 18 },
     { nombre: 'Pan', precio: 12 },
     { nombre: 'Huevos', precio: 30 }
-  ];
+  ]);
 
-  // reseñas hechas por el chat pa probar
   const reseñasSimuladas = [
     {
       usuario: 'Ana López',
@@ -38,40 +37,12 @@ function Mercado({ onVolver }) {
       contenido: 'Muy buen pan, suave y fresco.',
       calificacion: 10,
       producto: 'Pan'
-    },
-    {
-      usuario: 'Lucía Fernández',
-      fecha: '2025-04-15',
-      contenido: 'Muy buen pan, suave y fresco.',
-      calificacion: 10,
-      producto: 'Pan'
-    },
-    {
-      usuario: 'Lucía Fernández',
-      fecha: '2025-04-15',
-      contenido: 'Muy buen pan, suave y fresco.',
-      calificacion: 10,
-      producto: 'Pan'
-    },
-    {
-      usuario: 'Lucía Fernández',
-      fecha: '2025-04-15',
-      contenido: 'Muy buen pan, suave y fresco.',
-      calificacion: 10,
-      producto: 'Pan'
-    },
-    {
-      usuario: 'Lucía Fernández',
-      fecha: '2025-04-15',
-      contenido: 'Muy buen pan, suave y fresco.',
-      calificacion: 10,
-      producto: 'Pan'
     }
   ];
 
   const manejarBusqueda = (e) => {
     if (e.key === 'Enter') {
-      const coincidencias = productosSimulados.filter(p =>
+      const coincidencias = productos.filter(p =>
         p.nombre.toLowerCase().includes(busqueda.toLowerCase())
       );
       setResultados(coincidencias);
@@ -89,6 +60,26 @@ function Mercado({ onVolver }) {
     setPantalla('formulario');
   };
 
+  const confirmarProducto = () => {
+    if (nombreProducto && precio) {
+      setProductos(prev => {
+        const existe = prev.find(p => p.nombre.toLowerCase() === nombreProducto.toLowerCase());
+        if (existe) {
+          // Actualizar precio si el producto ya existe
+          return prev.map(p =>
+            p.nombre.toLowerCase() === nombreProducto.toLowerCase()
+              ? { ...p, precio: Number(precio) }
+              : p
+          );
+        } else {
+          // Agregar producto nuevo
+          return [...prev, { nombre: nombreProducto, precio: Number(precio) }];
+        }
+      });
+      setPantalla(null); // Volver a pantalla principal
+    }
+  };
+
   const renderPrincipal = () => (
     <div className="contenedor">
       <h1 className="titulo">Mercado</h1>
@@ -101,15 +92,13 @@ function Mercado({ onVolver }) {
   const renderFormulario = () => (
     <div className="contenedor">
       <h2 className="titulo">{nombreProducto ? 'Modificar Producto' : 'Publicar Producto'}</h2>
-      {!nombreProducto && (
-        <input
-          type="text"
-          placeholder="Nombre del producto"
-          value={nombreProducto}
-          onChange={(e) => setNombreProducto(e.target.value)}
-          className="inputStyle"
-        />
-      )}
+      <input
+        type="text"
+        placeholder="Nombre del producto"
+        value={nombreProducto}
+        onChange={(e) => setNombreProducto(e.target.value)}
+        className="inputStyle"
+      />
       <input
         type="number"
         placeholder="Precio"
@@ -117,7 +106,7 @@ function Mercado({ onVolver }) {
         onChange={(e) => setPrecio(e.target.value)}
         className="inputStyle"
       />
-      <button className="buttonStyle" onClick={() => setPantalla(null)}>Confirmar</button>
+      <button className="buttonStyle" onClick={confirmarProducto}>Confirmar</button>
       <button className="buttonStyle" onClick={() => setPantalla(null)}>Cancelar</button>
     </div>
   );
@@ -145,8 +134,6 @@ function Mercado({ onVolver }) {
     </div>
   );
 
-  // esto carga las reseñas cuando entraas a esa pagina
-  // aqui iria la llamada para que te lleguen las reseñas de donde tengan que llegar
   useEffect(() => {
     if (pantalla === 'reseñas') {
       setReseñas(reseñasSimuladas);
@@ -179,4 +166,3 @@ function Mercado({ onVolver }) {
 }
 
 export default Mercado;
-
