@@ -40,6 +40,8 @@ function Mercado({ onVolver }) {
     }
   ];
 
+
+  // llamada a la API para obtener productos
   const manejarBusqueda = (e) => {
     if (e.key === 'Enter') {
       const coincidencias = productos.filter(p =>
@@ -65,18 +67,18 @@ function Mercado({ onVolver }) {
       setProductos(prev => {
         const existe = prev.find(p => p.nombre.toLowerCase() === nombreProducto.toLowerCase());
         if (existe) {
-          // Actualizar precio si el producto ya existe
+          // Actualizar precio
           return prev.map(p =>
             p.nombre.toLowerCase() === nombreProducto.toLowerCase()
               ? { ...p, precio: Number(precio) }
               : p
           );
         } else {
-          // Agregar producto nuevo
+          // Agregar producto
           return [...prev, { nombre: nombreProducto, precio: Number(precio) }];
         }
       });
-      setPantalla(null); // Volver a pantalla principal
+      setPantalla(null);
     }
   };
 
@@ -134,6 +136,9 @@ function Mercado({ onVolver }) {
     </div>
   );
 
+  // aqui lo que hice fue tomar directamente el array de reseñas simuladas y lo guardé en el estado reseñas
+  // para que se muestre en la pantalla de reseñas, pero aquí iría una llamada a la API para obtener las reseñas+
+  // solo que no exactamente de esta forma, es mas bien como hice con los productos creo
   useEffect(() => {
     if (pantalla === 'reseñas') {
       setReseñas(reseñasSimuladas);
