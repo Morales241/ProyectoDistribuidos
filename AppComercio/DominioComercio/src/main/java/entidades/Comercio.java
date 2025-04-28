@@ -2,9 +2,6 @@ package entidades;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "Comercios")
 public class Comercio {
@@ -16,7 +13,7 @@ public class Comercio {
     private String nombre;
 
     @Column(nullable = false)
-    private String usuario;
+    private String correo;
 
     @Column(nullable = false)
     private String contrasena;
@@ -27,12 +24,12 @@ public class Comercio {
     public Comercio() {
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getContrasena() {

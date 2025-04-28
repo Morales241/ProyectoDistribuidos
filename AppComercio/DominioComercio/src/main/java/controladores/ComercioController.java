@@ -4,6 +4,7 @@ import dtos.ComercioDTO;
 import entidades.Comercio;
 import mappers.ComercioMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import servicios.ComercioService;
@@ -18,8 +19,8 @@ public class ComercioController {
     private ComercioService comercioService;
 
     @PostMapping("/guardar")
-    public ResponseEntity<ComercioDTO> crearComercio(@RequestBody Comercio comercio) {
-        return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.crearComercio(comercio)));
+    public ResponseEntity<ComercioDTO> crearComercio(@RequestBody ComercioDTO comercio) {
+        return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.crearComercio(ComercioMapper.toEntity(comercio))));
     }
 
     @DeleteMapping("/eliminar")
@@ -38,5 +39,22 @@ public class ComercioController {
     @GetMapping("/obtener/{id}")
     public ResponseEntity<ComercioDTO> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.buscarComercioPorId(id)));
+    }
+
+    @PostMapping("/inicioSesion")
+    public ResponseEntity<?> inicioSesion(@RequestParam String correo, @RequestParam String contrasena) {
+        Optional<Comercio> comercio = comercioService.iniciarSesion(correo, contrasena);
+
+        if (comercio.isPresent()) {
+
+            Comercio comercioAux = comercio.get();
+
+            return ResponseEntity.ok(ComercioMapper.toDTO(comercioAux));
+        }else{
+
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Correo o contraseña incorrectos");
+        }
     }
 }

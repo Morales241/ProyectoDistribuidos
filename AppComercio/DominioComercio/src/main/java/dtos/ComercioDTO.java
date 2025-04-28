@@ -4,15 +4,28 @@ public class ComercioDTO {
 
     private Long id;
     private String nombre;
-    private String usurio;
+    private String correo;
     private String tipo;
+    private String contra;
 
     public ComercioDTO() {}
 
-    public ComercioDTO(String nombre, String authId, String tipo) {
+    public ComercioDTO(String nombre, String correo, String tipo) {
         this.nombre = nombre;
-        this.usurio = authId;
+        this.correo = correo;
         this.tipo = tipo;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public String getContra() {
+        return contra;
+    }
+
+    public void setContra(String contra) {
+        this.contra = contra;
     }
 
     public Long getId() {
@@ -32,11 +45,11 @@ public class ComercioDTO {
     }
 
     public String getUsurio() {
-        return usurio;
+        return correo;
     }
 
-    public void setUsurio(String usurio) {
-        this.usurio = usurio;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getTipo() {

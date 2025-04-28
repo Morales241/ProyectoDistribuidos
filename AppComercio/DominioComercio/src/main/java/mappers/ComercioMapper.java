@@ -8,10 +8,26 @@ public class ComercioMapper {
     public static Comercio toEntity(ComercioDTO dto) {
 
         Comercio comercio = new Comercio();
-        comercio.setId(dto.getId());
-        comercio.setNombre(dto.getNombre());
-        comercio.setUsuario(dto.getUsurio());
-        comercio.setTipo(dto.getTipo());
+        if (dto.getId() != null) {
+            comercio.setId(dto.getId());
+        }
+
+        if (dto.getNombre() != null) {
+            comercio.setNombre(dto.getNombre());
+        }
+
+        if (dto.getTipo() != null) {
+            comercio.setTipo(dto.getTipo());
+        }
+
+        if (dto.getUsurio() != null) {
+            comercio.setCorreo(dto.getUsurio());
+        }
+
+        if (dto.getContra() != null) {
+            comercio.setContrasena(dto.getContra());
+        }
+
         return comercio;
     }
 
@@ -20,7 +36,7 @@ public class ComercioMapper {
         ComercioDTO comerciodto = new ComercioDTO();
         comerciodto.setId(comercio.getId());
         comerciodto.setNombre(comercio.getNombre());
-        comerciodto.setUsurio(comercio.getUsuario());
+        comerciodto.setCorreo(comercio.getCorreo());
         comerciodto.setTipo(comercio.getTipo());
         return comerciodto;
     }
