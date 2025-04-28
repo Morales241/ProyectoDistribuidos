@@ -17,7 +17,7 @@ public class Carrito {
     private Consumidor consumidor;
 
     @Column(nullable = false)
-    private Long idProducto;
+    private Long productoId;
 
     @Column(nullable = false)
     private LocalDateTime fechaAgregado;
@@ -25,9 +25,9 @@ public class Carrito {
     public Carrito() {
     }
 
-    public Carrito(LocalDateTime fechaAgregado, Long idProducto, Consumidor consumidor) {
+    public Carrito(LocalDateTime fechaAgregado, Long productoId, Consumidor consumidor) {
         this.fechaAgregado = fechaAgregado;
-        this.idProducto = idProducto;
+        this.productoId = productoId;
         this.consumidor = consumidor;
     }
 
@@ -39,12 +39,12 @@ public class Carrito {
         this.consumidor = consumidor;
     }
 
-    public Long getIdProducto() {
-        return idProducto;
+    public Long getProductoId() {
+        return productoId;
     }
 
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
+    public void setProductoId(Long productoId) {
+        this.productoId = productoId;
     }
 
     public LocalDateTime getFechaAgregado() {

@@ -17,7 +17,7 @@ public class WishListService {
 
     public Carrito agregarAWishlist(Carrito wish) throws ConsumidorServiciosException {
         // Evitar duplicados
-        if (wishListRepository.existsByConsumidorIdAndProductoId(wish.getConsumidor().getId(), wish.getIdProducto())) {
+        if (wishListRepository.existsByConsumidorIdAndProductoId(wish.getConsumidor().getId(), wish.getProductoId())) {
             throw new ConsumidorServiciosException("El producto ya se encuentra en la wishlist");
         }
 

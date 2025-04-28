@@ -19,11 +19,11 @@ public class MultaService {
     }
 
     public List<Multa> findMultasByComercioId(Long comercioId) {
-        return multaRepository.findByComercioId(comercioId);
+        return multaRepository.findByIdComercio(comercioId);
     }
 
     public List<Multa> findMultasBySpecificFecha(LocalDate fecha){
-        return  multaRepository.findByEspecificFecha(fecha);
+        return  multaRepository.findByFecha(fecha);
     }
 
     public Multa guardarMulta(Multa multa) {

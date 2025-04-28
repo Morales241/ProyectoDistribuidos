@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ComercioClient {
 
     @GetMapping("/comercios/{id}")
-    public ResponseEntity<ComercioDTO> obtener(@PathVariable Long id);
+    ResponseEntity<ComercioDTO> obtener(@PathVariable Long id);
 }

@@ -1,10 +1,8 @@
 package controladores;
 
 import dtos.ComercioDTO;
-import dtos.ProductoDTO;
 import entidades.Comercio;
 import mappers.ComercioMapper;
-import mappers.ProductoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +18,8 @@ public class ComercioController {
     private ComercioService comercioService;
 
     @PostMapping("/guardar")
-    public ResponseEntity<ComercioDTO> crearComercio(@RequestBody ComercioDTO comercio) {
-        return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.crearComercio(ComercioMapper.toEntity(comercio))));
+    public ResponseEntity<ComercioDTO> crearComercio(@RequestBody Comercio comercio) {
+        return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.crearComercio(comercio)));
     }
 
     @DeleteMapping("/eliminar")
@@ -37,7 +35,7 @@ public class ComercioController {
         return  comercio.map(ComercioMapper::toDTO).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
     public ResponseEntity<ComercioDTO> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.buscarComercioPorId(id)));
     }

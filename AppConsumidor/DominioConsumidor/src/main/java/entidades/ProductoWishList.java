@@ -16,6 +16,9 @@ public class ProductoWishList {
     private Long idWishList;
 
     @Column(nullable = false)
+    private Long carritoId;
+
+    @Column(nullable = false)
     private int cantidad;
 
     public ProductoWishList() {}

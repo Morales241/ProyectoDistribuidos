@@ -10,10 +10,10 @@ import java.util.Optional;
 @Repository
 public interface PrecioProductoRepository extends JpaRepository<PrecioProducto, Long> {
 
-    Optional<PrecioProducto> findByProductoAndComercio(Long producto, Long comercio);
+    Optional<PrecioProducto> findByIdProductoAndIdComercio(Long producto, Long comercio);
 
-    List<PrecioProducto> findByComercio(Long comercio);
+    List<PrecioProducto> findByidComercio(Long comercio);
 
-    List<PrecioProducto> findByProducto(Long producto);
+    List<PrecioProducto> findByidProducto(Long producto);
 
 }

@@ -15,15 +15,15 @@ public class PrecioProductoService {
     private PrecioProductoRepository precioProductoRepository;
 
     public List<PrecioProducto> findByComercioId(Long comercioId) {
-        return precioProductoRepository.findByComercio(comercioId);
+        return precioProductoRepository.findByidComercio(comercioId);
     }
 
     public List<PrecioProducto> findByProductoId(Long productoId) {
-        return precioProductoRepository.findByProducto(productoId);
+        return precioProductoRepository.findByidProducto(productoId);
     }
 
     public Optional<PrecioProducto> findEspecificPrecioProducto(Long productoId, Long comercioId) {
-        return precioProductoRepository.findByProductoAndComercio(productoId, comercioId);
+        return precioProductoRepository.findByIdProductoAndIdComercio(productoId, comercioId);
     }
 
     public PrecioProducto crearPrecioProducto(PrecioProducto precioProducto) {

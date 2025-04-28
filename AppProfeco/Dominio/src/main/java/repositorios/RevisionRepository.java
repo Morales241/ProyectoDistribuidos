@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public interface RevisionRepository extends JpaRepository<Revision, Long> {
 
-    List<Revision> findByComercioId(Long id);
+    List<Revision> findByIdComercio(Long id);
 
-    List<Revision> findByEspecificFecha(LocalDate fecha);
+    List<Revision> findByFecha(LocalDate fecha);
 
     List<Revision> findByFechaBetween(LocalDate fechaInicio, LocalDate fechaFin);
 }

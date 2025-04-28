@@ -1,6 +1,5 @@
 package servicios;
 
-import entidades.Multa;
 import entidades.Revision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +19,11 @@ public class RevisionService {
     }
 
     public List<Revision> findRevisionesByComercioId(Long comercioId) {
-        return revisionRepository.findByComercioId(comercioId);
+        return revisionRepository.findByIdComercio(comercioId);
     }
 
     public List<Revision> findRevisionesBySpecificFecha(LocalDate fecha){
-        return  revisionRepository.findByEspecificFecha(fecha);
+        return  revisionRepository.findByFecha(fecha);
     }
 
     public Revision guardarRevision(Revision revision) {

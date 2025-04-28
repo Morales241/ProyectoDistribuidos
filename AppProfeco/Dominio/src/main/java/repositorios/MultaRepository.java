@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public interface MultaRepository extends JpaRepository<Multa, Long> {
 
-    List<Multa> findByComercioId(Long id);
+    List<Multa> findByIdComercio(Long id);
 
-    List<Multa> findByEspecificFecha(LocalDate fecha);
+    List<Multa> findByFecha(LocalDate fecha);
 
     List<Multa> findByFechaBetween(LocalDate fechaInicio, LocalDate fechaFin);
 }

@@ -26,7 +26,7 @@ public class ConvertidorCarrito extends Convertidor<CarritoDTO, Carrito> {
         CarritoDTO dto = new CarritoDTO();
         dto.setFecha(carrito.getFechaAgregado());
         dto.setConsumidor(convertidorConsumidor.convertFromEntity(carrito.getConsumidor()));
-        List<PrecioProductoDTO> productos = clienteComercio.findByProductoId(carrito.getIdProducto()).getBody();
+        List<PrecioProductoDTO> productos = clienteComercio.findByProductoId(carrito.getProductoId()).getBody();
         PrecioProductoDTO producto = productos.getFirst();
         dto.setProducto(producto);
 
