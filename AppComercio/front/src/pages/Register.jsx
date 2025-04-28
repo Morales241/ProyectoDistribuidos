@@ -11,18 +11,24 @@ const Register = () => {
     const handleRegister = async () => {
         try {
             const contraEncriptada = await encriptarContraseña(password);
-    
+
             const comercioData = {
+                id: null,
                 nombre: nombre,
                 correo: correo,
-                contraseña: contraEncriptada, 
-                tipo: tipoComercio
+                tipo: tipoComercio,
+                contrasena: contraEncriptada
+                
             };
-    
-            const response = await axios.post('http://localhost:8080/comercios/guardar', comercioData);
-            
+
+            const response = await axios.post(
+                'http://localhost:8080/comercios/guardar',
+                comercioData,
+                { headers: { 'Content-Type': 'application/json' } }
+            );
             console.log('Registro exitoso', response.data);
             alert('Registro exitoso');
+            
         } catch (error) {
             console.error('Error al registrar:', error);
             alert('Error al registrar');

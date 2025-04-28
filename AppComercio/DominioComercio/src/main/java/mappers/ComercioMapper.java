@@ -24,8 +24,8 @@ public class ComercioMapper {
             comercio.setCorreo(dto.getUsurio());
         }
 
-        if (dto.getContra() != null) {
-            comercio.setContrasena(dto.getContra());
+        if (dto.getContrasena() != null) {
+            comercio.setContrasena(dto.getContrasena());
         }
 
         return comercio;

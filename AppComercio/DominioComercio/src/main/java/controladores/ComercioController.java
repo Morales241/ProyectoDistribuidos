@@ -3,6 +3,8 @@ package controladores;
 import dtos.ComercioDTO;
 import entidades.Comercio;
 import mappers.ComercioMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +13,20 @@ import servicios.ComercioService;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/comercios")
 public class ComercioController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ComercioController.class);
 
     @Autowired
     private ComercioService comercioService;
 
     @PostMapping("/guardar")
     public ResponseEntity<ComercioDTO> crearComercio(@RequestBody ComercioDTO comercio) {
+
+        logger.info("Datos recibidos: {}", comercio);
         return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.crearComercio(ComercioMapper.toEntity(comercio))));
     }
 

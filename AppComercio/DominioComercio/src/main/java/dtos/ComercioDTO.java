@@ -6,7 +6,7 @@ public class ComercioDTO {
     private String nombre;
     private String correo;
     private String tipo;
-    private String contra;
+    private String contrasena;
 
     public ComercioDTO() {}
 
@@ -20,12 +20,12 @@ public class ComercioDTO {
         return correo;
     }
 
-    public String getContra() {
-        return contra;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContra(String contra) {
-        this.contra = contra;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public Long getId() {
