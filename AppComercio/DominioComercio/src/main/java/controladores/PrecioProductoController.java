@@ -35,7 +35,7 @@ public class PrecioProductoController {
     }
 
     @GetMapping("/buscarPorProductoId/{productoid}")
-    public ResponseEntity<List<PrecioProductoDTO>> findByProductoId(@PathVariable  Long productoid) {
+    public ResponseEntity<List<PrecioProductoDTO>> findByProductoId(@PathVariable Long productoid) {
         List<PrecioProducto> pps = precioProductoService.findByProductoId(productoid);
         List<PrecioProductoDTO> ppsdto = pps.stream().map(precioProducto -> PrecioProductoMapper.toDTO(precioProducto, productoService, comercioService)).collect(Collectors.toList());
         return ResponseEntity.ok(ppsdto);
@@ -48,8 +48,18 @@ public class PrecioProductoController {
     }
 
     @PostMapping("/guardar")
-    public ResponseEntity<PrecioProductoDTO> addPrecioProducto(@RequestBody PrecioProductoDTO precioProductoDTO) {
-        return ResponseEntity.ok(PrecioProductoMapper.toDTO(precioProductoService.crearPrecioProducto(PrecioProductoMapper.toEntity(precioProductoDTO)),productoService, comercioService));
+    public ResponseEntity<?> addPrecioProducto(@RequestBody PrecioProductoDTO precioProductoDTO) {
+
+        Optional<PrecioProducto> precioProductoExistente = precioProductoService.findEspecificPrecioProducto(
+                precioProductoDTO.getProducto().getId(),
+                precioProductoDTO.getComercio().getId()
+        );
+
+        if (precioProductoExistente.isPresent()) {
+            return ResponseEntity.badRequest().body("Ya se registró un precio para este producto en este comercio.");
+        } else {
+            return ResponseEntity.ok(PrecioProductoMapper.toDTO(precioProductoService.crearPrecioProducto(PrecioProductoMapper.toEntity(precioProductoDTO)), productoService, comercioService));
+        }
     }
 
     @DeleteMapping("/eliminar")
