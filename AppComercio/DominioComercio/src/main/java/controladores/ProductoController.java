@@ -1,8 +1,10 @@
 package controladores;
 
 import dtos.ProductoDTO;
+import entidades.PrecioProducto;
 import entidades.Producto;
 import jakarta.websocket.server.PathParam;
+import mappers.PrecioProductoMapper;
 import mappers.ProductoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/productos")
 public class ProductoController {
@@ -51,8 +54,14 @@ public class ProductoController {
 
     @PostMapping("/guardar")
     public ResponseEntity<ProductoDTO> guardarProducto(@RequestBody ProductoDTO productodto) {
-        Producto producto = ProductoMapper.toEntity(productodto);
-        return ResponseEntity.ok(ProductoMapper.toDTO(productoService.saveProducto(producto)));
+        Optional<Producto> ProductoExistente = productoService.findByNombre(productodto.getNombre());
+
+        if (!ProductoExistente.isPresent()) {
+            return ResponseEntity.ok(ProductoMapper.toDTO(productoService.saveProducto(ProductoMapper.toEntity(productodto))));
+        }else{
+            return ResponseEntity.ok(ProductoMapper.toDTO(ProductoExistente.get()));
+        }
+
     }
 
     @DeleteMapping("/eliminar")

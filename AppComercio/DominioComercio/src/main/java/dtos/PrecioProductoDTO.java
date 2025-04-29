@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public class PrecioProductoDTO {
     private Long id;
-    private ComercioDTO Comercio;
-    private ProductoDTO Producto;
+    private Long comercio;
+    private Long producto;
     private double precio;
     private LocalDateTime fecha;
 
@@ -19,20 +19,20 @@ public class PrecioProductoDTO {
         this.id = id;
     }
 
-    public ComercioDTO getComercio() {
-        return Comercio;
+    public Long getComercio() {
+        return comercio;
     }
 
-    public void setComercio(ComercioDTO Comercio) {
-        this.Comercio = Comercio;
+    public void setComercio(Long Comercio) {
+        this.comercio = Comercio;
     }
 
-    public ProductoDTO getProducto() {
-        return Producto;
+    public Long getProducto() {
+        return producto;
     }
 
-    public void setProducto(ProductoDTO Producto) {
-        this.Producto = Producto;
+    public void setProducto(Long Producto) {
+        this.producto = Producto;
     }
 
     public double getPrecio() {

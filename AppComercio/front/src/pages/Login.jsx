@@ -23,6 +23,7 @@ const Login = () => {
         const comercio = response.data;
         localStorage.setItem('comercioId', comercio.id);
         localStorage.setItem('comercioNombre', comercio.nombre);
+        console.info('id Comercio:', comercio.id);
         navigate('/mercado');
       } else {
         alert('Credenciales incorrectas');

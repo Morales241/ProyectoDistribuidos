@@ -13,20 +13,20 @@ public class PrecioProductoMapper {
         PrecioProducto pp = new PrecioProducto();
         pp.setId(dto.getId());
         pp.setPrecio(dto.getPrecio());
-        pp.setProducto(dto.getProducto().getId());
-        pp.setComercio(dto.getComercio().getId());
+        pp.setProducto(dto.getProducto());
+        pp.setComercio(dto.getComercio());
         pp.setFecha(dto.getFecha());
 
         return pp;
     }
 
-    public static PrecioProductoDTO toDTO(PrecioProducto pp, ProductoService productoService, ComercioService comercioService) {
+    public static PrecioProductoDTO toDTO(PrecioProducto pp) {
 
         PrecioProductoDTO ppdto = new PrecioProductoDTO();
         ppdto.setId(pp.getId());
         ppdto.setPrecio(pp.getPrecio());
-        ppdto.setProducto(ProductoMapper.toDTO(productoService.findById(pp.getProducto())));
-        ppdto.setComercio(ComercioMapper.toDTO(comercioService.buscarComercioPorId(pp.getProducto())));
+        ppdto.setProducto(pp.getProducto());
+        ppdto.setComercio(pp.getProducto());
         ppdto.setFecha(pp.getFecha());
         return ppdto;
     }

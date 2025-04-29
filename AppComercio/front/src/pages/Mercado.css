@@ -19,6 +19,13 @@
     border: 1px solid black;
     margin-bottom: 1.5rem;
   }
+
+  .selector {
+    padding: 10px;
+    width: 322px;
+    border: 1px solid black;
+    margin-bottom: 1.5rem;
+  }
   
   .cuadricula {
     display: grid;

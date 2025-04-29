@@ -1,20 +1,122 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Mercado.css';
 
 function Mercado({ onVolver }) {
   const [pantalla, setPantalla] = useState(null);
   const [nombreProducto, setNombreProducto] = useState('');
   const [precio, setPrecio] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [categoria, setCategoria] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const [resultados, setResultados] = useState([]);
   const [reseñas, setReseñas] = useState([]);
+  const [productos, setProductos] = useState([]);
 
-  const [productos, setProductos] = useState([
-    { nombre: 'Manzanas', precio: 25 },
-    { nombre: 'Leche', precio: 18 },
-    { nombre: 'Pan', precio: 12 },
-    { nombre: 'Huevos', precio: 30 }
-  ]);
+  const categoriasDisponibles = [
+    'Frutas y Verduras',
+    'Lácteos',
+    'Carnes',
+    'Panadería',
+    'Bebidas',
+    'Snacks',
+    'Limpieza',
+    'Higiene Personal',
+    'Mascotas',
+    'Electrónica'
+  ];
+
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+
+  const obtenerProductos = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/productos/buscarTodos');
+      setProductos(response.data);
+    } catch (error) {
+      console.error('Error al obtener productos:', error);
+    }
+  };
+
+  const manejarBusqueda = async (e) => {
+    if (e.key === 'Enter') {
+      try {
+        const response = await axios.get('http://localhost:8080/productos/buscarPorConisidencias', {
+          params: { cadena: busqueda }
+        });
+        setResultados(response.data);
+      } catch (error) {
+        console.error('Error buscando productos:', error);
+      }
+    }
+  };
+
+  const mostrarFormulario = (producto = null) => {
+    if (producto) {
+      setNombreProducto(producto.nombre);
+      setDescripcion(producto.descripcion || '');
+      setCategoria(producto.categoria || '');
+      setPrecio(producto.precio || '');
+    } else {
+      setNombreProducto('');
+      setDescripcion('');
+      setCategoria('');
+      setPrecio('');
+    }
+    setPantalla('formulario');
+  };
+
+  const confirmarProducto = async () => {
+    if (nombreProducto && precio && descripcion && categoria) {
+      try {
+
+        const productoData = {
+          id: null,
+          nombre: nombreProducto,
+          descripcion: descripcion,
+          categoria: categoria
+
+        };
+
+        const productoResponse = await axios.post(
+          'http://localhost:8080/productos/guardar',
+          productoData,
+          { headers: { 'Content-Type': 'application/json' }});
+
+        const productoGuardado = productoResponse.data;
+        localStorage.setItem('productoId', productoGuardado.id)
+
+        const productoId = localStorage.getItem('productoId');
+        console.info('productoId:', productoId);
+        const comercioId = localStorage.getItem('comercioId');
+        console.info('comercioId:', comercioId);
+
+        const precioproductoData = {
+          id: null,
+          comercio: comercioId,
+          producto: productoId,
+          precio: precio,
+          fecha: null
+
+        };
+
+        await axios.post('http://localhost:8080/precioProductos/guardar',
+          precioproductoData,
+          { headers: { 'Content-Type': 'application/json' } });
+
+        alert('Producto y precio registrados correctamente.');
+        setPantalla(null);
+        obtenerProductos();
+
+      } catch (error) {
+        console.error('Error al guardar producto o precio:', error);
+        alert('Ocurrió un error al guardar el producto o el precio.');
+      }
+    } else {
+      alert('Por favor completa todos los campos.');
+    }
+  };
 
   const reseñasSimuladas = [
     {
@@ -40,47 +142,11 @@ function Mercado({ onVolver }) {
     }
   ];
 
-
-  // llamada a la API para obtener productos
-  const manejarBusqueda = (e) => {
-    if (e.key === 'Enter') {
-      const coincidencias = productos.filter(p =>
-        p.nombre.toLowerCase().includes(busqueda.toLowerCase())
-      );
-      setResultados(coincidencias);
+  useEffect(() => {
+    if (pantalla === 'reseñas') {
+      setReseñas(reseñasSimuladas);
     }
-  };
-
-  const mostrarFormulario = (producto = null) => {
-    if (producto) {
-      setNombreProducto(producto.nombre);
-      setPrecio(producto.precio);
-    } else {
-      setNombreProducto('');
-      setPrecio('');
-    }
-    setPantalla('formulario');
-  };
-
-  const confirmarProducto = () => {
-    if (nombreProducto && precio) {
-      setProductos(prev => {
-        const existe = prev.find(p => p.nombre.toLowerCase() === nombreProducto.toLowerCase());
-        if (existe) {
-          // Actualizar precio
-          return prev.map(p =>
-            p.nombre.toLowerCase() === nombreProducto.toLowerCase()
-              ? { ...p, precio: Number(precio) }
-              : p
-          );
-        } else {
-          // Agregar producto
-          return [...prev, { nombre: nombreProducto, precio: Number(precio) }];
-        }
-      });
-      setPantalla(null);
-    }
-  };
+  }, [pantalla]);
 
   const renderPrincipal = () => (
     <div className="contenedor">
@@ -101,6 +167,22 @@ function Mercado({ onVolver }) {
         onChange={(e) => setNombreProducto(e.target.value)}
         className="inputStyle"
       />
+      <textarea
+        placeholder="Descripción del producto"
+        value={descripcion}
+        onChange={(e) => setDescripcion(e.target.value)}
+        className="inputStyle"
+      />
+      <select
+        value={categoria}
+        onChange={(e) => setCategoria(e.target.value)}
+        className="selector"
+      >
+        <option value="">Seleccione una categoría</option>
+        {categoriasDisponibles.map((cat, index) => (
+          <option key={index} value={cat}>{cat}</option>
+        ))}
+      </select>
       <input
         type="number"
         placeholder="Precio"
@@ -127,7 +209,7 @@ function Mercado({ onVolver }) {
       <div className="cuadricula">
         {resultados.map((producto, index) => (
           <div key={index} className="cardStyle">
-            <strong>{producto.nombre}</strong> - <span>${producto.precio}</span>
+            <strong>{producto.nombre}</strong> - <span>${producto.precio || 'N/A'}</span>
             <button className="buttonStyle" onClick={() => mostrarFormulario(producto)}>Modificar</button>
           </div>
         ))}
@@ -135,15 +217,6 @@ function Mercado({ onVolver }) {
       <button className="buttonStyle volverBtn" onClick={() => setPantalla(null)}>Volver</button>
     </div>
   );
-
-  // aqui lo que hice fue tomar directamente el array de reseñas simuladas y lo guardé en el estado reseñas
-  // para que se muestre en la pantalla de reseñas, pero aquí iría una llamada a la API para obtener las reseñas+
-  // solo que no exactamente de esta forma, es mas bien como hice con los productos creo
-  useEffect(() => {
-    if (pantalla === 'reseñas') {
-      setReseñas(reseñasSimuladas);
-    }
-  }, [pantalla]);
 
   const renderReseñas = () => (
     <div className="contenedor">

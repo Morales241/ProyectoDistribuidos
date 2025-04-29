@@ -13,23 +13,23 @@ public class OfertaMapper {
 
         Oferta oferta = new Oferta();
         oferta.setId(dto.getId());
-        oferta.setComercio(dto.getComercio().getId());
+        oferta.setComercio(dto.getComercio());
         oferta.setPrecioOferta(dto.getPrecioOferta());
         oferta.setDescripcion(dto.getDescripcion());
-        oferta.setProducto(dto.getProducto().getId());
+        oferta.setProducto(dto.getProducto());
         oferta.setFechaFin(dto.getFechaFin());
         oferta.setFechaInicio(dto.getFechaInicio());
         return oferta;
     }
 
-    public static OfertaDTO toDTO(Oferta oferta, ComercioService comercioService, ProductoService productoService) {
+    public static OfertaDTO toDTO(Oferta oferta) {
 
         OfertaDTO ofertadto = new OfertaDTO();
         ofertadto.setId(oferta.getId());
-        ofertadto.setComercio(ComercioMapper.toDTO(comercioService.buscarComercioPorId(oferta.getComercio())));
+        ofertadto.setComercio(oferta.getComercio());
         ofertadto.setPrecioOferta(oferta.getPrecioOferta());
         ofertadto.setDescripcion(oferta.getDescripcion());
-        ofertadto.setProducto(ProductoMapper.toDTO(productoService.findById(oferta.getProducto())));
+        ofertadto.setProducto(oferta.getProducto());
         ofertadto.setFechaFin(oferta.getFechaFin());
         ofertadto.setFechaInicio(oferta.getFechaInicio());
         return ofertadto;
