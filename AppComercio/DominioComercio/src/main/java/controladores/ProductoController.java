@@ -45,7 +45,7 @@ public class ProductoController {
         return ResponseEntity.ok(productoDTOs);
     }
 
-    @GetMapping("/buscarPorConisidencias")
+    @GetMapping("/buscarPorCoinsidencias")
     public ResponseEntity<List<ProductoDTO>> buscarCoincidenciasPorNombre(@RequestParam String cadena) {
         List<Producto> productos = productoService.findByNombreLike(cadena);
         List<ProductoDTO> productoDTOs = productos.stream().map(ProductoMapper::toDTO).collect(Collectors.toList());

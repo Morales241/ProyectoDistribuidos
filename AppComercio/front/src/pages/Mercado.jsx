@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BiPlusCircle, BiEdit, BiSearchAlt, BiStar, BiArrowBack } from 'react-icons/bi';
 import './Mercado.css';
 
 function Mercado({ onVolver }) {
@@ -14,16 +15,8 @@ function Mercado({ onVolver }) {
   const [productos, setProductos] = useState([]);
 
   const categoriasDisponibles = [
-    'Frutas y Verduras',
-    'Lácteos',
-    'Carnes',
-    'Panadería',
-    'Bebidas',
-    'Snacks',
-    'Limpieza',
-    'Higiene Personal',
-    'Mascotas',
-    'Electrónica'
+    'Frutas y Verduras', 'Lácteos', 'Carnes', 'Panadería', 'Bebidas',
+    'Snacks', 'Limpieza', 'Higiene Personal', 'Mascotas', 'Electrónica'
   ];
 
   useEffect(() => {
@@ -70,27 +63,24 @@ function Mercado({ onVolver }) {
   const confirmarProducto = async () => {
     if (nombreProducto && precio && descripcion && categoria) {
       try {
-
         const productoData = {
           id: null,
           nombre: nombreProducto,
           descripcion: descripcion,
           categoria: categoria
-
         };
 
         const productoResponse = await axios.post(
           'http://localhost:8080/productos/guardar',
           productoData,
-          { headers: { 'Content-Type': 'application/json' }});
+          { headers: { 'Content-Type': 'application/json' } }
+        );
 
         const productoGuardado = productoResponse.data;
-        localStorage.setItem('productoId', productoGuardado.id)
+        localStorage.setItem('productoId', productoGuardado.id);
 
         const productoId = localStorage.getItem('productoId');
-        console.info('productoId:', productoId);
         const comercioId = localStorage.getItem('comercioId');
-        console.info('comercioId:', comercioId);
 
         const precioproductoData = {
           id: null,
@@ -98,7 +88,6 @@ function Mercado({ onVolver }) {
           producto: productoId,
           precio: precio,
           fecha: null
-
         };
 
         await axios.post('http://localhost:8080/precioProductos/guardar',
@@ -119,27 +108,9 @@ function Mercado({ onVolver }) {
   };
 
   const reseñasSimuladas = [
-    {
-      usuario: 'Ana López',
-      fecha: '2025-04-20',
-      contenido: 'Producto fresco y de buena calidad.',
-      calificacion: 9,
-      producto: 'Manzanas'
-    },
-    {
-      usuario: 'Carlos Ramírez',
-      fecha: '2025-04-18',
-      contenido: 'El precio es justo, pero la leche llegó tibia.',
-      calificacion: 8,
-      producto: 'Leche'
-    },
-    {
-      usuario: 'Lucía Fernández',
-      fecha: '2025-04-15',
-      contenido: 'Muy buen pan, suave y fresco.',
-      calificacion: 10,
-      producto: 'Pan'
-    }
+    { usuario: 'Ana López', fecha: '2025-04-20', contenido: 'Producto fresco y de buena calidad.', calificacion: 9, producto: 'Manzanas' },
+    { usuario: 'Carlos Ramírez', fecha: '2025-04-18', contenido: 'El precio es justo, pero la leche llegó tibia.', calificacion: 8, producto: 'Leche' },
+    { usuario: 'Lucía Fernández', fecha: '2025-04-15', contenido: 'Muy buen pan, suave y fresco.', calificacion: 10, producto: 'Pan' }
   ];
 
   useEffect(() => {
@@ -149,34 +120,42 @@ function Mercado({ onVolver }) {
   }, [pantalla]);
 
   const renderPrincipal = () => (
-    <div className="contenedor">
+    <div className="register-container">
       <h1 className="titulo">Mercado</h1>
-      <button className="buttonStyle" onClick={() => mostrarFormulario()}>Publicar Producto</button>
-      <button className="buttonStyle" onClick={() => setPantalla('asignarPrecio')}>Asignar Precio</button>
-      <button className="buttonStyle" onClick={() => setPantalla('reseñas')}>Ver Reseñas</button>
+      <button className="register-button" onClick={() => mostrarFormulario()}>
+        <BiPlusCircle style={{ marginRight: '8px' }} />
+        Publicar Producto
+      </button>
+      <button className="register-button" onClick={() => setPantalla('asignarPrecio')}>
+        <BiSearchAlt style={{ marginRight: '8px' }} />
+        Asignar Precio
+      </button>
+      <button className="register-button" onClick={() => setPantalla('reseñas')}>
+        <BiStar style={{ marginRight: '8px' }} />
+        Ver Reseñas
+      </button>
     </div>
   );
 
   const renderFormulario = () => (
-    <div className="contenedor">
-      <h2 className="titulo">{nombreProducto ? 'Modificar Producto' : 'Publicar Producto'}</h2>
+    <div className="register-container">
+      <h2>{nombreProducto ? 'Modificar Producto' : 'Publicar Producto'}</h2>
       <input
         type="text"
         placeholder="Nombre del producto"
         value={nombreProducto}
         onChange={(e) => setNombreProducto(e.target.value)}
-        className="inputStyle"
       />
       <textarea
         placeholder="Descripción del producto"
         value={descripcion}
         onChange={(e) => setDescripcion(e.target.value)}
-        className="inputStyle"
+        className="input-textarea"
       />
       <select
         value={categoria}
         onChange={(e) => setCategoria(e.target.value)}
-        className="selector"
+        className="select-comercio"
       >
         <option value="">Seleccione una categoría</option>
         {categoriasDisponibles.map((cat, index) => (
@@ -188,42 +167,49 @@ function Mercado({ onVolver }) {
         placeholder="Precio"
         value={precio}
         onChange={(e) => setPrecio(e.target.value)}
-        className="inputStyle"
       />
-      <button className="buttonStyle" onClick={confirmarProducto}>Confirmar</button>
-      <button className="buttonStyle" onClick={() => setPantalla(null)}>Cancelar</button>
+      <button className="register-button" onClick={confirmarProducto}>Confirmar</button>
+      <button className="login-button" onClick={() => setPantalla(null)}>
+        <BiArrowBack style={{ marginRight: '5px' }} />
+        Cancelar
+      </button>
     </div>
   );
 
   const renderAsignarPrecio = () => (
-    <div className="contenedor">
-      <h2 className="titulo">Asignar Precio</h2>
+    <div className="register-container">
+      <h2>Asignar Precio</h2>
       <input
         type="text"
         placeholder="Buscar producto..."
         value={busqueda}
         onChange={(e) => setBusqueda(e.target.value)}
         onKeyDown={manejarBusqueda}
-        className="inputStyle"
       />
-      <div className="cuadricula">
+      <div>
         {resultados.map((producto, index) => (
-          <div key={index} className="cardStyle">
+          <div key={index} className="producto-card">
             <strong>{producto.nombre}</strong> - <span>${producto.precio || 'N/A'}</span>
-            <button className="buttonStyle" onClick={() => mostrarFormulario(producto)}>Modificar</button>
+            <button className="register-button" onClick={() => mostrarFormulario(producto)}>
+              <BiEdit style={{ marginRight: '5px' }} />
+              Modificar
+            </button>
           </div>
         ))}
       </div>
-      <button className="buttonStyle volverBtn" onClick={() => setPantalla(null)}>Volver</button>
+      <button className="login-button" onClick={() => setPantalla(null)}>
+        <BiArrowBack style={{ marginRight: '5px' }} />
+        Volver
+      </button>
     </div>
   );
 
   const renderReseñas = () => (
-    <div className="contenedor">
-      <h2 className="titulo">Reseñas de los consumidores</h2>
-      <div className="cuadricula">
+    <div className="register-container">
+      <h2>Reseñas de los consumidores</h2>
+      <div>
         {reseñas.map((r, i) => (
-          <div key={i} className="cardStyle">
+          <div key={i} className="producto-card">
             <h3>{r.usuario}</h3>
             <p><strong>Producto:</strong> {r.producto}</p>
             <p><strong>Fecha:</strong> {r.fecha}</p>
@@ -232,7 +218,10 @@ function Mercado({ onVolver }) {
           </div>
         ))}
       </div>
-      <button className="buttonStyle volverBtn" onClick={() => setPantalla(null)}>Volver</button>
+      <button className="login-button" onClick={() => setPantalla(null)}>
+        <BiArrowBack style={{ marginRight: '5px' }} />
+        Volver
+      </button>
     </div>
   );
 
