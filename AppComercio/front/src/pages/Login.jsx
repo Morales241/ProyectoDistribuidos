@@ -1,35 +1,44 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import bcrypt from 'bcryptjs';
+import axios from "axios";
 
 const Login = () => {
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
-    console.log('Iniciando sesión con:', correo, password);
-    const login = async () => {
-        const response = await axios.post('http://localhost:8080/comercio/login', null, {
-          params: {
-            correo: correo,
-            password: password
-          }
-        });
-      
-        if (response.status === 200) {
-          const comercio = response.data;
-          localStorage.setItem('comercioId', comercio.id);
-          localStorage.setItem('comercioNombre', comercio.nombre);
-          navigate('/mercado'); 
-        } else {
-          alert('Credenciales incorrectas');
+
+
+      const response = await axios.post('http://localhost:8080/comercios/inicioSesion', null, {
+        params: {
+          correo: correo,
+          contrasena: password
         }
-      };
+      });
+
+      if (response.status === 200) {
+        const comercio = response.data;
+        localStorage.setItem('comercioId', comercio.id);
+        localStorage.setItem('comercioNombre', comercio.nombre);
+        navigate('/mercado');
+      } else {
+        alert('Credenciales incorrectas');
+      }
+    
   };
 
+  const encriptarContraseña = async (password) => {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    return hashedPassword;
+  };
+
+
   const irARegistro = () => {
-    navigate('/register'); 
+    navigate('/register');
   };
 
   return (

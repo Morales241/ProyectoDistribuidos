@@ -18,4 +18,5 @@ public interface ComercioRepository extends JpaRepository<Comercio, Long> {
     @Query("SELECT c FROM Comercio c WHERE c.correo = :correo AND c.contrasena = :contrasena")
     Optional<Comercio> iniciarSesion(@Param("correo") String correo, @Param("contrasena") String contrasena);
 
+    Optional<Comercio> findByCorreo(String correo);
 }

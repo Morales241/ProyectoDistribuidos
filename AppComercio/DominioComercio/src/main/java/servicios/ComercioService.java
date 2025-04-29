@@ -32,4 +32,8 @@ public class ComercioService {
     public Optional<Comercio> iniciarSesion(String email, String password) {
         return comercioRepository.iniciarSesion(email, password);
     }
+
+    public Optional<Comercio> buscarComercioPorCorreo(String correo) {
+        return comercioRepository.findByCorreo(correo);
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import servicios.ComercioService;
+import servicios.EncriptamientoService;
 
 import java.util.Optional;
 
@@ -22,6 +23,9 @@ public class ComercioController {
 
     @Autowired
     private ComercioService comercioService;
+
+    @Autowired
+    private EncriptamientoService encriptamientoService;
 
     @PostMapping("/guardar")
     public ResponseEntity<ComercioDTO> crearComercio(@RequestBody ComercioDTO comercio) {
@@ -50,18 +54,17 @@ public class ComercioController {
 
     @PostMapping("/inicioSesion")
     public ResponseEntity<?> inicioSesion(@RequestParam String correo, @RequestParam String contrasena) {
-        Optional<Comercio> comercio = comercioService.iniciarSesion(correo, contrasena);
 
-        if (comercio.isPresent()) {
+        Optional<Comercio> comercioOpt = comercioService.buscarComercioPorCorreo(correo);
 
-            Comercio comercioAux = comercio.get();
+        if (comercioOpt.isPresent()) {
+            Comercio comercio = comercioOpt.get();
+            boolean passwordValido = encriptamientoService.verificarContraseña(contrasena, comercio.getContrasena());
 
-            return ResponseEntity.ok(ComercioMapper.toDTO(comercioAux));
-        }else{
-
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body("Correo o contraseña incorrectos");
+            if (passwordValido) {
+                return ResponseEntity.ok(ComercioMapper.toDTO(comercio));
+            }
         }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Register.css';
 import bcrypt from 'bcryptjs';
+import axios from "axios";
 
 const Register = () => {
     const [nombre, setNombre] = useState('');
@@ -18,7 +19,7 @@ const Register = () => {
                 correo: correo,
                 tipo: tipoComercio,
                 contrasena: contraEncriptada
-                
+
             };
 
             const response = await axios.post(
@@ -28,7 +29,7 @@ const Register = () => {
             );
             console.log('Registro exitoso', response.data);
             alert('Registro exitoso');
-            
+            window.history.back();
         } catch (error) {
             console.error('Error al registrar:', error);
             alert('Error al registrar');
