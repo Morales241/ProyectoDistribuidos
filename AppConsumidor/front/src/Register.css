@@ -1,0 +1,56 @@
+.register-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 350px;
+    margin: 3rem auto;
+    box-shadow: 0 0 10px rgba(0, 119, 255, 0.2);
+    text-align: center;
+}
+
+.register-container h2 {
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.register-container input,
+.input-textarea {
+    display: block;
+    width: 90%;
+    padding: 0.5rem;
+    margin: 1rem auto;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+}
+
+.input-textarea {
+    height: 100px;
+    resize: none;
+}
+
+.register-button,
+.login-button {
+    width: 90%;
+    padding: 0.7rem;
+    margin: 0.5rem auto;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.register-button:hover,
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+.producto-card {
+    background-color: #f0f8ff;
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    text-align: left;
+}

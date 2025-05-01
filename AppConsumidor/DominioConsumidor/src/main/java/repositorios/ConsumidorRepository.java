@@ -11,4 +11,5 @@ public interface ConsumidorRepository extends JpaRepository<Consumidor, Long> {
 
     Optional<Consumidor> findByCorreoAndContrasena(String correo, String contrasena);
 
+    Optional<Consumidor> findByCorreo(String correo);
 }

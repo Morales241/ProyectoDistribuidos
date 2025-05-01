@@ -23,6 +23,10 @@ public class ConsumidorService {
         return consumidorRepository.findById(id);
     }
 
+    public Optional<Consumidor> obtenerPorCorreo(String correo) {
+        return consumidorRepository.findByCorreo(correo);
+    }
+
     public void eliminar(Long id) {
         consumidorRepository.deleteById(id);
     }

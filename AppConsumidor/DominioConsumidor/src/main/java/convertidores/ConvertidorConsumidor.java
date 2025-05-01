@@ -11,6 +11,7 @@ public class ConvertidorConsumidor  extends Convertidor<ConsumidorDTO, Consumido
 
     private static ConsumidorDTO convertToDto(Consumidor consumidor) {
         ConsumidorDTO dto = new ConsumidorDTO();
+        dto.setId(consumidor.getId());
         dto.setCorreo(consumidor.getCorreo());
         dto.setNombre(consumidor.getNombre());
         dto.setFechaRegistro(consumidor.getFechaRegistro());
@@ -20,6 +21,7 @@ public class ConvertidorConsumidor  extends Convertidor<ConsumidorDTO, Consumido
 
     private static Consumidor convertToEntity(ConsumidorDTO dto) {
         Consumidor consumidor = new Consumidor();
+        consumidor.setId(dto.getId());
         consumidor.setNombre(dto.getNombre());
         consumidor.setCorreo(dto.getCorreo());
         consumidor.setFechaRegistro(dto.getFechaRegistro());
