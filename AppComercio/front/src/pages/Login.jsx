@@ -11,7 +11,6 @@ const Login = () => {
 
   const handleLogin = async () => {
 
-
       const response = await axios.post('http://localhost:8080/comercios/inicioSesion', null, {
         params: {
           correo: correo,
@@ -22,7 +21,6 @@ const Login = () => {
       if (response.status === 200) {
         const comercio = response.data;
         localStorage.setItem('comercioId', comercio.id);
-        localStorage.setItem('comercioNombre', comercio.nombre);
         console.info('id Comercio:', comercio.id);
         navigate('/mercado');
       } else {

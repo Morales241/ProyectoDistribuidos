@@ -15,7 +15,7 @@ public class ProductoService {
     private ProductoRepository productoRepository;
 
     public List<Producto> findByNombreLike(String nombre) {
-        return productoRepository.findByNombreLike(nombre);
+        return productoRepository.findByNombreLike("%" + nombre + "%");
     }
 
     public Producto findById(Long id) {

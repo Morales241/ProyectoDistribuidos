@@ -34,7 +34,6 @@ public class ProductoController {
     @GetMapping("/buscarPorNombre")
     public ResponseEntity<ProductoDTO> buscarProductoPornombre(@RequestParam String nombre) {
         Optional<Producto> producto = productoService.findByNombre(nombre);
-
         return  producto.map(ProductoMapper::toDTO).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -55,13 +54,11 @@ public class ProductoController {
     @PostMapping("/guardar")
     public ResponseEntity<ProductoDTO> guardarProducto(@RequestBody ProductoDTO productodto) {
         Optional<Producto> ProductoExistente = productoService.findByNombre(productodto.getNombre());
-
         if (!ProductoExistente.isPresent()) {
             return ResponseEntity.ok(ProductoMapper.toDTO(productoService.saveProducto(ProductoMapper.toEntity(productodto))));
         }else{
             return ResponseEntity.ok(ProductoMapper.toDTO(ProductoExistente.get()));
         }
-
     }
 
     @DeleteMapping("/eliminar")

@@ -19,32 +19,32 @@ function Mercado({ onVolver }) {
     'Snacks', 'Limpieza', 'Higiene Personal', 'Mascotas', 'Electrónica'
   ];
 
-  useEffect(() => {
-    obtenerProductos();
-  }, []);
+  useEffect(() => {obtenerProductos();}, []);
 
   const obtenerProductos = async () => {
+
     try {
-      const response = await axios.get('http://localhost:8080/productos/buscarTodos');
+      const comercioId = localStorage.getItem('comercioId');
+      console.log("ID del comercio actual en localStorage:", comercioId);
+      const response = await axios.get(`http://localhost:8080/precioProductos/buscarPorComercioId/${comercioId}`);
       setProductos(response.data);
     } catch (error) {
       console.error('Error al obtener productos:', error);
     }
   };
 
-  const manejarBusqueda = async (e) => {
+  const manejarBusqueda = (e) => {
+    
     if (e.key === 'Enter') {
-      try {
-        const response = await axios.get('http://localhost:8080/productos/buscarPorConisidencias', {
-          params: { cadena: busqueda }
-        });
-        setResultados(response.data);
-      } catch (error) {
-        console.error('Error buscando productos:', error);
-      }
+      const productosFiltrados = productos.filter(producto =>
+        producto.nombreProducto.toLowerCase().includes(busqueda.toLowerCase())
+      );
+  
+      console.log('Productos filtrados:', productosFiltrados);
+      setResultados(productosFiltrados); 
     }
   };
-
+  
   const mostrarFormulario = (producto = null) => {
     if (producto) {
       setNombreProducto(producto.nombre);
@@ -178,7 +178,7 @@ function Mercado({ onVolver }) {
 
   const renderAsignarPrecio = () => (
     <div className="register-container">
-      <h2>Asignar Precio</h2>
+      <h2>Modificar Precio</h2>
       <input
         type="text"
         placeholder="Buscar producto..."
@@ -189,7 +189,7 @@ function Mercado({ onVolver }) {
       <div>
         {resultados.map((producto, index) => (
           <div key={index} className="producto-card">
-            <strong>{producto.nombre}</strong> - <span>${producto.precio || 'N/A'}</span>
+            <strong>{producto.nombreProducto}</strong> - <span>${producto.precio || 'N/A'}</span>
             <button className="register-button" onClick={() => mostrarFormulario(producto)}>
               <BiEdit style={{ marginRight: '5px' }} />
               Modificar

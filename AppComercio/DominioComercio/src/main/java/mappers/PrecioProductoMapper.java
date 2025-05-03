@@ -26,7 +26,7 @@ public class PrecioProductoMapper {
         ppdto.setId(pp.getId());
         ppdto.setPrecio(pp.getPrecio());
         ppdto.setProducto(pp.getProducto());
-        ppdto.setComercio(pp.getProducto());
+        ppdto.setComercio(pp.getComercio());
         ppdto.setFecha(pp.getFecha());
         return ppdto;
     }

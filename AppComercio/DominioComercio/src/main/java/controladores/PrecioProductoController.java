@@ -1,10 +1,14 @@
 package controladores;
 
+import dtos.ComercioDTO;
 import dtos.PrecioProductoDTO;
+import dtos.ProductoDTO;
 import entidades.Comercio;
 import entidades.PrecioProducto;
 import entidades.Producto;
+import mappers.ComercioMapper;
 import mappers.PrecioProductoMapper;
+import mappers.ProductoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,22 +35,61 @@ public class PrecioProductoController {
 
     @GetMapping("/buscarPorComercioId/{comercioid}")
     public ResponseEntity<List<PrecioProductoDTO>> findByComercioId(@PathVariable Long comercioid) {
+        System.out.println("llego el id de comercio: " + comercioid);
         List<PrecioProducto> pps = precioProductoService.findByComercioId(comercioid);
+
         List<PrecioProductoDTO> ppsdto = pps.stream().map(precioProducto -> PrecioProductoMapper.toDTO(precioProducto)).collect(Collectors.toList());
+
+        ppsdto.forEach(productoDTO -> {
+
+            productoDTO.setNombreProducto(traerProductoPorId(productoDTO.getProducto()).getNombre());
+
+            productoDTO.setNombreComercio(traerComercioPorId(productoDTO.getComercio()).getNombre());
+        });
+
         return ResponseEntity.ok(ppsdto);
     }
 
     @GetMapping("/buscarPorProductoId/{productoid}")
     public ResponseEntity<List<PrecioProductoDTO>> findByProductoId(@PathVariable Long productoid) {
+
         List<PrecioProducto> pps = precioProductoService.findByProductoId(productoid);
         List<PrecioProductoDTO> ppsdto = pps.stream().map(precioProducto -> PrecioProductoMapper.toDTO(precioProducto)).collect(Collectors.toList());
+
+        ppsdto.forEach(productoDTO -> {
+
+            productoDTO.setNombreProducto(traerProductoPorId(productoDTO.getProducto()).getNombre());
+
+            productoDTO.setNombreComercio(traerComercioPorId(productoDTO.getComercio()).getNombre());
+        });
+
         return ResponseEntity.ok(ppsdto);
+    }
+
+    private ProductoDTO traerProductoPorId(Long productoid){
+
+        return ProductoMapper.toDTO(productoService.findById(productoid));
+    }
+
+    private ComercioDTO traerComercioPorId(Long comercioid){
+        System.out.println("va a buscar el comercio por el id:"+comercioid);
+        return ComercioMapper.toDTO(comercioService.buscarComercioPorId(comercioid));
     }
 
     @GetMapping("/buscarEspecificamente/{productoid}/{comercioid}")
     public ResponseEntity<PrecioProductoDTO> findEspecificPrecioProducto(@PathVariable Long productoid, @PathVariable Long comercioid) {
         Optional<PrecioProducto> pp = precioProductoService.findEspecificPrecioProducto(productoid, comercioid);
-        return pp.map(precioProducto -> PrecioProductoMapper.toDTO(precioProducto)).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        PrecioProductoDTO ppDTO = PrecioProductoMapper.toDTO(pp.get());
+
+        if (pp.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ppDTO.setNombreProducto(traerProductoPorId(ppDTO.getProducto()).getNombre());
+
+        ppDTO.setNombreComercio(traerComercioPorId(ppDTO.getComercio()).getNombre());
+
+        return ResponseEntity.ok(ppDTO);
     }
 
     @PostMapping("/guardar")
@@ -60,8 +103,6 @@ public class PrecioProductoController {
         if (precioProductoExistente.isPresent()) {
             return ResponseEntity.badRequest().body("Ya se registró un precio para este producto en este comercio.");
         } else {
-            System.out.println(precioProductoDTO.getProducto());
-            System.out.println(precioProductoDTO.getComercio());
             precioProductoDTO.setFecha(LocalDateTime.now());
             return ResponseEntity.ok(PrecioProductoMapper.toDTO(precioProductoService.crearPrecioProducto(PrecioProductoMapper.toEntity(precioProductoDTO))));
         }
@@ -72,5 +113,4 @@ public class PrecioProductoController {
         precioProductoService.eliminarPrecioProducto(precioProductoid);
         return ResponseEntity.noContent().build();
     }
-
 }

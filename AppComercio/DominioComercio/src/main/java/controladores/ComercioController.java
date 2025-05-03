@@ -55,16 +55,18 @@ public class ComercioController {
     @PostMapping("/inicioSesion")
     public ResponseEntity<?> inicioSesion(@RequestParam String correo, @RequestParam String contrasena) {
 
-        Optional<Comercio> comercioOpt = comercioService.buscarComercioPorCorreo(correo);
+        Optional<Comercio> comercioAux = comercioService.buscarComercioPorCorreo(correo);
 
-        if (comercioOpt.isPresent()) {
-            Comercio comercio = comercioOpt.get();
+        if (comercioAux.isPresent()) {
+            Comercio comercio = comercioAux.get();
             boolean passwordValido = encriptamientoService.verificarContraseña(contrasena, comercio.getContrasena());
 
             if (passwordValido) {
+                System.out.println("inicio sesion: " + comercio.getId());
                 return ResponseEntity.ok(ComercioMapper.toDTO(comercio));
             }
         }
+        System.out.println("no inicio sesion");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

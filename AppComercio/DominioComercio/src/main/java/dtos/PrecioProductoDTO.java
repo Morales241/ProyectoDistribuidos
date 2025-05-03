@@ -5,11 +5,29 @@ import java.time.LocalDateTime;
 public class PrecioProductoDTO {
     private Long id;
     private Long comercio;
+    private String nombreComercio;
     private Long producto;
+    private String nombreProducto;
     private double precio;
     private LocalDateTime fecha;
 
     public PrecioProductoDTO() {}
+
+    public String getNombreComercio() {
+        return nombreComercio;
+    }
+
+    public void setNombreComercio(String nombreComercio) {
+        this.nombreComercio = nombreComercio;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
 
     public Long getId() {
         return id;
