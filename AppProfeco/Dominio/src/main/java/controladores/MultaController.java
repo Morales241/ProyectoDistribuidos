@@ -10,6 +10,7 @@ import servicios.MultaService;
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/multas")
 public class MultaController {

@@ -16,6 +16,7 @@ import servicios.EncriptamientoService;
 import java.time.LocalDate;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/consumidores")
 public class ConsumidorController {

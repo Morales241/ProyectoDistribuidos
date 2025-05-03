@@ -16,9 +16,11 @@ import servicios.WishListService;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/wishList")
 public class WishListController {
+
 
     @Autowired
     private WishListService servicio;
