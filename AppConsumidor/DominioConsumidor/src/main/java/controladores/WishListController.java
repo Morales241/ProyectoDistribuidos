@@ -46,6 +46,13 @@ public class WishListController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/{idProducto}")
+    public ResponseEntity<List<CarritoDTO>> obtenerWishlistPorProducto(@PathVariable Long idProducto) {
+        Convertidor<CarritoDTO, Carrito> convertidor = new ConvertidorCarrito();
+        List<CarritoDTO> dtos = convertidor.createFromEntities(servicio.obtenerWishlistPorProducto(idProducto));
+        return ResponseEntity.ok(dtos);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarWishlistItem(@PathVariable Long id) {
         servicio.eliminarWishlistItem(id);

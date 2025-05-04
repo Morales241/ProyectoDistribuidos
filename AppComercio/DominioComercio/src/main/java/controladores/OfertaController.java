@@ -1,12 +1,15 @@
 package controladores;
 
+import dtos.CarritoDTO;
 import dtos.OfertaDTO;
 import entidades.Oferta;
+import feigns.ConsumidorClient;
 import mappers.OfertaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import servicios.ComercioService;
+import servicios.NotificacionService;
 import servicios.OfertaService;
 import servicios.ProductoService;
 
@@ -25,10 +28,19 @@ public class OfertaController {
     private ComercioService comercioService;
     @Autowired
     private ProductoService productoService;
+    @Autowired
+    private NotificacionService notificacionService;
+    @Autowired
+    private ConsumidorClient clienteConsumidor;
 
     @PostMapping("/guardar")
     public ResponseEntity<OfertaDTO> create(@RequestBody OfertaDTO ofertaDTO) {
         Oferta oferta = ofertaService.crearOferta(OfertaMapper.toEntity(ofertaDTO));
+        List<CarritoDTO> wishList = clienteConsumidor.obtenerWishlistPorProducto(oferta.getProducto()).getBody();
+        List<String> ids = wishList.stream()
+                .map(carrito -> carrito.getConsumidor().getId().toString())
+                .toList();
+        notificacionService.enviarNotificacion(ids, ofertaDTO);
         return ResponseEntity.ok(OfertaMapper.toDTO(oferta));
     }
 

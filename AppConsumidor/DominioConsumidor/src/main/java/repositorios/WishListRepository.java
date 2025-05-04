@@ -11,6 +11,8 @@ public interface WishListRepository extends JpaRepository<Carrito, Long> {
 
     List<Carrito> findByConsumidorId(Long consumidor);
 
+    List<Carrito> findByProductoId(Long producto);
+
     boolean existsByConsumidorIdAndProductoId(Long consumidorId, Long productoId);
 
 

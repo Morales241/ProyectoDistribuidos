@@ -32,4 +32,8 @@ public class WishListService {
     public void eliminarWishlistItem(Long id) {
         wishListRepository.deleteById(id);
     }
+
+    public List<Carrito> obtenerWishlistPorProducto(Long idProducto) {
+        return wishListRepository.findByProductoId(idProducto);
+    }
 }
