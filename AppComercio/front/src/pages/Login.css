@@ -37,3 +37,17 @@
 .login-button:hover, .register-button:hover {
   background-color: #0056b3;
 }
+
+.boton-recuperar {
+  background: none;
+  border: none;
+  color: #007BFF; 
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+}
+
+.boton-recuperar:hover {
+  color: #0056b3; 
+}

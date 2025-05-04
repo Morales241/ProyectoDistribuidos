@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { BiPlusCircle, BiEdit, BiSearchAlt, BiStar, BiArrowBack } from 'react-icons/bi';
 import './Mercado.css';
 
@@ -13,13 +14,25 @@ function Mercado({ onVolver }) {
   const [resultados, setResultados] = useState([]);
   const [reseñas, setReseñas] = useState([]);
   const [productos, setProductos] = useState([]);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [nuevoPrecio, setNuevoPrecio] = useState('');
+  const [precioAnterior, setPrecioAnterior] = useState('');
+  const [precioOferta, setPrecioOferta] = useState('');
+  const [fechaInicio, setFechaInicio] = useState('');
+  const [fechaFin, setFechaFin] = useState('');
+  // esto no puede estar bien ya hice 30mil de estos
+
 
   const categoriasDisponibles = [
     'Frutas y Verduras', 'Lácteos', 'Carnes', 'Panadería', 'Bebidas',
     'Snacks', 'Limpieza', 'Higiene Personal', 'Mascotas', 'Electrónica'
   ];
 
-  useEffect(() => {obtenerProductos();}, []);
+  useEffect(() => {}, []);
+
+  const cerrarSesion = () => {
+    navigate('/Login.jsx');
+  };
 
   const obtenerProductos = async () => {
 
@@ -34,17 +47,17 @@ function Mercado({ onVolver }) {
   };
 
   const manejarBusqueda = (e) => {
-    
+
     if (e.key === 'Enter') {
       const productosFiltrados = productos.filter(producto =>
         producto.nombreProducto.toLowerCase().includes(busqueda.toLowerCase())
       );
-  
+
       console.log('Productos filtrados:', productosFiltrados);
-      setResultados(productosFiltrados); 
+      setResultados(productosFiltrados);
     }
   };
-  
+
   const mostrarFormulario = (producto = null) => {
     if (producto) {
       setNombreProducto(producto.nombre);
@@ -128,12 +141,20 @@ function Mercado({ onVolver }) {
       </button>
       <button className="register-button" onClick={() => setPantalla('asignarPrecio')}>
         <BiSearchAlt style={{ marginRight: '8px' }} />
-        Asignar Precio
+        Modificar Precio
       </button>
       <button className="register-button" onClick={() => setPantalla('reseñas')}>
         <BiStar style={{ marginRight: '8px' }} />
         Ver Reseñas
       </button>
+      <button className="register-button" onClick={() => setPantalla('publicarOferta')}>
+        <BiPlusCircle style={{ marginRight: '8px' }} />
+        Publicar Oferta
+      </button>
+      <button className="login-button" style={{ marginTop: '20px' }} onClick={() => cerrarSesion}>
+        Cerrar sesión
+      </button>
+
     </div>
   );
 
@@ -190,16 +211,45 @@ function Mercado({ onVolver }) {
         {resultados.map((producto, index) => (
           <div key={index} className="producto-card">
             <strong>{producto.nombreProducto}</strong> - <span>${producto.precio || 'N/A'}</span>
-            <button className="register-button" onClick={() => mostrarFormulario(producto)}>
+            <button
+              className="register-button"
+              onClick={() => {
+                setProductoSeleccionado(producto);
+                setNuevoPrecio(producto.precio || '');
+                setPantalla('modificarSoloPrecio');
+              }}
+            >
               <BiEdit style={{ marginRight: '5px' }} />
               Modificar
             </button>
+
+
           </div>
         ))}
       </div>
       <button className="login-button" onClick={() => setPantalla(null)}>
         <BiArrowBack style={{ marginRight: '5px' }} />
         Volver
+      </button>
+    </div>
+  );
+
+  const renderModificarSoloPrecio = () => (
+    <div className="register-container">
+      <h2>Modificar Precio</h2>
+      <p><strong>Producto:</strong> {productoSeleccionado?.nombreProducto}</p>
+      <input
+        type="number"
+        placeholder="Nuevo precio"
+        value={nuevoPrecio}
+        onChange={(e) => setNuevoPrecio(e.target.value)}
+      />
+      <button className="register-button" onClick={() => setPantalla(null)}>
+        Confirmar
+      </button>
+      <button className="login-button" onClick={() => setPantalla(null)}>
+        <BiArrowBack style={{ marginRight: '5px' }} />
+        Cancelar
       </button>
     </div>
   );
@@ -225,11 +275,115 @@ function Mercado({ onVolver }) {
     </div>
   );
 
-  if (pantalla === 'formulario') return renderFormulario();
-  if (pantalla === 'asignarPrecio') return renderAsignarPrecio();
-  if (pantalla === 'reseñas') return renderReseñas();
+  const renderPublicarOferta = () => (
+    <div className="register-container">
+      <h2>Publicar Oferta</h2>
 
-  return renderPrincipal();
+      <input
+        type="text"
+        placeholder="Buscar producto..."
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        onKeyDown={manejarBusqueda}
+      />
+
+      <div>
+        {resultados.map((producto, index) => (
+          <div
+            key={index}
+            className="producto-card"
+            onClick={() => {
+              setBusqueda(producto.nombreProducto);
+              setPrecioAnterior(producto.precio || '');
+              setResultados([]);
+            }}
+
+            style={{ cursor: 'pointer' }}
+          >
+            <strong>{producto.nombreProducto}</strong> - <span>${producto.precio || 'N/A'}</span>
+          </div>
+        ))}
+      </div>
+
+      <input
+        type="number"
+        placeholder="Precio anterior"
+        value={precioAnterior}
+        disabled
+        style={{ backgroundColor: '#eee', cursor: 'not-allowed' }}
+      />
+      <input
+        type="number"
+        placeholder="Precio con descuento"
+        value={precioOferta}
+        onChange={(e) => setPrecioOferta(e.target.value)}
+      />
+
+
+
+      <label style={{ marginTop: '10px' }}>Inicio de la oferta:</label>
+      <input
+        type="date"
+        value={fechaInicio}
+        onChange={(e) => setFechaInicio(e.target.value)}
+      />
+
+      <label>Fin de la oferta:</label>
+      <input
+        type="date"
+        value={fechaFin}
+        onChange={(e) => setFechaFin(e.target.value)}
+      />
+
+      <button className="register-button" onClick={() => alert('alerta de registro pa porbar')}>
+        Confirmar
+      </button>
+      <button className="login-button" onClick={() => setPantalla(null)}>
+        <BiArrowBack style={{ marginRight: '5px' }} />
+        Cancelar
+      </button>
+    </div>
+  );
+
+
+  let contenido;
+
+  if (pantalla === 'formulario') contenido = renderFormulario();
+  else if (pantalla === 'asignarPrecio') contenido = renderAsignarPrecio();
+  else if (pantalla === 'reseñas') contenido = renderReseñas();
+  else if (pantalla === 'modificarSoloPrecio') contenido = renderModificarSoloPrecio();
+  else if (pantalla === 'publicarOferta') contenido = renderPublicarOferta();
+  else contenido = renderPrincipal();
+
+  return (
+    <>
+      {contenido}
+
+      {pantalla !== null && (
+        <div className="barra-inferior">
+          <button onClick={() => mostrarFormulario()}>
+            <BiPlusCircle /> <span>Publicar</span>
+          </button>
+          <button onClick={() => setPantalla('asignarPrecio')}>
+            <BiSearchAlt /> <span>Precios</span>
+          </button>
+          <button onClick={() => setPantalla('reseñas')}>
+            <BiStar /> <span>Reseñas</span>
+          </button>
+          <button onClick={() => setPantalla('publicarOferta')}>
+            <BiEdit /> <span>Oferta</span>
+          </button>
+
+          {/* Botón para regresar al menú principal */}
+          <button onClick={() => setPantalla(null)}>
+            <BiArrowBack /> <span>Volver</span>
+          </button>
+        </div>
+      )}
+    </>
+  );
+
+
 }
 
 export default Mercado;

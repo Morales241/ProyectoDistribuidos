@@ -1,55 +1,83 @@
 .contenedor {
-    min-height: 100vh;
-    padding: 2rem;
-    background-color: #fff;
-    color: #000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .titulo {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .inputStyle {
-    padding: 10px;
-    width: 300px;
-    border: 1px solid black;
-    margin-bottom: 1.5rem;
-  }
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .selector {
-    padding: 10px;
-    width: 322px;
-    border: 1px solid black;
-    margin-bottom: 1.5rem;
-  }
-  
-  .cuadricula {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-    width: 100%;
-    max-width: 800px;
-  }
-  
-  .cardStyle {
-    padding: 1rem;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .buttonStyle {
-    padding: 8px;
-    margin-top: 0.5rem;
-    border: 1px solid black;
-    background: white;
-    color: black;
-    cursor: pointer;
-    width: 200px;
-  }
-  
+.titulo {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.inputStyle {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid black;
+  margin-bottom: 1.5rem;
+}
+
+.selector {
+  padding: 10px;
+  width: 322px;
+  border: 1px solid black;
+  margin-bottom: 1.5rem;
+}
+
+.cuadricula {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.cardStyle {
+  padding: 1rem;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttonStyle {
+  padding: 8px;
+  margin-top: 0.5rem;
+  border: 1px solid black;
+  background: white;
+  color: black;
+  cursor: pointer;
+  width: 200px;
+}
+
+.barra-inferior {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 100;
+}
+
+.barra-inferior button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #007BFF;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.barra-inferior button:hover {
+  transform: scale(1.05);
+}
