@@ -3,6 +3,7 @@ package mappers;
 
 import dtos.PrecioProductoDTO;
 import entidades.PrecioProducto;
+import enums.CategoriaProducto;
 import servicios.ComercioService;
 import servicios.ProductoService;
 
@@ -30,4 +31,5 @@ public class PrecioProductoMapper {
         ppdto.setFecha(pp.getFecha());
         return ppdto;
     }
+
 }

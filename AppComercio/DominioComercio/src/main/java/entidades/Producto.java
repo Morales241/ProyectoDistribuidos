@@ -1,5 +1,6 @@
 package entidades;
 
+import enums.CategoriaProducto;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -19,12 +20,12 @@ public class Producto {
     private String descripcion;
 
     @Column(nullable = false)
-    private String categoria;
+    private CategoriaProducto categoria;
 
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, String categoria) {
+    public Producto(String nombre, String descripcion, CategoriaProducto categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.categoria = categoria;
@@ -38,11 +39,11 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public String getCategoria() {
+    public CategoriaProducto getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(CategoriaProducto categoria) {
         this.categoria = categoria;
     }
 
