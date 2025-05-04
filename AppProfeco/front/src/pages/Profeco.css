@@ -13,9 +13,16 @@
   margin-bottom: 1rem;
 }
 
-.input-style {
+.inputStyle {
   padding: 10px;
   width: 300px;
+  border: 1px solid black;
+  margin-bottom: 1.5rem;
+}
+
+.selector {
+  padding: 10px;
+  width: 322px;
   border: 1px solid black;
   margin-bottom: 1.5rem;
 }
@@ -28,7 +35,7 @@
   max-width: 800px;
 }
 
-.card-style {
+.cardStyle {
   padding: 1rem;
   border: 1px solid black;
   display: flex;
@@ -36,15 +43,70 @@
   align-items: center;
 }
 
-.button-style {
+.buttonStyle {
   padding: 8px;
   margin-top: 0.5rem;
   border: 1px solid black;
   background: white;
   color: black;
   cursor: pointer;
+  width: 200px;
 }
 
-.volver {
-  margin-top: 2rem;
+.barra-inferior {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 100;
+}
+
+.barra-inferior button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #007BFF;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.barra-inferior button:hover {
+  transform: scale(1.05);
+}
+
+.barra-inferior {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 100;
+}
+
+.barra-inferior button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #007BFF;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.barra-inferior button:hover {
+  transform: scale(1.05);
 }
