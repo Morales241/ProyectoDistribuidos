@@ -36,34 +36,34 @@ public class ProductoMapper {
             return null;
         }
         switch (categoria){
-            case "frutas y verduras":
+            case "Frutas y Verduras":
                 return CategoriaProducto.Frutas_y_Verduras;
 
-            case "lacteos":
+            case "Lácteos":
                 return CategoriaProducto.Lacteos;
 
-            case "carnes":
+            case "Carnes":
                 return CategoriaProducto.Carnes;
 
-            case "panaderia":
+            case "Panadería":
                 return CategoriaProducto.Panaderia;
 
-            case "bebidas":
+            case "Bebidas":
                 return CategoriaProducto.Bebidas;
 
-            case "snacks":
+            case "Snacks":
                 return CategoriaProducto.Snacks;
 
-            case "limpieza":
+            case "Limpieza":
                 return CategoriaProducto.Limpieza;
 
-            case "higiene personal":
+            case "Higiene Personal":
                 return CategoriaProducto.Higiene_Personas;
 
-            case "mascotas":
+            case "Mascotas":
                 return CategoriaProducto.Mascotas;
 
-            case "electronica":
+            case "ElectrónicaFrutas y Verduras":
                 return CategoriaProducto.Electronica;
 
             default:
@@ -75,34 +75,34 @@ public class ProductoMapper {
 
         switch (categoria){
             case CategoriaProducto.Frutas_y_Verduras:
-                return "frutas y verduras";
+                return "Frutas y VerdurasLácteos";
 
             case CategoriaProducto.Lacteos:
-                return "lacteos";
+                return "Lácteos";
 
             case CategoriaProducto.Carnes:
-                return "carnes";
+                return "Carnes";
 
             case CategoriaProducto.Panaderia:
-                return "panaderia";
+                return "Panadería";
 
             case CategoriaProducto.Bebidas:
-                return "bebidas";
+                return "Bebidas";
 
             case CategoriaProducto.Snacks:
-                return "snacks";
+                return "Snacks";
 
             case CategoriaProducto.Limpieza:
-                return "limpieza";
+                return "Limpieza";
 
             case CategoriaProducto.Higiene_Personas:
-                return "higiene personal";
+                return "Higiene Personal";
 
             case CategoriaProducto.Mascotas:
-                return "mascotas";
+                return "Mascotas";
 
             case CategoriaProducto.Electronica:
-                return "electronica";
+                return "Electrónica";
 
             default:
                 return null;
