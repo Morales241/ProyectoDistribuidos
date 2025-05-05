@@ -113,4 +113,17 @@ public class PrecioProductoController {
         precioProductoService.eliminarPrecioProducto(precioProductoid);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping
+    public ResponseEntity<PrecioProducto> modificarPrecioProducto(@PathVariable Long idComercio, @PathVariable String nombre, @PathVariable double precio) {
+        Optional<Producto> productoAux = productoService.findByNombre(nombre);
+        Optional<PrecioProducto> precioProductoExistente = null;
+        if (productoAux.isPresent()) {
+            precioProductoExistente = precioProductoService.findEspecificPrecioProducto(productoAux.get().getId(), idComercio);
+            if (precioProductoExistente.isPresent()) {
+                precioProductoExistente.get().setPrecio(precio);
+            }
+        }
+        return ResponseEntity.ok(precioProductoService.crearPrecioProducto(precioProductoExistente.get()));
+    }
 }
