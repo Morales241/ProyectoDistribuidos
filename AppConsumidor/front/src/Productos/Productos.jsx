@@ -68,6 +68,9 @@ function Productos({ onVolver }) {
               <button className="buttonStyle" onClick={() => agregarAWishlist(producto)}>
                 Agregar a Wishlist
               </button>
+              <button className="buttonStyle" onClick={() => agregarAWishlist(producto)}>
+                Agregar a carrito
+              </button>
             </div>
           </div>
         ))}

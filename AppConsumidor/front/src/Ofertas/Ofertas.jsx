@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Ofertas.css';
 
 function Ofertas({ onVolver }) {
@@ -12,14 +12,17 @@ function Ofertas({ onVolver }) {
     { nombre: 'Arroz', marca: 'La Merced', presentacion: '1kg', precioOriginal: 30, precioOferta: 25, tienda: 'Soriana' },
   ];
 
-  // llamada a la api para obtener las ofertas
+  useEffect(() => {
+    setResultados(ofertasSimuladas);
+  }, []);
+
   const manejarBusqueda = (e) => {
-    if (e.key === 'Enter') {
-      const coincidencias = ofertasSimuladas.filter(p =>
-        p.nombre.toLowerCase().includes(busqueda.toLowerCase())
-      );
-      setResultados(coincidencias);
-    }
+    const texto = e.target.value;
+    setBusqueda(texto);
+    const coincidencias = ofertasSimuladas.filter(p =>
+      p.nombre.toLowerCase().includes(texto.toLowerCase())
+    );
+    setResultados(coincidencias);
   };
 
   return (
@@ -30,8 +33,7 @@ function Ofertas({ onVolver }) {
         type="text"
         placeholder="Buscar producto en oferta..."
         value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        onKeyDown={manejarBusqueda}
+        onChange={manejarBusqueda}
         className="inputStyle"
       />
 
@@ -46,6 +48,8 @@ function Ofertas({ onVolver }) {
               <span className="oferta"> ${producto.precioOferta} MXN</span>
             </p>
             <p><strong>Tienda:</strong> {producto.tienda}</p>
+            <button className="buttonStyle"> Agregar a Wishlist</button>
+            <button className="buttonStyle"> Agregar a carrito </button>
           </div>
         ))}
       </div>

@@ -23,6 +23,7 @@ function Wishlist({ onVolver }) {
           <div key={index} className="cardStyle">
             <div className="nombreProducto">{producto.nombre}</div>
             <div className="precioProducto">{producto.precio}</div>
+            <button className="buttonStyle volverBtn" onClick={onVolver}>Agregar al carrito</button>
           </div>
         ))}
       </div>

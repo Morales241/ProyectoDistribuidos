@@ -6,37 +6,42 @@ import Reportar from './Reportar/Reportar';
 import Preferencias from './Preferencias/Preferencias';
 import Reseñas from './Reseñas/Reseñas';
 import Wishlist from './Wishlist/Wishlist';
+import { FaBox, FaTags, FaExclamationTriangle, FaHeart, FaThumbsUp, FaSlidersH } from 'react-icons/fa';
 
-function Consumidor({ onVolver }) {
+function Consumidor() {
   const [vistaActual, setVistaActual] = useState('menu');
 
-  const volverAlMenu = () => {
-    setVistaActual('menu');
+  const renderVista = () => {
+    switch (vistaActual) {
+      case 'productos': return <Productos onVolver={() => setVistaActual('menu')} />;
+      case 'ofertas': return <Ofertas onVolver={() => setVistaActual('menu')} />;
+      case 'reportar': return <Reportar onVolver={() => setVistaActual('menu')} />;
+      case 'preferencias': return <Preferencias onVolver={() => setVistaActual('menu')} />;
+      case 'reseñas': return <Reseñas onVolver={() => setVistaActual('menu')} />;
+      case 'wishlist': return <Wishlist onVolver={() => setVistaActual('menu')} />;
+      default:
+        return (
+          <>
+            <h1 className="titulo">PROFECO - CONSUMIDOR</h1>
+          </>
+        );
+    }
   };
 
-  
   return (
     <div className="contenedor">
-      {vistaActual === 'menu' && (
-        <>
-          <h1 className="titulo">PROFECO - CONSUMIDOR</h1>
-          <div className="botonera">
-            <button className="button-style" onClick={() => setVistaActual('productos')}>Ver productos</button>
-            <button className="button-style" onClick={() => setVistaActual('ofertas')}>Ver ofertas</button>
-            <button className="button-style" onClick={() => setVistaActual('reportar')}>Reportar inconsistencias</button>
-            <button className="button-style" onClick={() => setVistaActual('preferencias')}>Guardar preferencias</button>
-            <button className="button-style" onClick={() => setVistaActual('reseñas')}>Dar reseña</button>
-            <button className="button-style" onClick={() => setVistaActual('wishlist')}>Wishlist</button>
-          </div>
-        </>
-      )}
+      <div className="barra-lateral">
+        <button onClick={() => setVistaActual('productos')}><FaBox />Productos</button>
+        <button onClick={() => setVistaActual('ofertas')}><FaTags />Ofertas</button>
+        <button onClick={() => setVistaActual('reportar')}><FaExclamationTriangle />Reportar</button>
+        <button onClick={() => setVistaActual('preferencias')}><FaSlidersH />Preferencias</button>
+        <button onClick={() => setVistaActual('reseñas')}><FaThumbsUp />Reseñas</button>
+        <button onClick={() => setVistaActual('wishlist')}><FaHeart />Wishlist</button>
+      </div>
 
-      {vistaActual === 'productos' && <Productos onVolver={volverAlMenu} />}
-      {vistaActual === 'ofertas' && <Ofertas onVolver={volverAlMenu} />}
-      {vistaActual === 'reportar' && <Reportar onVolver={volverAlMenu} />}
-      {vistaActual === 'preferencias' && <Preferencias onVolver={volverAlMenu} />}
-      {vistaActual === 'reseñas' && <Reseñas onVolver={volverAlMenu} />}
-      {vistaActual === 'wishlist' && <Wishlist onVolver={volverAlMenu} />}
+      <div className="contenido-con-barra">
+        {renderVista()}
+      </div>
     </div>
   );
 }
