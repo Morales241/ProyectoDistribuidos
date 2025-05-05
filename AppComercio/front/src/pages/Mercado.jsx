@@ -5,6 +5,7 @@ import { BiPlusCircle, BiEdit, BiSearchAlt, BiStar, BiArrowBack } from 'react-ic
 import './Mercado.css';
 
 function Mercado({ onVolver }) {
+  const navigate = useNavigate();
   const [pantalla, setPantalla] = useState(null);
   const [nombreProducto, setNombreProducto] = useState('');
   const [precio, setPrecio] = useState('');
@@ -22,16 +23,20 @@ function Mercado({ onVolver }) {
   const [fechaFin, setFechaFin] = useState('');
   // esto no puede estar bien ya hice 30mil de estos
 
-
   const categoriasDisponibles = [
     'Frutas y Verduras', 'Lácteos', 'Carnes', 'Panadería', 'Bebidas',
     'Snacks', 'Limpieza', 'Higiene Personal', 'Mascotas', 'Electrónica'
   ];
 
-  useEffect(() => { }, []);
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+  
 
   const cerrarSesion = () => {
-    navigate('/Login.jsx');
+    sessionStorage.clear();
+    localStorage.clear();
+    navigate('/');
   };
 
   const obtenerProductos = async () => {
@@ -41,6 +46,7 @@ function Mercado({ onVolver }) {
       console.log("ID del comercio actual en localStorage:", comercioId);
       const response = await axios.get(`http://localhost:8080/precioProductos/buscarPorComercioId/${comercioId}`);
       setProductos(response.data);
+      console.log('Productos:', response.data);
     } catch (error) {
       console.error('Error al obtener productos:', error);
     }
@@ -120,6 +126,29 @@ function Mercado({ onVolver }) {
     }
   };
 
+  const confirmarModificarProducto = async () => {
+    if (nuevoPrecio) {
+      try {
+        
+        const comercioId = localStorage.getItem('comercioId');
+
+        const productoResponse = await axios.post(
+          `http://localhost:8080/precioProductos/modificarPrecio/${comercioId}/${productoSeleccionado?.nombreProducto}/${nuevoPrecio}`
+        );
+
+        alert('El precio del producto se ha cambiado correctamente.');
+        setPantalla(null);
+        obtenerProductos();
+
+      } catch (error) {
+        console.error('Error al guardar producto o precio:', error);
+        alert('Ocurrió un error al modificar el precio del producto.');
+      }
+    } else {
+      alert('Por favor completa todos los campos.');
+    }
+  };
+
   const reseñasSimuladas = [
     { usuario: 'Ana López', fecha: '2025-04-20', contenido: 'Producto fresco y de buena calidad.', calificacion: 9, producto: 'Manzanas' },
     { usuario: 'Carlos Ramírez', fecha: '2025-04-18', contenido: 'El precio es justo, pero la leche llegó tibia.', calificacion: 8, producto: 'Leche' },
@@ -151,7 +180,7 @@ function Mercado({ onVolver }) {
         <BiPlusCircle style={{ marginRight: '8px' }} />
         Publicar Oferta
       </button>
-      <button className="login-button" style={{ marginTop: '20px' }} onClick={() => cerrarSesion}>
+      <button className="login-button" style={{ marginTop: '20px' }} onClick={cerrarSesion}>
         Cerrar sesión
       </button>
 
@@ -244,7 +273,7 @@ function Mercado({ onVolver }) {
         value={nuevoPrecio}
         onChange={(e) => setNuevoPrecio(e.target.value)}
       />
-      <button className="register-button" onClick={() => setPantalla(null)}>
+      <button className="register-button" onClick={confirmarModificarProducto}>
         Confirmar
       </button>
       <button className="login-button" onClick={() => setPantalla(null)}>

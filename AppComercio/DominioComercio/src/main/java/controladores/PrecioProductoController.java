@@ -114,7 +114,7 @@ public class PrecioProductoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping
+    @PostMapping("/modificarPrecio/{idComercio}/{nombre}/{precio}")
     public ResponseEntity<PrecioProducto> modificarPrecioProducto(@PathVariable Long idComercio, @PathVariable String nombre, @PathVariable double precio) {
         Optional<Producto> productoAux = productoService.findByNombre(nombre);
         Optional<PrecioProducto> precioProductoExistente = null;
