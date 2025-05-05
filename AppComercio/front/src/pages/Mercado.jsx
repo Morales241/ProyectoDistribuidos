@@ -304,6 +304,50 @@ function Mercado({ onVolver }) {
     </div>
   );
 
+  const enviarOferta = async () => {
+    if (!productoSeleccionado || !precioOferta || !fechaInicio || !fechaFin) {
+      alert('Faltan datos para registrar la oferta.');
+      return;
+    }
+  
+    const body = {
+      comercio: comercioId,
+      producto: productoSeleccionado.id,
+      precioOferta: parseFloat(precioOferta),
+      fechaInicio: `${fechaInicio}T00:00:00`, 
+      fechaFin: `${fechaFin}T00:00:00`,
+      descripcion: `Oferta para ${productoSeleccionado.nombreProducto}`
+    };
+  
+    try {
+      const response = await fetch('http://localhost:8080/ofertas/guardar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        alert('Oferta registrada correctamente');
+        setBusqueda('');
+        setPrecioAnterior('');
+        setPrecioOferta('');
+        setFechaInicio('');
+        setFechaFin('');
+        setProductoSeleccionado(null);
+      } else {
+        const errorText = await response.text();
+        alert(`Error al registrar oferta: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error al conectar con la API:', error);
+      alert('Error de conexión al registrar la oferta');
+    }
+  };
+  
+
   const renderPublicarOferta = () => (
     <div className="register-container">
       <h2>Publicar Oferta</h2>
@@ -364,7 +408,7 @@ function Mercado({ onVolver }) {
         onChange={(e) => setFechaFin(e.target.value)}
       />
 
-      <button className="register-button" onClick={() => alert('alerta de registro pa porbar')}>
+      <button className="register-button" onClick={enviarOferta}>
         Confirmar
       </button>
       <button className="login-button" onClick={() => setPantalla(null)}>
