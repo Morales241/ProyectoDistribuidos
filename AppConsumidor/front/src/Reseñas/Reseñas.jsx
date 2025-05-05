@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Reseñas.css';
 
 function Reseñas({ onVolver }) {
-  const [supermercadoSeleccionado, setSupermercadoSeleccionado] = useState('');
   const [productoSeleccionado, setProductoSeleccionado] = useState('');
-  const [busquedaSuper, setBusquedaSuper] = useState('');
-  const [busquedaProducto, setBusquedaProducto] = useState('');
-  const [resultadosSuper, setResultadosSuper] = useState([]);
-  const [resultadosProducto, setResultadosProducto] = useState([]);
   const [contenido, setContenido] = useState('');
   const [calificacion, setCalificacion] = useState(1);
+  const [productosComprados, setProductosComprados] = useState([]);
 
-  const supermercadosSimulados = ['Soriana', 'Walmart', 'Chedraui', 'Costco', 'Superama'];
-  
+  // Simulación de productos comprados anteriormente
   const productosSimulados = [
     { nombre: 'Leche Lala 1L', supermercado: 'Soriana' },
     { nombre: 'Pan Bimbo 680g', supermercado: 'Walmart' },
@@ -21,33 +16,16 @@ function Reseñas({ onVolver }) {
     { nombre: 'Huevos San Juan 12pzas', supermercado: 'Costco' },
   ];
 
-  // llamada a la api para obtener los comercios
-  const manejarBusquedaSupermercado = (e) => {
-    if (e.key === 'Enter') {
-      const coincidencias = supermercadosSimulados.filter(s =>
-        s.toLowerCase().includes(busquedaSuper.toLowerCase())
-      );
-      setResultadosSuper(coincidencias);
-    }
-  };
+  useEffect(() => {
+    // Simulamos carga de historial de compras
+    setProductosComprados(productosSimulados);
+  }, []);
 
-  // llamada a la api para obtener los productos
-  const manejarBusquedaProducto = (e) => {
-    if (e.key === 'Enter') {
-      const coincidencias = productosSimulados.filter(p =>
-        p.supermercado === supermercadoSeleccionado &&
-        p.nombre.toLowerCase().includes(busquedaProducto.toLowerCase())
-      );
-      setResultadosProducto(coincidencias);
-    }
-  };
-
-  // post a la api con la reseña
   const confirmarReseña = () => {
     const fecha = new Date().toLocaleDateString(); 
     console.log({
-      supermercado: supermercadoSeleccionado,
-      producto: productoSeleccionado,
+      producto: productoSeleccionado.nombre,
+      supermercado: productoSeleccionado.supermercado,
       fecha: fecha,
       contenido: contenido,
       calificacion: calificacion,
@@ -57,12 +35,7 @@ function Reseñas({ onVolver }) {
   };
 
   const limpiarTodo = () => {
-    setSupermercadoSeleccionado('');
     setProductoSeleccionado('');
-    setBusquedaSuper('');
-    setBusquedaProducto('');
-    setResultadosSuper([]);
-    setResultadosProducto([]);
     setContenido('');
     setCalificacion(1);
   };
@@ -71,65 +44,19 @@ function Reseñas({ onVolver }) {
     <div className="contenedor">
       <h1 className="titulo">Escribir Reseña</h1>
 
-      {/* busqueda de comercio */}
-      {!supermercadoSeleccionado && (
+      {/* lista de productos comprados */}
+      {!productoSeleccionado && (
         <>
-          <input
-            type="text"
-            placeholder="Buscar supermercado..."
-            value={busquedaSuper}
-            onChange={(e) => setBusquedaSuper(e.target.value)}
-            onKeyDown={manejarBusquedaSupermercado}
-            className="inputStyle"
-          />
+          <h3>De tus productos comprados anteriormente:</h3>
           <div className="cuadricula">
-            {resultadosSuper.map((supermercado, index) => (
+            {productosComprados.map((producto, index) => (
               <div
                 key={index}
                 className="cardStyle"
-                onClick={() => {
-                  setSupermercadoSeleccionado(supermercado);
-                  setBusquedaSuper('');
-                  setResultadosSuper([]);
-                }}
+                onClick={() => setProductoSeleccionado(producto)}
               >
-                {supermercado}
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* comercio seleccionado */}
-      {supermercadoSeleccionado && (
-        <div className="seleccionActual">
-          <strong>Supermercado:</strong> {supermercadoSeleccionado}
-        </div>
-      )}
-
-      {/* busqueda de producto */}
-      {!productoSeleccionado && supermercadoSeleccionado && (
-        <>
-          <input
-            type="text"
-            placeholder="Buscar producto..."
-            value={busquedaProducto}
-            onChange={(e) => setBusquedaProducto(e.target.value)}
-            onKeyDown={manejarBusquedaProducto}
-            className="inputStyle"
-          />
-          <div className="cuadricula">
-            {resultadosProducto.map((producto, index) => (
-              <div
-                key={index}
-                className="cardStyle"
-                onClick={() => {
-                  setProductoSeleccionado(producto.nombre);
-                  setBusquedaProducto('');
-                  setResultadosProducto([]);
-                }}
-              >
-                {producto.nombre}
+                <p><strong>{producto.nombre}</strong></p>
+                <p className="subtexto">Comprado en {producto.supermercado}</p>
               </div>
             ))}
           </div>
@@ -139,7 +66,8 @@ function Reseñas({ onVolver }) {
       {/* producto seleccionado */}
       {productoSeleccionado && (
         <div className="seleccionActual">
-          <strong>Producto:</strong> {productoSeleccionado}
+          <strong>Producto:</strong> {productoSeleccionado.nombre}<br />
+          <strong>Supermercado:</strong> {productoSeleccionado.supermercado}
         </div>
       )}
 
@@ -154,7 +82,7 @@ function Reseñas({ onVolver }) {
         />
       )}
 
-      {/* estas estrellitas claro que me las robe y claro que quedaron de locos */}
+      {/* calificación */}
       {productoSeleccionado && (
         <div className="calificacion">
           <label>Calificación:</label>
