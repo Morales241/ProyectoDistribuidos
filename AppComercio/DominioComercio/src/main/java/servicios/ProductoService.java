@@ -1,6 +1,7 @@
 package servicios;
 
 import entidades.Producto;
+import enums.CategoriaProducto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repositorios.ProductoRepository;
@@ -26,7 +27,7 @@ public class ProductoService {
         return productoRepository.findByNombre(nombre);
     }
 
-    public List<Producto> findByCategoria(String categoria) {
+    public List<Producto> findByCategoria(CategoriaProducto categoria) {
         return productoRepository.findByCategoria(categoria);
     }
 

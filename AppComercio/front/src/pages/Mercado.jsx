@@ -28,7 +28,7 @@ function Mercado({ onVolver }) {
     'Snacks', 'Limpieza', 'Higiene Personal', 'Mascotas', 'Electrónica'
   ];
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const cerrarSesion = () => {
     navigate('/Login.jsx');
@@ -356,11 +356,11 @@ function Mercado({ onVolver }) {
   else contenido = renderPrincipal();
 
   return (
-    <>
-      {contenido}
-
+    <div className="layout-container">
       {pantalla !== null && (
-        <div className="barra-inferior">
+        <div className="barra-lateral">
+
+          <h1 className="titulo">Mercado</h1>
           <button onClick={() => mostrarFormulario()}>
             <BiPlusCircle /> <span>Publicar</span>
           </button>
@@ -373,17 +373,14 @@ function Mercado({ onVolver }) {
           <button onClick={() => setPantalla('publicarOferta')}>
             <BiEdit /> <span>Oferta</span>
           </button>
-
-          {/* Botón para regresar al menú principal */}
-          <button onClick={() => setPantalla(null)}>
-            <BiArrowBack /> <span>Volver</span>
-          </button>
         </div>
       )}
-    </>
+
+      <div className="contenido-principal">
+        {contenido}
+      </div>
+    </div>
   );
-
-
 }
 
 export default Mercado;

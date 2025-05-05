@@ -2,6 +2,7 @@ package repositorios;
 
 import entidades.Comercio;
 import entidades.Producto;
+import enums.CategoriaProducto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     List<Producto> findByNombreLike(String nombre);
 
-    List<Producto> findByCategoria(String categoria);
+    List<Producto> findByCategoria(CategoriaProducto categoria);
 
 }

@@ -8,7 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"controladores", "servicios"})
+@ComponentScan(basePackages = {"controladores", "servicios", "config"})
+@EnableFeignClients("feigns")
 @EntityScan("entidades")
 @EnableJpaRepositories("repositorios")
 public class DominioComercioApplication {

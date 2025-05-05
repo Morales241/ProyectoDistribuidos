@@ -30,7 +30,7 @@ public class ProductoMapper {
         return productodto;
     }
 
-    protected static CategoriaProducto identificador_Categoria_Entity(String categoria){
+    public static CategoriaProducto identificador_Categoria_Entity(String categoria){
         CategoriaProducto categoriaProducto;
         if(categoria.isEmpty()){
             return null;
@@ -71,7 +71,7 @@ public class ProductoMapper {
         }
     }
 
-    protected static String identificador_Categoria_DTO(CategoriaProducto categoria){
+    public static String identificador_Categoria_DTO(CategoriaProducto categoria){
 
         switch (categoria){
             case CategoriaProducto.Frutas_y_Verduras:

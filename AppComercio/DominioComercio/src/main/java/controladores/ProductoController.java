@@ -39,7 +39,10 @@ public class ProductoController {
 
     @GetMapping("/buscarPorCategoria")
     public ResponseEntity<List<ProductoDTO>> buscarProductoPorCategoria(@RequestParam String categoria) {
-        List<Producto> productos = productoService.findByCategoria(categoria);
+
+
+
+        List<Producto> productos = productoService.findByCategoria(ProductoMapper.identificador_Categoria_Entity(categoria));
         List<ProductoDTO> productoDTOs = productos.stream().map(ProductoMapper::toDTO).collect(Collectors.toList());
         return ResponseEntity.ok(productoDTOs);
     }
