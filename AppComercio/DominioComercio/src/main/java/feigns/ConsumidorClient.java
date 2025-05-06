@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient("CONSUMIDORDOMINIO")
+@FeignClient("DOMINIOCONSUMIDOR")
 public interface ConsumidorClient {
 
-    @GetMapping("/wishList/{idProducto}")
+    @GetMapping("/wishList/obtenerPorProducto/{idProducto}")
     public ResponseEntity<List<CarritoDTO>> obtenerWishlistPorProducto(@PathVariable Long idProducto);
 }

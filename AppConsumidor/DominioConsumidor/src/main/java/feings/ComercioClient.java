@@ -10,17 +10,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 
-@FeignClient("COMERCIODOMINIO")
+@FeignClient("DOMINIOCOMERCIO")
 public interface ComercioClient {
 
+    @GetMapping("/comercios/buscarPorNombre")
+    ResponseEntity<ComercioDTO> buscarComercioPornombre(@RequestParam String nombre);
+
     @GetMapping("/productos/buscarPorNombre")
-    public ResponseEntity<ProductoDTO> buscarProductoPornombre(@RequestParam String nombre);
+    ResponseEntity<ProductoDTO> buscarProductoPornombre(@RequestParam String nombre);
+
+    @GetMapping("/productos/buscarTodos")
+    public ResponseEntity<List<ProductoDTO>> listarProductos();
 
     @GetMapping("/precioProductos/buscarPorProductoId/{productoid}")
-    public ResponseEntity<List<PrecioProductoDTO>> findByProductoId(@PathVariable Long productoid);
+    ResponseEntity<List<PrecioProductoDTO>> findByProductoId(@PathVariable Long productoid);
 
     @GetMapping("/comercios/{id}")
-    public ResponseEntity<ComercioDTO> obtener(@PathVariable Long id);
+    ResponseEntity<ComercioDTO> obtener(@PathVariable Long id);
 }

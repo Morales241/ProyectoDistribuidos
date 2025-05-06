@@ -28,7 +28,7 @@ public class WishListController {
     @Autowired
     private ComercioClient clienteComercio;
 
-    @PostMapping
+    @PostMapping("/agregar")
     public ResponseEntity<Carrito> agregarAWishlist(@RequestBody Carrito wish) {
         try {
             wish.setFechaAgregado(LocalDateTime.now());
@@ -39,21 +39,21 @@ public class WishListController {
         }
     }
 
-    @GetMapping("/{idConsumidor}")
+    @GetMapping("/obtener/{idConsumidor}")
     public ResponseEntity<List<CarritoDTO>> obtenerWishlist(@PathVariable Long idConsumidor) {
         Convertidor<CarritoDTO, Carrito> convertidor = new ConvertidorCarrito();
         List<CarritoDTO> dtos = convertidor.createFromEntities(servicio.obtenerWishlist(idConsumidor));
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/{idProducto}")
+    @GetMapping("/obtenerPorProducto/{idProducto}")
     public ResponseEntity<List<CarritoDTO>> obtenerWishlistPorProducto(@PathVariable Long idProducto) {
         Convertidor<CarritoDTO, Carrito> convertidor = new ConvertidorCarrito();
         List<CarritoDTO> dtos = convertidor.createFromEntities(servicio.obtenerWishlistPorProducto(idProducto));
         return ResponseEntity.ok(dtos);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarWishlistItem(@PathVariable Long id) {
         servicio.eliminarWishlistItem(id);
         return ResponseEntity.noContent().build();
