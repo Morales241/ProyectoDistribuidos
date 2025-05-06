@@ -1,12 +1,22 @@
 package dtos;
 
+import entidades.ProductoWishList;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class WishListDTO {
 
     private ConsumidorDTO consumidor;
 
     private String nombre;
 
-    public WishListDTO(){}
+    private List<ProductoWishListDTO> productos;
+
+    public WishListDTO(){
+
+        productos = new ArrayList<>();
+    }
 
     public ConsumidorDTO getConsumidor() {
         return consumidor;
@@ -22,5 +32,13 @@ public class WishListDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public List<ProductoWishListDTO> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<ProductoWishListDTO> productos) {
+        this.productos = productos;
     }
 }

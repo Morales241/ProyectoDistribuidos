@@ -2,8 +2,11 @@ package entidades;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "Carrito")
+@Table(name = "WishList")
 public class WishList {
 
     @Id
@@ -17,11 +20,11 @@ public class WishList {
     @Column(nullable = false)
     private String nombre;
 
-    public WishList() {}
+    @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoWishList> productos;
 
-    public WishList(Consumidor consumidor, String nombre) {
-        this.consumidor = consumidor;
-        this.nombre = nombre;
+    public WishList() {
+        productos = new ArrayList<>();
     }
 
     public Long getId() {
@@ -38,6 +41,14 @@ public class WishList {
 
     public void setConsumidor(Consumidor consumidor) {
         this.consumidor = consumidor;
+    }
+
+    public List<ProductoWishList> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<ProductoWishList> productos) {
+        this.productos = productos;
     }
 
     public String getNombre() {

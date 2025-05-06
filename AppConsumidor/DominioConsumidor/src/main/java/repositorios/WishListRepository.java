@@ -1,19 +1,18 @@
 package repositorios;
 
-import entidades.Carrito;
+import entidades.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface WishListRepository extends JpaRepository<Carrito, Long> {
+public interface WishListRepository extends JpaRepository<WishList, Long> {
 
-    List<Carrito> findByConsumidorId(Long consumidor);
+    public List<WishList> findByConsumidorId(Long consumidor);
 
-    List<Carrito> findByProductoId(Long producto);
+    public WishList findByNombreAndConsumidor(String nombre, Long consumidor);
 
-    boolean existsByConsumidorIdAndProductoId(Long consumidorId, Long productoId);
 
 
 }

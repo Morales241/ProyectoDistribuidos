@@ -4,7 +4,6 @@ package dtos;
 import java.time.LocalDate;
 
 public class ConsumidorDTO {
-    private Long id;
 
     private String nombre;
 
@@ -13,14 +12,6 @@ public class ConsumidorDTO {
     private LocalDate fechaRegistro;
 
     public ConsumidorDTO() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNombre() {
         return nombre;

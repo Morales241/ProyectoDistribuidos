@@ -10,23 +10,16 @@ public class ProductoWishList {
     private Long id;
 
     @Column(nullable = false)
-    private Long idProducto;
+    private Long idPrecioProducto;
 
-    @Column(nullable = false)
-    private Long idWishList;
-
-    @Column(nullable = false)
-    private Long carritoId;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "id_wishList")
+    private WishList wishList;
 
     @Column(nullable = false)
     private int cantidad;
 
     public ProductoWishList() {}
-
-    public ProductoWishList(Long idWishList, Long idProducto) {
-        this.idWishList = idWishList;
-        this.idProducto = idProducto;
-    }
 
     public int getCantidad() {
         return cantidad;
@@ -36,20 +29,20 @@ public class ProductoWishList {
         this.cantidad = cantidad;
     }
 
-    public Long getIdProducto() {
-        return idProducto;
+    public Long getIdPrecioProducto() {
+        return idPrecioProducto;
     }
 
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
+    public void setIdPrecioProducto(Long idPrecioProducto) {
+        this.idPrecioProducto = idPrecioProducto;
     }
 
-    public Long getIdWishList() {
-        return idWishList;
+    public WishList getWishList() {
+        return wishList;
     }
 
-    public void setIdWishList(Long idWishList) {
-        this.idWishList = idWishList;
+    public void setWishList(WishList wishList) {
+        this.wishList = wishList;
     }
 
     public void setId(Long id) {

@@ -1,13 +1,14 @@
 package dtos;
 
+import java.time.LocalDateTime;
 
-public class ProductoWishListDTO {
+public class CarritoProductoDTO {
 
     private PrecioProductoDTO producto;
 
     private int cantidad;
 
-    public ProductoWishListDTO(){}
+    public CarritoProductoDTO () {}
 
     public PrecioProductoDTO getProducto() {
         return producto;

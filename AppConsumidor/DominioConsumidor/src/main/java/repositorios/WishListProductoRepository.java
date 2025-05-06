@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductoCarritoRepository extends JpaRepository<ProductoWishList, Long> {
-    List<ProductoWishList> findByCarritoId(Long id);
+public interface WishListProductoRepository extends JpaRepository<ProductoWishList, Long> {
+
+    public List<ProductoWishList> findByWishListId(Long idwishList);
 }

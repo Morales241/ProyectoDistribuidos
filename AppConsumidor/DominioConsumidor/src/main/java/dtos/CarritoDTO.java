@@ -1,31 +1,19 @@
 package dtos;
 
+import entidades.ProductoCarrito;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CarritoDTO {
 
     private ConsumidorDTO consumidor;
 
-    private PrecioProductoDTO producto;
+    List<CarritoProductoDTO> productos;
 
-    private LocalDateTime fecha;
-
-    public CarritoDTO() {}
-
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
-
-    public PrecioProductoDTO getProducto() {
-        return producto;
-    }
-
-    public void setProducto(PrecioProductoDTO producto) {
-        this.producto = producto;
+    public CarritoDTO() {
+        productos = new ArrayList<>();
     }
 
     public ConsumidorDTO getConsumidor() {
@@ -34,6 +22,14 @@ public class CarritoDTO {
 
     public void setConsumidor(ConsumidorDTO consumidor) {
         this.consumidor = consumidor;
+    }
+
+    public List<CarritoProductoDTO> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<CarritoProductoDTO> productos) {
+        this.productos = productos;
     }
 }
 

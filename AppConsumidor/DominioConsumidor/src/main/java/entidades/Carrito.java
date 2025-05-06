@@ -3,9 +3,11 @@ package entidades;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "WishList")
+@Table(name = "Carrito")
 public class Carrito {
 
     @Id
@@ -16,19 +18,19 @@ public class Carrito {
     @JoinColumn(nullable = false)
     private Consumidor consumidor;
 
-    @Column(nullable = false)
-    private Long productoId;
-
-    @Column(nullable = false)
-    private LocalDateTime fechaAgregado;
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoCarrito> productos;
 
     public Carrito() {
+        productos = new ArrayList<>();
     }
 
-    public Carrito(LocalDateTime fechaAgregado, Long productoId, Consumidor consumidor) {
-        this.fechaAgregado = fechaAgregado;
-        this.productoId = productoId;
-        this.consumidor = consumidor;
+    public List<ProductoCarrito> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<ProductoCarrito> productos) {
+        this.productos = productos;
     }
 
     public Consumidor getConsumidor() {
@@ -37,22 +39,6 @@ public class Carrito {
 
     public void setConsumidor(Consumidor consumidor) {
         this.consumidor = consumidor;
-    }
-
-    public Long getProductoId() {
-        return productoId;
-    }
-
-    public void setProductoId(Long productoId) {
-        this.productoId = productoId;
-    }
-
-    public LocalDateTime getFechaAgregado() {
-        return fechaAgregado;
-    }
-
-    public void setFechaAgregado(LocalDateTime fechaAgregado) {
-        this.fechaAgregado = fechaAgregado;
     }
 
     public void setId(Long id) {

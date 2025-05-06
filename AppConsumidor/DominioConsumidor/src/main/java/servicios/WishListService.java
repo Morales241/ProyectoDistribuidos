@@ -1,12 +1,15 @@
 package servicios;
 
 import entidades.Carrito;
+import entidades.WishList;
 import excepciones.ConsumidorServiciosException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import repositorios.WishListProductoRepository;
 import repositorios.WishListRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,25 +18,34 @@ public class WishListService {
     @Autowired
     private WishListRepository wishListRepository;
 
-    public Carrito agregarAWishlist(Carrito wish) throws ConsumidorServiciosException {
-        // Evitar duplicados
-        if (wishListRepository.existsByConsumidorIdAndProductoId(wish.getConsumidor().getId(), wish.getProductoId())) {
-            throw new ConsumidorServiciosException("El producto ya se encuentra en la wishlist");
+    @Autowired
+    private WishListProductoRepository WLPR;
+
+    public WishList ObtenerWishListPorNombre(String nombre, Long consumidor) throws ConsumidorServiciosException {
+        WishList wishList = wishListRepository.findByNombreAndConsumidor(nombre, consumidor);
+
+        if (wishList.getProductos().isEmpty()) {
+            wishList.setProductos(WLPR.findByWishListId(wishList.getId()));
         }
-
-        wish.setFechaAgregado(LocalDateTime.now());
-        return wishListRepository.save(wish);
+        return wishList;
     }
 
-    public List<Carrito> obtenerWishlist(Long idConsumidor) {
-        return wishListRepository.findByConsumidorId(idConsumidor);
+    public List<WishList> ObtenerWishListsPorConsumidor(Long consumidor) throws ConsumidorServiciosException {
+        List<WishList> wishLists = new ArrayList<>();
+        wishLists = wishListRepository.findByConsumidorId(consumidor);
+
+        wishLists.forEach(wishList -> {wishList.setProductos(WLPR.findByWishListId(wishList.getId()));});
+
+        return wishLists;
     }
 
-    public void eliminarWishlistItem(Long id) {
-        wishListRepository.deleteById(id);
+    public WishList save(WishList wishList) throws ConsumidorServiciosException {
+        return wishListRepository.save(wishList);
     }
 
-    public List<Carrito> obtenerWishlistPorProducto(Long idProducto) {
-        return wishListRepository.findByProductoId(idProducto);
+    public void remove(String nombre, Long consumidor){
+
+        WishList wishList = wishListRepository.findByNombreAndConsumidor(nombre, consumidor);
+        wishListRepository.delete(wishList);
     }
 }

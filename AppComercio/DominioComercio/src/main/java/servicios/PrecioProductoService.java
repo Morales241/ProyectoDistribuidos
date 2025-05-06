@@ -33,4 +33,8 @@ public class PrecioProductoService {
     public void eliminarPrecioProducto(Long precioProducto) {
         precioProductoRepository.deleteById(precioProducto);
     }
+
+    public PrecioProducto findPrecioProductoById(Long precioProductoId) {
+        return precioProductoRepository.findById(precioProductoId).get();
+    }
 }

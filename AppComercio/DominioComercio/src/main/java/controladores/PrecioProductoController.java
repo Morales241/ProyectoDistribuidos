@@ -126,4 +126,19 @@ public class PrecioProductoController {
         }
         return ResponseEntity.ok(precioProductoService.crearPrecioProducto(precioProductoExistente.get()));
     }
+
+    @GetMapping("/traerProductoEspecifico/{producto}/{comercio}")
+    public ResponseEntity<Long> traerProductoEspecifico(@PathVariable String producto, @PathVariable String comercio) {
+        Optional<Comercio> comercioAux = comercioService.buscarComercioPorNombre(comercio);
+        Optional<Producto> productoAux = productoService.findByNombre(producto);
+        Optional<PrecioProducto> precioProducto = precioProductoService.findEspecificPrecioProducto(productoAux.get().getId(), comercioAux.get().getId());
+
+        return ResponseEntity.ok(PrecioProductoMapper.toDTO(precioProducto.get()).getId());
+    }
+
+    @GetMapping("/traerProductoEspecificoPorId/{Idproducto}")
+    public ResponseEntity<PrecioProductoDTO> traerProductoEspecificoPorId(@PathVariable Long Idproducto) {
+        PrecioProducto precioProducto = precioProductoService.findPrecioProductoById(Idproducto);
+        return ResponseEntity.ok(PrecioProductoMapper.toDTO(precioProducto));
+    }
 }
