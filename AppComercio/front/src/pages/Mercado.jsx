@@ -31,7 +31,6 @@ function Mercado({ onVolver }) {
   useEffect(() => {
     obtenerProductos();
   }, []);
-  
 
   const cerrarSesion = () => {
     sessionStorage.clear();
@@ -40,7 +39,6 @@ function Mercado({ onVolver }) {
   };
 
   const obtenerProductos = async () => {
-
     try {
       const comercioId = localStorage.getItem('comercioId');
       console.log("ID del comercio actual en localStorage:", comercioId);
@@ -116,7 +114,6 @@ function Mercado({ onVolver }) {
         alert('Producto y precio registrados correctamente.');
         setPantalla(null);
         obtenerProductos();
-
       } catch (error) {
         console.error('Error al guardar producto o precio:', error);
         alert('Ocurrió un error al guardar el producto o el precio.');
@@ -139,7 +136,6 @@ function Mercado({ onVolver }) {
         alert('El precio del producto se ha cambiado correctamente.');
         setPantalla(null);
         obtenerProductos();
-
       } catch (error) {
         console.error('Error al guardar producto o precio:', error);
         alert('Ocurrió un error al modificar el precio del producto.');
@@ -183,7 +179,6 @@ function Mercado({ onVolver }) {
       <button className="login-button" style={{ marginTop: '20px' }} onClick={cerrarSesion}>
         Cerrar sesión
       </button>
-
     </div>
   );
 
@@ -251,8 +246,6 @@ function Mercado({ onVolver }) {
               <BiEdit style={{ marginRight: '5px' }} />
               Modificar
             </button>
-
-
           </div>
         ))}
       </div>
@@ -298,7 +291,7 @@ function Mercado({ onVolver }) {
         ))}
       </div>
       <button className="login-button" onClick={() => setPantalla(null)}>
-        <BiArrowBack style={{ marginRight: '5px' }} />
+        <BiArrowBack style={{ marginRight: "5px" }} />
         Volver
       </button>
     </div>
@@ -309,16 +302,16 @@ function Mercado({ onVolver }) {
       alert('Faltan datos para registrar la oferta.');
       return;
     }
-  
+
     const body = {
-      comercio: comercioId,
+      comercio: localStorage.getItem("comercioId"),
       producto: productoSeleccionado.id,
       precioOferta: parseFloat(precioOferta),
-      fechaInicio: `${fechaInicio}T00:00:00`, 
+      fechaInicio: `${fechaInicio}T00:00:00`,
       fechaFin: `${fechaFin}T00:00:00`,
       descripcion: `Oferta para ${productoSeleccionado.nombreProducto}`
     };
-  
+
     try {
       const response = await fetch('http://localhost:8080/ofertas/guardar', {
         method: 'POST',
@@ -327,7 +320,7 @@ function Mercado({ onVolver }) {
         },
         body: JSON.stringify(body)
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         alert('Oferta registrada correctamente');
@@ -346,7 +339,6 @@ function Mercado({ onVolver }) {
       alert('Error de conexión al registrar la oferta');
     }
   };
-  
 
   const renderPublicarOferta = () => (
     <div className="register-container">
@@ -366,14 +358,13 @@ function Mercado({ onVolver }) {
             key={index}
             className="producto-card"
             onClick={() => {
+              setProductoSeleccionado(producto);
               setBusqueda(producto.nombreProducto);
               setPrecioAnterior(producto.precio || '');
               setResultados([]);
             }}
-
-            style={{ cursor: 'pointer' }}
-          >
-            <strong>{producto.nombreProducto}</strong> - <span>${producto.precio || 'N/A'}</span>
+            style={{ cursor: "pointer" }}>
+            <strong>{producto.nombreProducto}</strong> - <span>${producto.precio || "N/A"}</span>
           </div>
         ))}
       </div>
@@ -417,7 +408,6 @@ function Mercado({ onVolver }) {
       </button>
     </div>
   );
-
 
   let contenido;
 
