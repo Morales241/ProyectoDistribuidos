@@ -22,7 +22,7 @@ public class CarritoService {
     public Carrito getCarrito(Long idConsumidor){
         Carrito carrito = CarritoRepository.findByConsumidorId(idConsumidor);
         if(carrito.getProductos().isEmpty()){
-            carrito.setProductos(CPR.findByCarrito(carrito.getId()));
+            carrito.setProductos(CPR.findByCarrito(carrito));
         }
         return carrito;
     }

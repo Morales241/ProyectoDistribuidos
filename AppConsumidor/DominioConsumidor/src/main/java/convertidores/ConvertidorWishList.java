@@ -13,9 +13,7 @@ import java.util.stream.Collectors;
 @Component
 public class ConvertidorWishList extends Convertidor<WishListDTO, WishList> {
 
-    @Autowired
     private static Convertidor<ConsumidorDTO, Consumidor> convertidorConsumidor = new ConvertidorConsumidor();
-
 
     public ConvertidorWishList() {
         super(ConvertidorWishList::convertToEntity, ConvertidorWishList::convertToDTO);

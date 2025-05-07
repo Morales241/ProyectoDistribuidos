@@ -1,6 +1,5 @@
 package servicios;
 
-import entidades.Carrito;
 import entidades.WishList;
 import excepciones.ConsumidorServiciosException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Service;
 import repositorios.WishListProductoRepository;
 import repositorios.WishListRepository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class WishListService {
     private WishListProductoRepository WLPR;
 
     public WishList ObtenerWishListPorNombre(String nombre, Long consumidor) throws ConsumidorServiciosException {
-        WishList wishList = wishListRepository.findByNombreAndConsumidor(nombre, consumidor);
+        WishList wishList = wishListRepository.findByNombreAndConsumidorId(nombre, consumidor);
 
         if (wishList.getProductos().isEmpty()) {
             wishList.setProductos(WLPR.findByWishListId(wishList.getId()));
@@ -45,7 +43,7 @@ public class WishListService {
 
     public void remove(String nombre, Long consumidor){
 
-        WishList wishList = wishListRepository.findByNombreAndConsumidor(nombre, consumidor);
+        WishList wishList = wishListRepository.findByNombreAndConsumidorId(nombre, consumidor);
         wishListRepository.delete(wishList);
     }
 }
