@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './Preferencias.css';
 
 function Preferencias({ onVolver }) {
@@ -9,7 +10,13 @@ function Preferencias({ onVolver }) {
   const [resultadosProducto, setResultadosProducto] = useState([]);
   const [resultadosSupermercado, setResultadosSupermercado] = useState([]);
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [mercados, setMercados] = useState([]);
 
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+  
   const productosSimulados = [
     { nombre: 'Leche Lala 1L' },
     { nombre: 'Pan Bimbo 680g' },
@@ -20,10 +27,20 @@ function Preferencias({ onVolver }) {
 
   const supermercadosSimulados = ['Soriana', 'Walmart', 'Chedraui', 'Costco', 'Superama'];
 
+  const obtenerProductos = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
+      setProductos(response.data);
+      console.log("Productos:", response.data);
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    }
+  };
+  
   // llamada a la api para obtener los productos
   const manejarBusquedaProducto = (e) => {
     if (e.key === 'Enter') {
-      const coincidencias = productosSimulados.filter(p =>
+      const coincidencias = productos.filter(p =>
         p.nombre.toLowerCase().includes(busquedaProducto.toLowerCase())
       );
       setResultadosProducto(coincidencias);
@@ -33,10 +50,15 @@ function Preferencias({ onVolver }) {
   // llamada a la api para obtener los comercios
   const manejarBusquedaSupermercado = (e) => {
     if (e.key === 'Enter') {
-      const coincidencias = supermercadosSimulados.filter(s =>
-        s.toLowerCase().includes(busquedaSupermercado.toLowerCase())
-      );
-      setResultadosSupermercado(coincidencias);
+      const response = axios.get(`http://localhost:8082/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSupermercado}`)
+      .then(function (response) {
+        const coincidencias = [response.data.nombre];
+        console.log("Mercados:", coincidencias);
+        setResultadosSupermercado(coincidencias);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   };
 

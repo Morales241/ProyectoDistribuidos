@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './Reportar.css';
 
 function Reportar({ onVolver }) {
@@ -9,6 +10,7 @@ function Reportar({ onVolver }) {
   const [busquedaProducto, setBusquedaProducto] = useState('');
   const [resultadosSuper, setResultadosSuper] = useState([]);
   const [resultadosProducto, setResultadosProducto] = useState([]);
+  const [productos, setProductos] = useState([]);
 
   const supermercadosSimulados = ['Soriana', 'Walmart', 'Chedraui', 'Costco', 'Superama'];
 
@@ -19,24 +21,44 @@ function Reportar({ onVolver }) {
     { nombre: 'Arroz La Merced 1kg', supermercado: 'Soriana' },
     { nombre: 'Huevos San Juan 12pzas', supermercado: 'Costco' },
   ];
+  
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
 
+  const obtenerProductos = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
+      setProductos(response.data);
+      console.log("Productos:", response.data);
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    }
+  };
+  
   // llamada a la api para obtener los comercios
   const manejarBusquedaSupermercado = (e) => {
     if (e.key === 'Enter') {
-      const coincidencias = supermercadosSimulados.filter(s =>
-        s.toLowerCase().includes(busquedaSuper.toLowerCase())
-      );
-      setResultadosSuper(coincidencias);
+      const response = axios.get(`http://localhost:8082/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSuper}`)
+      .then(function (response) {
+        const coincidencias = [response.data.nombre];
+        console.log("Mercados:", coincidencias);
+        setResultadosSuper(coincidencias);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   };
 
   // llamada a la api para obtener los productos
   const manejarBusquedaProducto = (e) => {
     if (e.key === 'Enter') {
-      const coincidencias = productosSimulados.filter(p =>
-        p.supermercado === supermercadoSeleccionado &&
+      const coincidencias = productos.filter(p =>
+        //p.supermercado === supermercadoSeleccionado &&
         p.nombre.toLowerCase().includes(busquedaProducto.toLowerCase())
       );
+      console.log(coincidencias);
       setResultadosProducto(coincidencias);
     }
   };

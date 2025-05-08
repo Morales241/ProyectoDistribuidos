@@ -20,12 +20,12 @@ public class ComercioController {
     private ComercioClient clienteComercio;
 
     @GetMapping("/buscarComercioPorNombre")
-        public ResponseEntity<ComercioDTO> obtenerComercioPorNombre(@RequestBody String nombre) {
+        public ResponseEntity<ComercioDTO> obtenerComercioPorNombre(@RequestParam String nombre) {
         return ResponseEntity.ok(clienteComercio.buscarComercioPornombre(nombre).getBody());
     }
 
     @GetMapping("/buscarProductoPorNombre")
-    public ResponseEntity<ProductoDTO> obtenerProductosPorNombre(@RequestBody String nombre) {
+    public ResponseEntity<ProductoDTO> obtenerProductosPorNombre(@RequestParam String nombre) {
         return ResponseEntity.ok(clienteComercio.buscarProductoPornombre(nombre).getBody());
     }
 
