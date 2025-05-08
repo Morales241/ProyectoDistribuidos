@@ -55,7 +55,7 @@ function Reportar({ onVolver }) {
   const manejarBusquedaProducto = (e) => {
     if (e.key === 'Enter') {
       const coincidencias = productos.filter(p =>
-        //p.supermercado === supermercadoSeleccionado &&
+        p.supermercado === supermercadoSeleccionado &&
         p.nombre.toLowerCase().includes(busquedaProducto.toLowerCase())
       );
       console.log(coincidencias);
