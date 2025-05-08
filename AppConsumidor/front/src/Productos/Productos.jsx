@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './Productos.css';
 
 function Productos({ onVolver }) {
   const [busqueda, setBusqueda] = useState('');
   const [resultados, setResultados] = useState([]);
+  const [productos, setProductos] = useState([]);
 
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+  
+  const obtenerProductos = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
+      setProductos(response.data);
+      console.log("Productos:", response.data);
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    }
+  };
+  
   const productosSimulados = [
     { nombre: 'Leche', marca: 'Lala', presentacion: '1L', precio: 25, tienda: 'Soriana' },
     { nombre: 'Pan', marca: 'Bimbo', presentacion: '680g', precio: 35, tienda: 'Walmart' },
@@ -16,8 +32,8 @@ function Productos({ onVolver }) {
   // llamada a la api para obtener los productos
   const manejarBusqueda = (e) => {
     if (e.key === 'Enter') {
-      const coincidencias = productosSimulados.filter(p =>
-        p.nombre.toLowerCase().includes(busqueda.toLowerCase())
+      const coincidencias = productos.filter((producto) =>
+        producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
       );
       setResultados(coincidencias);
     }
