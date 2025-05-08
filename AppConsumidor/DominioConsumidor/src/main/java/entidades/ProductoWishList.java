@@ -9,32 +9,32 @@ public class ProductoWishList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long idPrecioProducto;
+    @Column(nullable = true)
+    private String productos;
+
+    @Column(nullable = true)
+    private String servicios;
 
     @ManyToOne
     @JoinColumn(nullable = false, name = "id_wishList")
     private WishList wishList;
 
-    @Column(nullable = false)
-    private int cantidad;
-
     public ProductoWishList() {}
 
-    public int getCantidad() {
-        return cantidad;
+    public String getProductos() {
+        return productos;
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void setProductos(String productos) {
+        this.productos = productos;
     }
 
-    public Long getIdPrecioProducto() {
-        return idPrecioProducto;
+    public String getServicios() {
+        return servicios;
     }
 
-    public void setIdPrecioProducto(Long idPrecioProducto) {
-        this.idPrecioProducto = idPrecioProducto;
+    public void setServicios(String servicios) {
+        this.servicios = servicios;
     }
 
     public WishList getWishList() {

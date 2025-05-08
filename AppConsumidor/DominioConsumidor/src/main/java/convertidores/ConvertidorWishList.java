@@ -52,13 +52,11 @@ public class ConvertidorWishList extends Convertidor<WishListDTO, WishList> {
 
         private static ProductoWishList convertToEntity(ProductoWishListDTO dto){
             ProductoWishList productoWishList = new ProductoWishList();
-            productoWishList.setCantidad(dto.getCantidad());
             return productoWishList;
         }
 
         private static ProductoWishListDTO convertToDto(ProductoWishList entity){
             ProductoWishListDTO productoWishListDTO = new ProductoWishListDTO();
-            productoWishListDTO.setCantidad(entity.getCantidad());
             return productoWishListDTO;
         }
     }

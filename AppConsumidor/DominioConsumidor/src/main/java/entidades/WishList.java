@@ -18,7 +18,7 @@ public class WishList {
     private Consumidor consumidor;
 
     @Column(nullable = false)
-    private String nombre;
+    private String nombreDeMercado;
 
     @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductoWishList> productos;
@@ -52,10 +52,10 @@ public class WishList {
     }
 
     public String getNombre() {
-        return nombre;
+        return nombreDeMercado;
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombreDeMercado = nombre;
     }
 }
