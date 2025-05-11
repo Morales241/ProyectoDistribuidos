@@ -159,9 +159,9 @@ public class PrecioProductoController {
         List<PrecioProductoDTO> ppsdto = convertidor.createFromEntities(pps);
 
         for(int i = 0 ; i < ppsdto.size() ; i++){
-            Comercio comercioAux2 = traerComercio(pps.get(i).getId());
-            Producto productoAux = traerProducto(pps.get(i).getId());
-            ppsdto.get(i).setComercio(comercioAux2.getNombre());
+            Comercio comercioAux = traerComercio(pps.get(i).getComercio());
+            Producto productoAux = traerProducto(pps.get(i).getProducto());
+            ppsdto.get(i).setComercio(comercioAux.getNombre());
             ppsdto.get(i).setProducto(productoAux.getNombre());
         }
 

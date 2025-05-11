@@ -51,11 +51,11 @@ public class WishList {
         this.productos = productos;
     }
 
-    public String getNombre() {
+    public String getNombreDeMercado() {
         return nombreDeMercado;
     }
 
-    public void setNombre(String nombre) {
-        this.nombreDeMercado = nombre;
+    public void setNombreDeMercado(String nombreDeMercado) {
+        this.nombreDeMercado = nombreDeMercado;
     }
 }

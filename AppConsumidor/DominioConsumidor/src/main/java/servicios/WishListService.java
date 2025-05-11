@@ -19,14 +19,14 @@ public class WishListService {
     @Autowired
     private WishListProductoRepository WLPR;
 
-    public WishList ObtenerWishListPorNombre(String nombre, Long consumidor) throws ConsumidorServiciosException {
-        WishList wishList = wishListRepository.findByNombreAndConsumidorId(nombre, consumidor);
-
-        if (wishList.getProductos().isEmpty()) {
-            wishList.setProductos(WLPR.findByWishListId(wishList.getId()));
-        }
-        return wishList;
-    }
+//    public WishList ObtenerWishListPorNombre(String nombre, Long consumidor) throws ConsumidorServiciosException {
+////        WishList wishList = wishListRepository.findByNombreDeMercadoAndConsumidor(nombre, consumidor);
+////
+////        if (wishList.getProductos().isEmpty()) {
+////            wishList.setProductos(WLPR.findByWishListId(wishList.getId()));
+////        }
+////        return wishList;
+//    }
 
     public List<WishList> ObtenerWishListsPorConsumidor(Long consumidor) throws ConsumidorServiciosException {
         List<WishList> wishLists = new ArrayList<>();
@@ -41,9 +41,4 @@ public class WishListService {
         return wishListRepository.save(wishList);
     }
 
-    public void remove(String nombre, Long consumidor){
-
-        WishList wishList = wishListRepository.findByNombreAndConsumidorId(nombre, consumidor);
-        wishListRepository.delete(wishList);
-    }
 }

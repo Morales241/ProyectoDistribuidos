@@ -1,8 +1,10 @@
 package controladores;
 
 import dtos.ComercioDTO;
+import dtos.RegistroDTO;
 import entidades.Comercio;
 import mappers.Convertidor;
+import mappers.ConvertidorComercioRegistro;
 import mappers.ConvertirdorComercio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ public class ComercioController {
     private static final Logger logger = LoggerFactory.getLogger(ComercioController.class);
 
     Convertidor<ComercioDTO, Comercio> convertidor = new ConvertirdorComercio();
+    Convertidor<RegistroDTO, Comercio> convertidorRegistro = new ConvertidorComercioRegistro();
 
     @Autowired
     private ComercioService comercioService;
@@ -33,10 +36,10 @@ public class ComercioController {
     private EncriptamientoService encriptamientoService;
 
     @PostMapping("/guardar")
-    public ResponseEntity<ComercioDTO> crearComercio(@RequestBody ComercioDTO comercio) {
+    public ResponseEntity<RegistroDTO> crearComercio(@RequestBody RegistroDTO comercio) {
 
         logger.info("Datos recibidos: {}", comercio);
-        return ResponseEntity.ok(convertidor.convertFromEntity(comercioService.crearComercio(convertidor.convertFromDto(comercio))));
+        return ResponseEntity.ok(convertidorRegistro.convertFromEntity(comercioService.crearComercio(convertidorRegistro.convertFromDto(comercio))));
     }
 
     @DeleteMapping("/eliminar")

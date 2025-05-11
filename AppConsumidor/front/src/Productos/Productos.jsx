@@ -1,39 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import "./Productos.css"; 
-
-const [busqueda, setBusqueda] = useState('');
-const [resultados, setResultados] = useState([]);
-const [productos, setProductos] = useState([]);
-
-useEffect(() => {
-  obtenerProductos();
-}, []);
-
-const obtenerProductos = async () => {
-  try {
-    const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
-    setProductos(response.data);
-    console.log("Productos:", response.data);
-  } catch (error) {
-    console.error("Error al obtener productos:", error);
-  }
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { BiPlusCircle, BiEdit, BiSearchAlt, BiStar, BiArrowBack } from 'react-icons/bi';
 
 
-
-const preciosMock = [
-  { productoId: 1, comercio: "Super A", precio: 1.2 },
-  { productoId: 1, comercio: "Super B", precio: 1.5 },
-  { productoId: 2, comercio: "Super A", precio: 0.9 },
-  { productoId: 2, comercio: "Super B", precio: 1.1 },
-  { productoId: 3, comercio: "Super A", precio: 3.5 },
-  { productoId: 3, comercio: "Super B", precio: 3.2 },
-];
-
-function App() {
+function Productos() {
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [tienda, setTienda] = useState("");
   const [precioTienda, setPrecioTienda] = useState(null);
   const [comparacion, setComparacion] = useState({ a: "", b: "", resultado: null, mejor: null });
+  const [productosBD, setProductos] = useState([]);
+  const [preciosBD, setPrecios] = useState([]);
+
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+
+  const obtenerProductos = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
+      setProductos(response.data);
+      console.log('Productos:', response.data);
+
+      const preciosresponse = await axios.get(`http://localhost:8082/consumidoresComercio/traerPrecios`);
+      setPrecios(preciosresponse.data);
+      console.log('precios:', preciosresponse.data);
+
+    } catch (error) {
+      console.error('Error al obtener productos:', error);
+    }
+  };
 
   const seleccionarProducto = (prod) => {
     setProductoSeleccionado(prod);
@@ -43,7 +40,7 @@ function App() {
 
   const buscarPrecio = () => {
     if (!productoSeleccionado || !tienda) return;
-    const precio = preciosMock.find(
+    const precio = preciosBD.find(
       (p) =>
         p.productoId === productoSeleccionado.id &&
         p.comercio.toLowerCase() === tienda.toLowerCase()
@@ -52,12 +49,12 @@ function App() {
   };
 
   const compararPrecios = () => {
-    const p1 = preciosMock.find(
+    const p1 = preciosBD.find(
       (p) =>
         p.productoId === productoSeleccionado.id &&
         p.comercio.toLowerCase() === comparacion.a.toLowerCase()
     );
-    const p2 = preciosMock.find(
+    const p2 = preciosBD.find(
       (p) =>
         p.productoId === productoSeleccionado.id &&
         p.comercio.toLowerCase() === comparacion.b.toLowerCase()
@@ -92,7 +89,7 @@ function App() {
         <>
           <h1 className="titulo">Selecciona un producto</h1>
           <div className="cuadricula">
-            {productos.map((prod) => (
+            {productosBD.map((prod) => (
               <div
                 key={prod.id}
                 onClick={() => seleccionarProducto(prod)}
@@ -168,4 +165,4 @@ function App() {
   );
 }
 
-export default App;
+export default Productos;

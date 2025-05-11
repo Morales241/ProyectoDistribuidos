@@ -61,101 +61,101 @@ public class WishListController {
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
 
-    @GetMapping("/obtenerEspecifica/{idConsumidor}/{nombre}")
-    public ResponseEntity<WishListDTO> obtenerWishlistEspecifica(@PathVariable Long idConsumidor, @PathVariable String nombre) {
-        Optional<Consumidor> consumidor = servicioConsumidor.obtener(idConsumidor);
+//    @GetMapping("/obtenerEspecifica/{idConsumidor}/{nombre}")
+//    public ResponseEntity<WishListDTO> obtenerWishlistEspecifica(@PathVariable Long idConsumidor, @PathVariable String nombre) {
+//        Optional<Consumidor> consumidor = servicioConsumidor.obtener(idConsumidor);
+//
+//        WishListDTO dtos = new WishListDTO();
+//        dtos = convertidorWishList.convertFromEntity(servicio.ObtenerWishListPorNombre(nombre, consumidor.get().getId()));
+//
+//        return ResponseEntity.ok(dtos);
+//    }
 
-        WishListDTO dtos = new WishListDTO();
-        dtos = convertidorWishList.convertFromEntity(servicio.ObtenerWishListPorNombre(nombre, consumidor.get().getId()));
+//    @DeleteMapping("/eliminar/{idConsumidor}/{nombre}")
+//    public ResponseEntity<Void> eliminarWishlistItem(@PathVariable Long idConsumidor, @PathVariable String nombre) {
+//
+//        Optional<Consumidor> consumidor = servicioConsumidor.obtener(idConsumidor);
+//
+//        servicio.remove(nombre, consumidor.get().getId());
+//
+//        return ResponseEntity.status(HttpStatus.OK).build();
+//    }
 
-        return ResponseEntity.ok(dtos);
-    }
-
-    @DeleteMapping("/eliminar/{idConsumidor}/{nombre}")
-    public ResponseEntity<Void> eliminarWishlistItem(@PathVariable Long idConsumidor, @PathVariable String nombre) {
-
-        Optional<Consumidor> consumidor = servicioConsumidor.obtener(idConsumidor);
-
-        servicio.remove(nombre, consumidor.get().getId());
-
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @PostMapping("/agregarAWishList/{idConsumidor}/{nombre}")
-    public ResponseEntity<Void> agregarProducto(
-            @PathVariable Long idConsumidor,
-            @PathVariable String nombre,
-            @RequestBody ProductoWishListDTO productoDTO) {
-
-        WishList wishList = servicio.ObtenerWishListPorNombre(nombre, idConsumidor);
-        if (wishList == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        for (ProductoWishList producto : wishList.getProductos()) {
-            PrecioProductoDTO productoAux = clienteComercio.traerProductoEspecificoPorId(producto.getIdPrecioProducto()).getBody();
-            if (productoAux == null) continue;
-
-            if (productoAux.getProducto().equals(productoDTO.getProducto().getProducto()) &&
-                    productoAux.getComercio().equals(productoDTO.getProducto().getComercio())) {
-
-                producto.setCantidad(producto.getCantidad() + productoDTO.getCantidad());
-                servicio.save(wishList);
-                return ResponseEntity.ok().build();
-            }
-        }
-
-        Long idPrecioProducto = clienteComercio
-                .traerProductoEspecifico(productoDTO.getProducto().getProducto(), productoDTO.getProducto().getComercio())
-                .getBody();
-
-        if (idPrecioProducto == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        ProductoWishList nuevoProducto = new ProductoWishList();
-        nuevoProducto.setCantidad(productoDTO.getCantidad());
-        nuevoProducto.setWishList(wishList);
-        nuevoProducto.setIdPrecioProducto(idPrecioProducto);
-
-        wishList.getProductos().add(nuevoProducto);
-        servicio.save(wishList);
-
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/agregarAWishList/{idConsumidor}/{nombre}")
+//    public ResponseEntity<Void> agregarProducto(
+//            @PathVariable Long idConsumidor,
+//            @PathVariable String nombre,
+//            @RequestBody ProductoWishListDTO productoDTO) {
+//
+//        WishList wishList = servicio.ObtenerWishListPorNombre(nombre, idConsumidor);
+//        if (wishList == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        for (ProductoWishList producto : wishList.getProductos()) {
+////            PrecioProductoDTO productoAux = clienteComercio.traerProductoEspecificoPorId(producto.getIdPrecioProducto()).getBody();
+////            if (productoAux == null) continue;
+////
+////            if (productoAux.getProducto().equals(productoDTO.getProducto().getProducto()) &&
+////                    productoAux.getComercio().equals(productoDTO.getProducto().getComercio())) {
+////
+//////                producto.setCantidad(producto.getCantidad() + productoDTO.getCantidad());
+////                servicio.save(wishList);
+////                return ResponseEntity.ok().build();
+////            }
+//        }
+//
+//        Long idPrecioProducto = clienteComercio
+//                .traerProductoEspecifico(productoDTO.getProducto().getProducto(), productoDTO.getProducto().getComercio())
+//                .getBody();
+//
+//        if (idPrecioProducto == null) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        ProductoWishList nuevoProducto = new ProductoWishList();
+////        nuevoProducto.setCantidad(productoDTO.getCantidad());
+////        nuevoProducto.setWishList(wishList);
+////        nuevoProducto.setIdPrecioProducto(idPrecioProducto);
+//
+//        wishList.getProductos().add(nuevoProducto);
+//        servicio.save(wishList);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
 
-    @PostMapping("/eliminarDeWishList/{idConsumidor}/{nombre}")
-    public ResponseEntity<Void> eliminarProducto(
-            @PathVariable Long idConsumidor,
-            @PathVariable String nombre,
-            @RequestBody CarritoProductoDTO productoDTO) {
-
-        WishList wishList = servicio.ObtenerWishListPorNombre(nombre, idConsumidor);
-        if (wishList == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Iterator<ProductoWishList> iterator = wishList.getProductos().iterator();
-        while (iterator.hasNext()) {
-            ProductoWishList producto = iterator.next();
-            PrecioProductoDTO productoAux = clienteComercio.traerProductoEspecificoPorId(producto.getIdPrecioProducto()).getBody();
-            if (productoAux == null) continue;
-
-            if (productoAux.getProducto().equals(productoDTO.getProducto().getProducto()) &&
-                    productoAux.getComercio().equals(productoDTO.getProducto().getComercio())) {
-
-                if (producto.getCantidad() <= productoDTO.getCantidad()) {
-                    iterator.remove();
-                } else {
-                    producto.setCantidad(producto.getCantidad() - productoDTO.getCantidad());
-                }
-
-                servicio.save(wishList);
-                return ResponseEntity.ok().build();
-            }
-        }
-
-        return ResponseEntity.badRequest().build();
-    }
+//    @PostMapping("/eliminarDeWishList/{idConsumidor}/{nombre}")
+//    public ResponseEntity<Void> eliminarProducto(
+//            @PathVariable Long idConsumidor,
+//            @PathVariable String nombre,
+//            @RequestBody CarritoProductoDTO productoDTO) {
+//
+//        WishList wishList = servicio.ObtenerWishListPorNombre(nombre, idConsumidor);
+//        if (wishList == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        Iterator<ProductoWishList> iterator = wishList.getProductos().iterator();
+//        while (iterator.hasNext()) {
+////            ProductoWishList producto = iterator.next();
+////            PrecioProductoDTO productoAux = clienteComercio.traerProductoEspecificoPorId(producto.getIdPrecioProducto()).getBody();
+////            if (productoAux == null) continue;
+////
+////            if (productoAux.getProducto().equals(productoDTO.getProducto().getProducto()) &&
+////                    productoAux.getComercio().equals(productoDTO.getProducto().getComercio())) {
+//
+////                if (producto.getCantidad() <= productoDTO.getCantidad()) {
+////                    iterator.remove();
+////                } else {
+////                    producto.setCantidad(producto.getCantidad() - productoDTO.getCantidad());
+////                }
+//
+////                servicio.save(wishList);
+////                return ResponseEntity.ok().build();
+////            }
+//           }
+//
+//        return ResponseEntity.badRequest().build();
+//    }
 }

@@ -22,7 +22,7 @@ public class ConvertidorWishList extends Convertidor<WishListDTO, WishList> {
     private static WishListDTO convertToDTO(WishList wishList) {
         //tienes que buscar el producto para rellenar la info, pero no se como hacerlo en un metodo estatico jsjs
         WishListDTO wishListDTO = new WishListDTO();
-        wishListDTO.setNombre(wishList.getNombre());
+        wishListDTO.setNombre(wishList.getNombreDeMercado());
         wishListDTO.setConsumidor(convertidorConsumidor.convertFromEntity(wishList.getConsumidor()));
         wishListDTO.setProductos(wishList.getProductos().stream().map(ConvertidorWishListProducto::convertToDto).collect(Collectors.toList()));
         return wishListDTO;
@@ -32,7 +32,7 @@ public class ConvertidorWishList extends Convertidor<WishListDTO, WishList> {
         //lo mismo
         WishList wishList = new WishList();
         wishList.setConsumidor(convertidorConsumidor.convertFromDto(dto.getConsumidor()));
-        wishList.setNombre(dto.getNombre());
+        wishList.setNombreDeMercado(dto.getNombre());
         wishList.setProductos(dto.getProductos().stream().map(ConvertidorWishListProducto::convertToEntity).collect(Collectors.toList()));
         return wishList;
 
