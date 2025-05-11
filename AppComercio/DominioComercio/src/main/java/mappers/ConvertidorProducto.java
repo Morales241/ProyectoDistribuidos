@@ -4,30 +4,27 @@ import dtos.ProductoDTO;
 import entidades.Producto;
 import enums.CategoriaProducto;
 
-public class ProductoMapper {
+public class ConvertidorProducto extends Convertidor<ProductoDTO, Producto>{
 
-    public static Producto toEntity(ProductoDTO dto) {
-        CategoriaProducto categoria = identificador_Categoria_Entity(dto.getCategoria());
-
-
-        Producto producto = new Producto();
-        producto.setId(dto.getId());
-        producto.setNombre(dto.getNombre());
-        producto.setDescripcion(dto.getDescripcion());
-        producto.setCategoria(categoria);
-        return producto;
+    public ConvertidorProducto() {
+        super(ConvertidorProducto::convertToEntity, ConvertidorProducto::convertToDTO);
     }
 
-    public static ProductoDTO toDTO(Producto producto) {
+    private static ProductoDTO convertToDTO(Producto producto) {
+        ProductoDTO productoDTO = new ProductoDTO();
+        productoDTO.setNombre(producto.getNombre());
+        productoDTO.setDescripcion(producto.getDescripcion());
+        productoDTO.setCategoria(identificador_Categoria_DTO(producto.getCategoria()));
+        return productoDTO;
+    }
 
-        String categoria = identificador_Categoria_DTO(producto.getCategoria());
+    private static Producto convertToEntity(ProductoDTO productoDTO) {
 
-        ProductoDTO productodto = new ProductoDTO();
-        productodto.setId(producto.getId());
-        productodto.setNombre(producto.getNombre());
-        productodto.setDescripcion(producto.getDescripcion());
-        productodto.setCategoria(categoria);
-        return productodto;
+        Producto producto = new Producto();
+        producto.setNombre(productoDTO.getNombre());
+        producto.setDescripcion(productoDTO.getDescripcion());
+        producto.setCategoria(identificador_Categoria_Entity(productoDTO.getCategoria()));
+        return producto;
     }
 
     public static CategoriaProducto identificador_Categoria_Entity(String categoria){

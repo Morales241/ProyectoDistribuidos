@@ -1,56 +1,27 @@
 package dtos;
 
-import java.time.LocalDateTime;
-
 public class PrecioProductoDTO {
-    private Long id;
-    private Long comercio;
-    private String nombreComercio;
-    private Long producto;
-    private String nombreProducto;
+
+    private String comercio;
+    private String producto;
     private double precio;
-    private LocalDateTime fecha;
 
     public PrecioProductoDTO() {}
 
-    public String getNombreComercio() {
-        return nombreComercio;
-    }
-
-    public void setNombreComercio(String nombreComercio) {
-        this.nombreComercio = nombreComercio;
-    }
-
-    public String getNombreProducto() {
-        return nombreProducto;
-    }
-
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getComercio() {
+    public String getComercio() {
         return comercio;
     }
 
-    public void setComercio(Long Comercio) {
-        this.comercio = Comercio;
+    public void setComercio(String comercio) {
+        this.comercio = comercio;
     }
 
-    public Long getProducto() {
+    public String getProducto() {
         return producto;
     }
 
-    public void setProducto(Long Producto) {
-        this.producto = Producto;
+    public void setProducto(String producto) {
+        this.producto = producto;
     }
 
     public double getPrecio() {
@@ -59,13 +30,5 @@ public class PrecioProductoDTO {
 
     public void setPrecio(double precio) {
         this.precio = precio;
-    }
-
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
     }
 }

@@ -127,8 +127,7 @@ public class CarritoController {
 
     @PostMapping("/eliminarDeCarrito/{idConsumidor}")
     public ResponseEntity<Void> eliminarProducto(
-            @PathVariable Long idConsumidor,
-            @RequestBody CarritoProductoDTO productoDTO) {
+            @PathVariable Long idConsumidor, @RequestBody CarritoProductoDTO productoDTO) {
 
         Carrito carrito = servicio.getCarrito(idConsumidor);
         if (carrito == null) {
@@ -166,4 +165,8 @@ public class CarritoController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/carritos/obtenerPorProducto/{idProducto}")
+    public ResponseEntity<List<CarritoDTO>> obtenerCarritosPorProducto(@PathVariable Long idProducto){
+        return ResponseEntity.ok(convertidorCarrito.createFromEntities(servicio.getCarritosPorProducto(idProducto)));
+    }
 }

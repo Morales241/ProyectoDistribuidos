@@ -14,9 +14,7 @@ public interface OfertaRepository extends CrudRepository<Oferta, Long> {
 
     List<Oferta> findByFechaFinLessThanEqual(LocalDateTime fecha);
 
-    List<Oferta> findByidProducto(Long id);
-
-    List<Oferta> findByidComercio(Long id);
+    List<Oferta> findByidPrecioProducto(Long id);
 
     List<Oferta> findByPrecioOfertaBetween(Double min, Double max);
 }

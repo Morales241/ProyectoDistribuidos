@@ -3,9 +3,8 @@ package dtos;
 import java.time.LocalDateTime;
 
 public class OfertaDTO {
-    private Long id;
-    private Long comercio;
-    private Long producto;
+    private String comercio;
+    private String producto;
     private Double precioOferta;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
@@ -13,28 +12,28 @@ public class OfertaDTO {
 
     public OfertaDTO() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getComercio() {
+    public String getComercio() {
         return comercio;
     }
 
-    public void setComercio(Long comercioP) {
-        this.comercio = comercioP;
+    public void setComercio(String comercio) {
+        this.comercio = comercio;
     }
 
-    public Long getProducto() {
+    public String getProducto() {
         return producto;
     }
 
-    public void setProducto(Long productoP) {
-        this.producto = productoP;
+    public void setProducto(String producto) {
+        this.producto = producto;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public Double getPrecioOferta() {
@@ -61,11 +60,4 @@ public class OfertaDTO {
         this.fechaFin = fechaFin;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
 }

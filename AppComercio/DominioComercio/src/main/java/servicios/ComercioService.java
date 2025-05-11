@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repositorios.ComercioRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,5 +36,9 @@ public class ComercioService {
 
     public Optional<Comercio> buscarComercioPorCorreo(String correo) {
         return comercioRepository.findByCorreo(correo);
+    }
+
+    public List<Comercio> buscarComercios() {
+        return comercioRepository.findAll();
     }
 }

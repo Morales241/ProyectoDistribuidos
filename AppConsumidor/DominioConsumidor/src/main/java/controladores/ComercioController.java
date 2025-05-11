@@ -1,14 +1,13 @@
 package controladores;
 
 import dtos.ComercioDTO;
+import dtos.PrecioProductoDTO;
 import dtos.ProductoDTO;
-import entidades.Consumidor;
 import feings.ComercioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -32,6 +31,11 @@ public class ComercioController {
     @GetMapping("/buscarProductos")
     public ResponseEntity<List<ProductoDTO>> obtenerProductos() {
         return org.springframework.http.ResponseEntity.ok(clienteComercio.listarProductos().getBody());
+    }
+
+    @GetMapping("/traerPrecios")
+    public ResponseEntity<List<PrecioProductoDTO>> traerPrecios() {
+        return org.springframework.http.ResponseEntity.ok(clienteComercio.traerPrecios().getBody());
     }
 
 }

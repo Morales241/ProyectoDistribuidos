@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import repositorios.CarritoProductoRepository;
 import repositorios.CarritoRepository;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -19,20 +21,38 @@ public class CarritoService {
     @Autowired
     private CarritoProductoRepository CPR;
 
-    public Carrito getCarrito(Long idConsumidor){
+    public Carrito getCarrito(Long idConsumidor) {
         Carrito carrito = CarritoRepository.findByConsumidorId(idConsumidor);
-        if(carrito.getProductos().isEmpty()){
+        if (carrito.getProductos().isEmpty()) {
             carrito.setProductos(CPR.findByCarrito(carrito));
         }
         return carrito;
     }
 
-    public Carrito saveCarrito(Carrito carrito){
+    public Carrito saveCarrito(Carrito carrito) {
         return CarritoRepository.save(carrito);
     }
 
-    public void agregarProductoACarrito(ProductoCarrito productoCarrito){
+    public void agregarProductoACarrito(ProductoCarrito productoCarrito) {
         CPR.save(productoCarrito);
     }
 
+    public List<Carrito> getCarritosPorProducto(long idProducto) {
+        List<Carrito> carritos = new ArrayList<>();
+
+        Iterator iterator = CarritoRepository.findAll().iterator();
+
+        while (iterator.hasNext()) {
+            Carrito carrito = (Carrito) iterator.next();
+
+            carrito.getProductos().forEach(productoCarrito -> {
+
+                if (productoCarrito.getIdPrecioProducto() == idProducto) {
+                    carritos.add(carrito);
+
+                }
+            });
+        }
+        return carritos;
+    }
 }

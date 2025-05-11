@@ -2,7 +2,8 @@ package controladores;
 
 import dtos.ComercioDTO;
 import entidades.Comercio;
-import mappers.ComercioMapper;
+import mappers.Convertidor;
+import mappers.ConvertirdorComercio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,18 @@ import org.springframework.web.bind.annotation.*;
 import servicios.ComercioService;
 import servicios.EncriptamientoService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:5175"})
 @RestController
 @RequestMapping("/comercios")
 public class ComercioController {
 
     private static final Logger logger = LoggerFactory.getLogger(ComercioController.class);
+
+    Convertidor<ComercioDTO, Comercio> convertidor = new ConvertirdorComercio();
 
     @Autowired
     private ComercioService comercioService;
@@ -31,7 +36,7 @@ public class ComercioController {
     public ResponseEntity<ComercioDTO> crearComercio(@RequestBody ComercioDTO comercio) {
 
         logger.info("Datos recibidos: {}", comercio);
-        return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.crearComercio(ComercioMapper.toEntity(comercio))));
+        return ResponseEntity.ok(convertidor.convertFromEntity(comercioService.crearComercio(convertidor.convertFromDto(comercio))));
     }
 
     @DeleteMapping("/eliminar")
@@ -44,12 +49,12 @@ public class ComercioController {
     public ResponseEntity<ComercioDTO> buscarComercioPornombre(@RequestParam String nombre) {
         Optional<Comercio> comercio = comercioService.buscarComercioPorNombre(nombre);
 
-        return  comercio.map(ComercioMapper::toDTO).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return  comercio.map(convertidor::convertFromEntity).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/obtener/{id}")
     public ResponseEntity<ComercioDTO> obtener(@PathVariable Long id) {
-        return ResponseEntity.ok(ComercioMapper.toDTO(comercioService.buscarComercioPorId(id)));
+        return ResponseEntity.ok(convertidor.convertFromEntity(comercioService.buscarComercioPorId(id)));
     }
 
     @PostMapping("/inicioSesion")
@@ -63,10 +68,15 @@ public class ComercioController {
 
             if (passwordValido) {
                 System.out.println("inicio sesion: " + comercio.getId());
-                return ResponseEntity.ok(ComercioMapper.toDTO(comercio));
+                return ResponseEntity.ok(convertidor.convertFromEntity(comercio));
             }
         }
         System.out.println("no inicio sesion");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/traerComercios")
+    public ResponseEntity<List<ComercioDTO>> traerComercios() {
+        return ResponseEntity.ok(convertidor.createFromEntities(comercioService.buscarComercios()));
     }
 }

@@ -4,6 +4,7 @@ package dtos;
 import java.time.LocalDate;
 
 public class ConsumidorDTO {
+
     private Long id;
 
     private String nombre;

@@ -40,9 +40,9 @@ function Mercado({ onVolver }) {
 
   const obtenerProductos = async () => {
     try {
-      const comercioId = localStorage.getItem('comercioId');
-      console.log("ID del comercio actual en localStorage:", comercioId);
-      const response = await axios.get(`http://localhost:8080/precioProductos/buscarPorComercioId/${comercioId}`);
+      //cambiar
+      const nombreComercio = localStorage.getItem('nombreComercio');
+      const response = await axios.get(`http://localhost:8080/precioProductos/buscarComercioPorNombre/${nombreComercio}`);
       setProductos(response.data);
       console.log('Productos:', response.data);
     } catch (error) {
@@ -52,15 +52,17 @@ function Mercado({ onVolver }) {
 
   const manejarBusqueda = (e) => {
 
-    if (e.key === 'Enter') {
-      const productosFiltrados = productos.filter(producto =>
-        producto.nombreProducto.toLowerCase().includes(busqueda.toLowerCase())
-      );
+    if (e.key === "Enter") {
 
-      console.log('Productos filtrados:', productosFiltrados);
+      const productosFiltrados = productos.filter(producto =>
+        producto.producto?.toLowerCase().includes(busqueda.toLowerCase())
+      );
+  
+      console.log("Productos filtrados:", productosFiltrados);
       setResultados(productosFiltrados);
     }
   };
+  
 
   const mostrarFormulario = (producto = null) => {
     if (producto) {
@@ -94,17 +96,15 @@ function Mercado({ onVolver }) {
         );
 
         const productoGuardado = productoResponse.data;
-        localStorage.setItem('productoId', productoGuardado.id);
+        localStorage.setItem('nombreProducto', productoGuardado.nombre);
 
-        const productoId = localStorage.getItem('productoId');
-        const comercioId = localStorage.getItem('comercioId');
+        const Nproducto = localStorage.getItem('nombreProducto');
+        const Ncomercio = localStorage.getItem('nombreComercio');
 
         const precioproductoData = {
-          id: null,
-          comercio: comercioId,
-          producto: productoId,
-          precio: precio,
-          fecha: null
+          comercio: Ncomercio,
+          producto: Nproducto,
+          precio: precio
         };
 
         await axios.post('http://localhost:8080/precioProductos/guardar',
@@ -127,10 +127,10 @@ function Mercado({ onVolver }) {
     if (nuevoPrecio) {
       try {
         
-        const comercioId = localStorage.getItem('comercioId');
+        const Ncomercio = localStorage.getItem('nombreComercio');
 
         const productoResponse = await axios.post(
-          `http://localhost:8080/precioProductos/modificarPrecio/${comercioId}/${productoSeleccionado?.nombreProducto}/${nuevoPrecio}`
+          `http://localhost:8080/precioProductos/modificarPrecio/${Ncomercio}/${productoSeleccionado?.producto}/${nuevoPrecio}`
         );
 
         alert('El precio del producto se ha cambiado correctamente.');
@@ -234,7 +234,7 @@ function Mercado({ onVolver }) {
       <div>
         {resultados.map((producto, index) => (
           <div key={index} className="producto-card">
-            <strong>{producto.nombreProducto}</strong> - <span>${producto.precio || 'N/A'}</span>
+            <strong>{producto.producto}</strong> - <span>${producto.precio || 'N/A'}</span>
             <button
               className="register-button"
               onClick={() => {
@@ -259,7 +259,7 @@ function Mercado({ onVolver }) {
   const renderModificarSoloPrecio = () => (
     <div className="register-container">
       <h2>Modificar Precio</h2>
-      <p><strong>Producto:</strong> {productoSeleccionado?.nombreProducto}</p>
+      <p><strong>Producto:</strong> {productoSeleccionado?.producto}</p>
       <input
         type="number"
         placeholder="Nuevo precio"
@@ -304,12 +304,12 @@ function Mercado({ onVolver }) {
     }
 
     const body = {
-      comercio: localStorage.getItem("comercioId"),
-      producto: productoSeleccionado.id,
+      comercio: localStorage.getItem("nombreComercio"),
+      producto: productoSeleccionado.producto,
       precioOferta: parseFloat(precioOferta),
       fechaInicio: `${fechaInicio}T00:00:00`,
       fechaFin: `${fechaFin}T00:00:00`,
-      descripcion: `Oferta para ${productoSeleccionado.nombreProducto}`
+      descripcion: `Oferta para ${productoSeleccionado.producto}`
     };
 
     try {
@@ -359,12 +359,12 @@ function Mercado({ onVolver }) {
             className="producto-card"
             onClick={() => {
               setProductoSeleccionado(producto);
-              setBusqueda(producto.nombreProducto);
+              setBusqueda(producto.producto);
               setPrecioAnterior(producto.precio || '');
               setResultados([]);
             }}
             style={{ cursor: "pointer" }}>
-            <strong>{producto.nombreProducto}</strong> - <span>${producto.precio || "N/A"}</span>
+            <strong>{producto.producto}</strong> - <span>${producto.precio || "N/A"}</span>
           </div>
         ))}
       </div>

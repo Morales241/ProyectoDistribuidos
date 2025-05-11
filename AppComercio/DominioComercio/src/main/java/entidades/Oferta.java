@@ -12,10 +12,7 @@ public class Oferta {
     private Long id;
 
     @Column(nullable = false)
-    private Long idComercio;
-
-    @Column(nullable = false)
-    private Long idProducto;
+    private Long idPrecioProducto;
 
     @Column(nullable = false)
     private Double precioOferta;
@@ -31,29 +28,12 @@ public class Oferta {
 
     public Oferta() {}
 
-    public Oferta(Long comercio, Long producto, Double precioOferta, LocalDateTime fechaInicio, LocalDateTime fechaFin, String descripcion) {
-        this.idComercio = comercio;
-        this.idProducto = producto;
-        this.precioOferta = precioOferta;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.descripcion = descripcion;
+    public Long getIdPrecioProducto() {
+        return idPrecioProducto;
     }
 
-    public Long getComercio() {
-        return idComercio;
-    }
-
-    public void setComercio(Long comercio) {
-        this.idComercio = comercio;
-    }
-
-    public Long getProducto() {
-        return idProducto;
-    }
-
-    public void setProducto(Long producto) {
-        this.idProducto = producto;
+    public void setIdPrecioProducto(Long idPrecioProducto) {
+        this.idPrecioProducto = idPrecioProducto;
     }
 
     public Double getPrecioOferta() {

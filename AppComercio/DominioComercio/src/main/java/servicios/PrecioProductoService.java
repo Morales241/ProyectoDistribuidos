@@ -37,4 +37,8 @@ public class PrecioProductoService {
     public PrecioProducto findPrecioProductoById(Long precioProductoId) {
         return precioProductoRepository.findById(precioProductoId).get();
     }
+
+    public List<PrecioProducto> findAllPrecioProducto() {
+        return precioProductoRepository.findAll();
+    }
 }

@@ -34,4 +34,7 @@ public interface ComercioClient {
 
     @GetMapping("/traerProductoEspecifico/{producto}/{comercio}")
     public ResponseEntity<Long> traerProductoEspecifico(@PathVariable String producto, @PathVariable String comercio);
+
+    @GetMapping("/traerPrecios")
+    public ResponseEntity<List<PrecioProductoDTO>> traerPrecios();
 }

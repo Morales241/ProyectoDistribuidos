@@ -1,100 +1,171 @@
-import React, { useState, useEffect } from 'react';
-import axios from "axios";
-import './Productos.css';
+import React, { useState } from "react";
+import "./Productos.css"; 
 
-function Productos({ onVolver }) {
-  const [busqueda, setBusqueda] = useState('');
-  const [resultados, setResultados] = useState([]);
-  const [productos, setProductos] = useState([]);
+const [busqueda, setBusqueda] = useState('');
+const [resultados, setResultados] = useState([]);
+const [productos, setProductos] = useState([]);
 
-  useEffect(() => {
-    obtenerProductos();
-  }, []);
-  
-  const obtenerProductos = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
-      setProductos(response.data);
-      console.log("Productos:", response.data);
-    } catch (error) {
-      console.error("Error al obtener productos:", error);
+useEffect(() => {
+  obtenerProductos();
+}, []);
+
+const obtenerProductos = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
+    setProductos(response.data);
+    console.log("Productos:", response.data);
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+  }
+
+
+
+const preciosMock = [
+  { productoId: 1, comercio: "Super A", precio: 1.2 },
+  { productoId: 1, comercio: "Super B", precio: 1.5 },
+  { productoId: 2, comercio: "Super A", precio: 0.9 },
+  { productoId: 2, comercio: "Super B", precio: 1.1 },
+  { productoId: 3, comercio: "Super A", precio: 3.5 },
+  { productoId: 3, comercio: "Super B", precio: 3.2 },
+];
+
+function App() {
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [tienda, setTienda] = useState("");
+  const [precioTienda, setPrecioTienda] = useState(null);
+  const [comparacion, setComparacion] = useState({ a: "", b: "", resultado: null, mejor: null });
+
+  const seleccionarProducto = (prod) => {
+    setProductoSeleccionado(prod);
+    setPrecioTienda(null);
+    setComparacion({ a: "", b: "", resultado: null, mejor: null });
+  };
+
+  const buscarPrecio = () => {
+    if (!productoSeleccionado || !tienda) return;
+    const precio = preciosMock.find(
+      (p) =>
+        p.productoId === productoSeleccionado.id &&
+        p.comercio.toLowerCase() === tienda.toLowerCase()
+    );
+    setPrecioTienda(precio ? precio.precio : "No encontrado");
+  };
+
+  const compararPrecios = () => {
+    const p1 = preciosMock.find(
+      (p) =>
+        p.productoId === productoSeleccionado.id &&
+        p.comercio.toLowerCase() === comparacion.a.toLowerCase()
+    );
+    const p2 = preciosMock.find(
+      (p) =>
+        p.productoId === productoSeleccionado.id &&
+        p.comercio.toLowerCase() === comparacion.b.toLowerCase()
+    );
+    if (!p1 || !p2) {
+      setComparacion((prev) => ({
+        ...prev,
+        resultado: "Precio no disponible para una o ambas tiendas",
+        mejor: null,
+      }));
+    } else {
+      const mejor = p1.precio < p2.precio ? p1 : p2;
+      const resultado = `La tienda más barata es ${mejor.comercio} ($${mejor.precio})`;
+      setComparacion((prev) => ({ ...prev, resultado, mejor }));
     }
   };
-  
-  const productosSimulados = [
-    { nombre: 'Leche', marca: 'Lala', presentacion: '1L', precio: 25, tienda: 'Soriana' },
-    { nombre: 'Pan', marca: 'Bimbo', presentacion: '680g', precio: 35, tienda: 'Walmart' },
-    { nombre: 'Refresco', marca: 'Coca-Cola', presentacion: '2L', precio: 42, tienda: 'Chedraui' },
-    { nombre: 'Arroz', marca: 'La Merced', presentacion: '1kg', precio: 30, tienda: 'Soriana' },
-    { nombre: 'Frijol', marca: 'Isadora', presentacion: '900g', precio: 50, tienda: 'Walmart' }
-  ];
 
-  // llamada a la api para obtener los productos
-  const manejarBusqueda = (e) => {
-    if (e.key === 'Enter') {
-      const coincidencias = productos.filter((producto) =>
-        producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
-      );
-      setResultados(coincidencias);
+  const handleAgregarAlCarrito = () => {
+    console.log(`Agregado al carrito: ${productoSeleccionado.nombre} de ${tienda} por $${precioTienda}`);
+  };
+
+  const handleAgregarComparacionAlCarrito = () => {
+    const { mejor } = comparacion;
+    if (mejor) {
+      console.log(`Agregado al carrito (comparación): ${productoSeleccionado.nombre} de ${mejor.comercio} por $${mejor.precio}`);
     }
-  };
-
-  // llamada a la api para guardar en la wishlist del usuario
-  const agregarAWishlist = (producto) => {
-    console.log(`Producto agregado a la wishlist: ${producto.nombre}`);
-    alert(`Producto ${producto.nombre} agregado a tu wishlist`);
-  };
-
-  /* Era para reportar el producto directamente desde esta pagina, 
-     pero por no implementar la redireccion con datos no sirve
-  */
-  const reportarProducto = (producto) => {
-    console.log(`Producto reportado: ${producto.nombre}`);
-    alert(`Producto ${producto.nombre} reportado`);
   };
 
   return (
     <div className="contenedor">
-      <h1 className="titulo">Buscar Productos</h1>
-
-      <input
-        type="text"
-        placeholder="Buscar producto..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        onKeyDown={manejarBusqueda}
-        className="inputStyle"
-      />
-
-      <div className="cuadricula">
-        {resultados.map((producto, index) => (
-          <div key={index} className="cardStyle">
-            <h3>{producto.nombre}</h3>
-            <p><strong>Marca:</strong> {producto.marca}</p>
-            <p><strong>Presentación:</strong> {producto.presentacion}</p>
-            <p><strong>Precio:</strong> ${producto.precio} MXN</p>
-            <p><strong>Tienda:</strong> {producto.tienda}</p>
-
-            {/* Acciones botones 
-                Queria meter mas botones como reportar, pero 
-                fue un lio querer redireccionar a la pagina de
-                reportes con los datos ya cargados
-            */}
-            <div className="botonesAccion">
-              <button className="buttonStyle" onClick={() => agregarAWishlist(producto)}>
-                Agregar a Wishlist
-              </button>
-              <button className="buttonStyle" onClick={() => agregarAWishlist(producto)}>
-                Agregar a carrito
-              </button>
-            </div>
+      {!productoSeleccionado ? (
+        <>
+          <h1 className="titulo">Selecciona un producto</h1>
+          <div className="cuadricula">
+            {productos.map((prod) => (
+              <div
+                key={prod.id}
+                onClick={() => seleccionarProducto(prod)}
+                className="cardStyle"
+                style={{ cursor: "pointer" }}
+              >
+                <h3>{prod.nombre}</h3>
+                <p>{prod.categoria.replace(/_/g, " ")}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      ) : (
+        <>
+          <h1 className="titulo">Detalles de {productoSeleccionado.nombre}</h1>
+          <div className="cardStyle">
+            <p><strong>Descripción:</strong> {productoSeleccionado.descripcion}</p>
+            <p><strong>Categoría:</strong> {productoSeleccionado.categoria.replace(/_/g, " ")}</p>
+          </div>
 
-      <button className="buttonStyle volverBtn" onClick={onVolver}>Volver</button>
+          <div className="botonesAccion">
+            <div>
+              <h3>Buscar precio por tienda</h3>
+              <input
+                className="inputStyle"
+                value={tienda}
+                onChange={(e) => setTienda(e.target.value)}
+                placeholder="Nombre del comercio"
+              />
+              <button className="buttonStyle" onClick={buscarPrecio}>Buscar</button>
+              {precioTienda !== null && (
+                <>
+                  <p><strong>Precio:</strong> {typeof precioTienda === "number" ? `$${precioTienda}` : precioTienda}</p>
+                  {typeof precioTienda === "number" && (
+                    <button className="buttonStyle" onClick={handleAgregarAlCarrito}>
+                      Agregar al carrito
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div>
+              <h3>Comparar precios entre dos tiendas</h3>
+              <input
+                className="inputStyle"
+                placeholder="Tienda A"
+                value={comparacion.a}
+                onChange={(e) => setComparacion({ ...comparacion, a: e.target.value })}
+              />
+              <input
+                className="inputStyle"
+                placeholder="Tienda B"
+                value={comparacion.b}
+                onChange={(e) => setComparacion({ ...comparacion, b: e.target.value })}
+              />
+              <button className="buttonStyle" onClick={compararPrecios}>Comparar</button>
+              {comparacion.resultado && <p>{comparacion.resultado}</p>}
+              {comparacion.mejor && (
+                <button className="buttonStyle" onClick={handleAgregarComparacionAlCarrito}>
+                  Agregar precio más bajo al carrito
+                </button>
+              )}
+            </div>
+
+            <button className="buttonStyle volverBtn" onClick={() => setProductoSeleccionado(null)}>
+              ← Volver
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
-export default Productos;
+export default App;

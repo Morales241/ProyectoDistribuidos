@@ -20,17 +20,7 @@ public class PrecioProducto {
     @Column(nullable = false)
     private double precio;
 
-    @Column(nullable = false)
-    private LocalDateTime fecha;
-
     public PrecioProducto() {}
-
-    public PrecioProducto(Long producto, Long comercio, double precio, LocalDateTime fecha) {
-        this.idProducto = producto;
-        this.idComercio = comercio;
-        this.precio = precio;
-        this.fecha = fecha;
-    }
 
     public Long getId() {
         return id;
@@ -64,11 +54,4 @@ public class PrecioProducto {
         this.precio = precio;
     }
 
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
 }

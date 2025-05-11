@@ -11,6 +11,6 @@ import java.util.List;
 @FeignClient("DOMINIOCONSUMIDOR")
 public interface ConsumidorClient {
 
-    @GetMapping("/wishList/obtenerPorProducto/{idProducto}")
-    public ResponseEntity<List<CarritoDTO>> obtenerWishlistPorProducto(@PathVariable Long idProducto);
+    @GetMapping("/carritos/obtenerPorProducto/{idProducto}")
+    public ResponseEntity<List<CarritoDTO>> obtenerCarritosPorProducto(@PathVariable Long idProducto);
 }

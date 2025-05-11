@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
-// import bcrypt from 'bcryptjs';
 import axios from "axios";
 
 const Login = () => {
@@ -20,21 +19,14 @@ const Login = () => {
 
     if (response.status === 200) {
       const comercio = response.data;
-      localStorage.setItem('comercioId', comercio.id);
-      console.info('id Comercio:', comercio.id);
+      localStorage.setItem('nombreComercio', comercio.nombre);
+      console.info('nombre Comercio:', comercio.nombre);
       navigate('/mercado');
     } else {
       alert('Credenciales incorrectas');
     }
 
   };
-
-  /*) const encriptarContraseña = async (password) => {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
-  };*/
-
 
   const irARegistro = () => {
     navigate('/register');
