@@ -1,5 +1,6 @@
 package servicios;
 
+import entidades.Consumidor;
 import entidades.Resena;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,12 @@ public class ResenaService {
         return resenaRepository.save(resena);
     }
 
-    public List<Resena> obtenerPorProducto(Long idProducto) {
-        return resenaRepository.findByProductoEnResena(idProducto);
+    public List<Resena> obtenerPorConsumidor(Consumidor consumidor) {
+        return resenaRepository.findByConsumidor(consumidor);
     }
 
-    public List<Resena> obtenerPorConsumidor(Long idConsumidor) {
-        return resenaRepository.findByConsumidorId(idConsumidor);
+    public List<Resena> obtenerPorComercio(Long comercio) {
+        return resenaRepository.findByIdComercio(comercio);
     }
 
     public void eliminarResena(Long id) {

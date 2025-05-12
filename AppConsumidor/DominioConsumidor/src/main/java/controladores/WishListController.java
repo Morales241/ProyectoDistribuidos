@@ -30,7 +30,6 @@ public class WishListController {
 
     Convertidor<WishListDTO, WishList> convertidorWishList = new ConvertidorWishList();
 
-
     @Autowired
     private WishListService servicio;
 

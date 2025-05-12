@@ -39,4 +39,10 @@ public interface ComercioClient {
 
     @GetMapping("/ofertas/Ofertasvigentes")
     public ResponseEntity<List<OfertaDTO>> obtenerOfertasVigentes();
+
+    @GetMapping("/comercios/traerComercios")
+    public ResponseEntity<List<ComercioDTO>> traerComercios();
+
+    @GetMapping("/comercios/buscarComercioIdPorNombre")
+    public ResponseEntity<Long> buscarComercioIdPorNombre(@RequestParam String nombre);
 }

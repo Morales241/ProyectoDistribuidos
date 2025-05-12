@@ -1,27 +1,49 @@
 package dtos;
 
 
+import java.time.LocalDateTime;
+
 public class ProductoWishListDTO {
 
-    private PrecioProductoDTO producto;
+    private String sugeriencia;
 
-    private int cantidad;
+    private ConsumidorDTO consumidor;
+
+    private String nombreComercio;
+
+    private LocalDateTime fecha;
 
     public ProductoWishListDTO(){}
 
-    public PrecioProductoDTO getProducto() {
-        return producto;
+    public String getSugeriencia() {
+        return sugeriencia;
     }
 
-    public void setProducto(PrecioProductoDTO producto) {
-        this.producto = producto;
+    public void setSugeriencia(String sugeriencia) {
+        this.sugeriencia = sugeriencia;
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public ConsumidorDTO getConsumidor() {
+        return consumidor;
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void setConsumidor(ConsumidorDTO consumidor) {
+        this.consumidor = consumidor;
+    }
+
+    public String getNombreComercio() {
+        return nombreComercio;
+    }
+
+    public void setNombreComercio(String nombreComercio) {
+        this.nombreComercio = nombreComercio;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 }

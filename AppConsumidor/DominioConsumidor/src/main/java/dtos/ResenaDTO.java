@@ -6,13 +6,13 @@ public class ResenaDTO {
 
     private String contenido;
 
-    private ConsumidorDTO consumidor;
+    private String comercio;
+
+    private Long idconsumidor;
 
     private int calificacion;
 
     private LocalDateTime fecha;
-
-    private PrecioProductoDTO precioProducto;
 
     public ResenaDTO() {}
 
@@ -24,12 +24,20 @@ public class ResenaDTO {
         this.contenido = contenido;
     }
 
-    public ConsumidorDTO getConsumidor() {
-        return consumidor;
+    public String getComercio() {
+        return comercio;
     }
 
-    public void setConsumidor(ConsumidorDTO consumidor) {
-        this.consumidor = consumidor;
+    public void setComercio(String comercio) {
+        this.comercio = comercio;
+    }
+
+    public Long getIdconsumidor() {
+        return idconsumidor;
+    }
+
+    public void setIdconsumidor(Long idconsumidor) {
+        this.idconsumidor = idconsumidor;
     }
 
     public int getCalificacion() {
@@ -46,13 +54,5 @@ public class ResenaDTO {
 
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
-    }
-
-    public PrecioProductoDTO getPrecioProducto() {
-        return precioProducto;
-    }
-
-    public void setPrecioProducto(PrecioProductoDTO precioProducto) {
-        this.precioProducto = precioProducto;
     }
 }

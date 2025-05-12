@@ -16,7 +16,7 @@ public class Resena {
     private String contenido;
 
     @Column(nullable = false)
-    private Long productoEnResena;
+    private Long idComercio;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -29,14 +29,6 @@ public class Resena {
     private LocalDateTime fecha;
 
     public Resena() {}
-
-    public Resena(String contenido, Long producto, Consumidor consumidor, int calificacion, LocalDateTime fecha) {
-        this.contenido = contenido;
-        this.productoEnResena = producto;
-        this.consumidor = consumidor;
-        this.calificacion = calificacion;
-        this.fecha = fecha;
-    }
 
     public Long getId() {
         return id;
@@ -54,12 +46,12 @@ public class Resena {
         this.contenido = contenido;
     }
 
-    public Long getProducto() {
-        return productoEnResena;
+    public Long getIdComercio() {
+        return idComercio;
     }
 
-    public void setProducto(Long producto) {
-        this.productoEnResena = producto;
+    public void setIdComercio(Long idComercio) {
+        this.idComercio = idComercio;
     }
 
     public Consumidor getConsumidor() {

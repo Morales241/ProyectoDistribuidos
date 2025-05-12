@@ -1,112 +1,114 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Reseñas.css';
 
-function Reseñas({ onVolver }) {
-  const [productoSeleccionado, setProductoSeleccionado] = useState('');
+function Reseñas() {
+  const [comercioSeleccionado, setComercioSeleccionado] = useState('');
   const [contenido, setContenido] = useState('');
   const [calificacion, setCalificacion] = useState(1);
-  const [productosComprados, setProductosComprados] = useState([]);
-
-  // Simulación de productos comprados anteriormente
-  const productosSimulados = [
-    { nombre: 'Leche Lala 1L', supermercado: 'Soriana' },
-    { nombre: 'Pan Bimbo 680g', supermercado: 'Walmart' },
-    { nombre: 'Refresco Coca-Cola 2L', supermercado: 'Chedraui' },
-    { nombre: 'Arroz La Merced 1kg', supermercado: 'Soriana' },
-    { nombre: 'Huevos San Juan 12pzas', supermercado: 'Costco' },
-  ];
+  const [comercios, setComercios] = useState([]);
+  const consumidorID = localStorage.getItem("consumidorId");
 
   useEffect(() => {
-    // Simulamos carga de historial de compras
-    setProductosComprados(productosSimulados);
+    obtenerComercios();
   }, []);
 
-  const confirmarReseña = () => {
-    const fecha = new Date().toLocaleDateString(); 
+  const obtenerComercios = async () => {
+    try {
+      const response = await axios.get('http://localhost:8082/consumidoresComercio/traerComercios');
+      setComercios(response.data);
+    } catch (error) {
+      console.error('Error al obtener comercios:', error);
+    }
+  };
+
+  const confirmarReseña = async () => {
     console.log({
-      producto: productoSeleccionado.nombre,
-      supermercado: productoSeleccionado.supermercado,
-      fecha: fecha,
       contenido: contenido,
+      comercio: comercioSeleccionado.nombre,
+      idconsumidor: consumidorID,
       calificacion: calificacion,
+      fecha: null
     });
+    
+    const resenaData ={
+      contenido: contenido,
+      comercio: comercioSeleccionado.nombre,
+      idconsumidor: consumidorID,
+      calificacion: calificacion,
+      fecha: null
+    }
+
+    await axios.post(`http://localhost:8082/resenas/guardarResena`,
+      resenaData,
+      { headers: { 'Content-Type': 'application/json' } });
+
     alert('¡Reseña enviada!');
     limpiarTodo();
   };
 
   const limpiarTodo = () => {
-    setProductoSeleccionado('');
+    setComercioSeleccionado('');
     setContenido('');
     setCalificacion(1);
   };
 
   return (
     <div className="contenedor">
-      <h1 className="titulo">Escribir Reseña</h1>
+      <h1 className="titulo">Escribir Reseña sobre Comercio</h1>
 
-      {/* lista de productos comprados */}
-      {!productoSeleccionado && (
+      {!comercioSeleccionado && comercios && comercios.length > 0 && (
         <>
-          <h3>De tus productos comprados anteriormente:</h3>
+          <h3>Selecciona un comercio que hayas visitado:</h3>
           <div className="cuadricula">
-            {productosComprados.map((producto, index) => (
+            {comercios.map((comercio, index) => (
               <div
                 key={index}
                 className="cardStyle"
-                onClick={() => setProductoSeleccionado(producto)}
+                onClick={() => setComercioSeleccionado(comercio)}
               >
-                <p><strong>{producto.nombre}</strong></p>
-                <p className="subtexto">Comprado en {producto.supermercado}</p>
+                <p><strong>{comercio.nombre}</strong></p>
+                <p className="subtexto">Es un comercio de tipo: {comercio.tipo}</p>
               </div>
             ))}
           </div>
         </>
       )}
 
-      {/* producto seleccionado */}
-      {productoSeleccionado && (
-        <div className="seleccionActual">
-          <strong>Producto:</strong> {productoSeleccionado.nombre}<br />
-          <strong>Supermercado:</strong> {productoSeleccionado.supermercado}
-        </div>
-      )}
+      {comercioSeleccionado && (
+        <>
+          <div className="seleccionActual">
+            <strong>Comercio:</strong> {comercioSeleccionado.nombre}<br />
+            <strong>Tipo:</strong> {comercioSeleccionado.tipo}
+          </div>
 
-      {/* reseña */}
-      {productoSeleccionado && (
-        <textarea
-          placeholder="Escribe tu reseña..."
-          value={contenido}
-          onChange={(e) => setContenido(e.target.value)}
-          className="inputStyle"
-          rows="5"
-        />
-      )}
+          <textarea
+            placeholder="Escribe tu reseña..."
+            value={contenido}
+            onChange={(e) => setContenido(e.target.value)}
+            className="inputStyle"
+            rows="5"
+          />
 
-      {/* calificación */}
-      {productoSeleccionado && (
-        <div className="calificacion">
-          <label>Calificación:</label>
-          {[1, 2, 3, 4, 5].map((estrellas) => (
-            <span
-              key={estrellas}
-              className={`estrella ${calificacion >= estrellas ? 'seleccionado' : ''}`}
-              onClick={() => setCalificacion(estrellas)}
-            >
-              &#9733;
-            </span>
-          ))}
-        </div>
-      )}
+          <div className="calificacion">
+            <label>Calificación:</label>
+            {[1, 2, 3, 4, 5].map((estrella) => (
+              <span
+                key={estrella}
+                className={`estrella ${calificacion >= estrella ? 'seleccionado' : ''}`}
+                onClick={() => setCalificacion(estrella)}
+              >
+                &#9733;
+              </span>
+            ))}
+          </div>
 
-      {/* acciones */}
-      {productoSeleccionado && (
-        <div className="botonesAccion">
-          <button className="buttonStyle" onClick={confirmarReseña}>Confirmar Reseña</button>
-          <button className="buttonStyle" onClick={limpiarTodo}>Cancelar</button>
-        </div>
+          <div className="botonesAccion">
+            <button className="buttonStyle" onClick={confirmarReseña}>Confirmar Reseña</button>
+            <button className="buttonStyle" onClick={limpiarTodo}>Cancelar</button>
+          </div>
+        </>
       )}
-
-      <button className="buttonStyle" onClick={onVolver}>Volver</button>
     </div>
   );
 }

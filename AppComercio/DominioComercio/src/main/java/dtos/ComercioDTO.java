@@ -7,11 +7,6 @@ public class ComercioDTO {
 
     public ComercioDTO() {}
 
-    public ComercioDTO(String nombre, String correo, String tipo) {
-        this.nombre = nombre;
-        this.tipo = tipo;
-    }
-
     public String getNombre() {
         return nombre;
     }

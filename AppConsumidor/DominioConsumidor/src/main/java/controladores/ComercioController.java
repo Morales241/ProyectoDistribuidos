@@ -40,6 +40,11 @@ public class ComercioController {
         return org.springframework.http.ResponseEntity.ok(clienteComercio.traerPrecios().getBody());
     }
 
-
+    @GetMapping("/traerComercios")
+    public ResponseEntity<List<ComercioDTO>> traerComercios() {
+        List<ComercioDTO> comercios = new ArrayList<>();
+        comercios = clienteComercio.traerComercios().getBody();
+        return ResponseEntity.ok(comercios);
+    }
 
 }

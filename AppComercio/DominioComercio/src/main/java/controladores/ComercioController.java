@@ -82,4 +82,11 @@ public class ComercioController {
     public ResponseEntity<List<ComercioDTO>> traerComercios() {
         return ResponseEntity.ok(convertidor.createFromEntities(comercioService.buscarComercios()));
     }
+
+    @GetMapping("/buscarComercioIdPorNombre")
+    public ResponseEntity<Long> buscarComercioIdPorNombre(@RequestParam String nombre) {
+       Comercio comercio = comercioService.buscarComercioPorNombre(nombre).get();
+
+        return  ResponseEntity.ok(comercio.getId());
+    }
 }
