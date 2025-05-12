@@ -1,30 +1,38 @@
 package entidades;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Reportes")
-public class Reporte {
+public class Reporte implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
 
     @Column(nullable = false)
+    @JsonProperty("comercioId")
     private Long comercioId;
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @JsonProperty("consumidor")
     private Consumidor consumidor;
 
     @Column(nullable = false)
+    @JsonProperty("producto")
     private Long producto;
 
     @Column(nullable = false)
+    @JsonProperty("contenido")
     private String contenido;
 
     @Column(nullable = false)
+    @JsonProperty("fecha")
     private LocalDateTime fecha;
 
     public Reporte() {

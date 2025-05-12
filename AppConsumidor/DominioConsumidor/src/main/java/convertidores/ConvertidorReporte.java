@@ -32,6 +32,12 @@ public class ConvertidorReporte extends Convertidor<ReporteDTO, Reporte> {
 
     private static Reporte convertToEntity(ReporteDTO dto) {
         Reporte reporte = new Reporte();
+        reporte.setFecha(dto.getFecha());
+        reporte.setContenido(dto.getContenido());
+        reporte.setConsumidor(convertidorConsumidor.convertFromDto(dto.getConsumidor()));
+        reporte.setComercioId(dto.getComercio().getId());
+        // Falta conseguir el id del producto
+        reporte.setProducto(2L);
 
         return reporte;
     }

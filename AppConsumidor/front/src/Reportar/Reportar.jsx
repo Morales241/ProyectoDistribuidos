@@ -11,26 +11,36 @@ function Reportar({ onVolver }) {
   const [resultadosSuper, setResultadosSuper] = useState([]);
   const [resultadosProducto, setResultadosProducto] = useState([]);
   const [productos, setProductos] = useState([]);
+  const [precios, setPrecios] = useState([]);
+  const [comentario, setComentario] = useState('');
+  const [consumidor, setConsumidor] = useState('');
+  const [comercio, setComercio] = useState('');
 
-  const supermercadosSimulados = ['Soriana', 'Walmart', 'Chedraui', 'Costco', 'Superama'];
-
-  const productosSimulados = [
-    { nombre: 'Leche Lala 1L', supermercado: 'Soriana' },
-    { nombre: 'Pan Bimbo 680g', supermercado: 'Walmart' },
-    { nombre: 'Refresco Coca-Cola 2L', supermercado: 'Chedraui' },
-    { nombre: 'Arroz La Merced 1kg', supermercado: 'Soriana' },
-    { nombre: 'Huevos San Juan 12pzas', supermercado: 'Costco' },
-  ];
-  
   useEffect(() => {
     obtenerProductos();
+    cargarDatosConsumidor();
   }, []);
+  
+  const cargarDatosConsumidor = async() => {
+    try {
+      const response = await axios.get(`http://localhost:8082/consumidores/obtener/1`);
+      setConsumidor(response.data);
+      console.log("Consumidor:", response.data);
+    } catch (error) {
+      console.error("Error al cargar los datos del consumidor:", error);
+    }
+  }
 
   const obtenerProductos = async () => {
     try {
       const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
       setProductos(response.data);
       console.log("Productos:", response.data);
+      
+      const preciosresponse = await axios.get(`http://localhost:8082/consumidoresComercio/traerPrecios`);
+      setPrecios(preciosresponse.data);
+      console.log('precios:', preciosresponse.data);
+      
     } catch (error) {
       console.error("Error al obtener productos:", error);
     }
@@ -41,6 +51,7 @@ function Reportar({ onVolver }) {
     if (e.key === 'Enter') {
       const response = axios.get(`http://localhost:8082/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSuper}`)
       .then(function (response) {
+        setComercio(response.data)
         const coincidencias = [response.data.nombre];
         console.log("Mercados:", coincidencias);
         setResultadosSuper(coincidencias);
@@ -51,26 +62,40 @@ function Reportar({ onVolver }) {
     }
   };
 
-  // llamada a la api para obtener los productos
   const manejarBusquedaProducto = (e) => {
     if (e.key === 'Enter') {
-      const coincidencias = productos.filter(p =>
-        p.supermercado === supermercadoSeleccionado &&
-        p.nombre.toLowerCase().includes(busquedaProducto.toLowerCase())
+      const coincidencias = precios.filter(p =>
+        p.comercio === supermercadoSeleccionado &&
+        p.producto.toLowerCase().includes(busquedaProducto.toLowerCase())
       );
       console.log(coincidencias);
       setResultadosProducto(coincidencias);
     }
   };
 
-  // post a la api con el reporte
   const confirmarReporte = () => {
-    console.log({
-      supermercado: supermercadoSeleccionado,
-      producto: productoSeleccionado,
+    const producto = precios.find(p =>
+      p.comercio === supermercadoSeleccionado &&
+      p.producto.includes(productoSeleccionado)
+    );
+    console.log(JSON.stringify({
+      comercio: comercio,
+      producto: producto,
+      contenido : comentario,
+      fecha : new Date(),
+      consumidor : consumidor
+    }));
+    axios.post(`http://localhost:8082/reportes/agregar`, {
+      comercio: comercio,
+      producto: producto,
+      contenido : comentario,
+      fecha : new Date(),
+      consumidor : consumidor
+    }).then(function (response) {
+      console.log(response);
+      alert('¡Reporte enviado!');
+      limpiarTodo();
     });
-    alert('¡Reporte enviado!');
-    limpiarTodo();
   };
 
   const limpiarTodo = () => {
@@ -145,20 +170,60 @@ function Reportar({ onVolver }) {
               className="inputStyle"
             />
             <div className="cuadricula">
-              {resultadosProducto.map((producto, index) => (
+              {resultadosProducto.map((precio, index) => (
                 <div
                   key={index}
                   className="cardStyle"
-                  onClick={() => setProductoSeleccionado(producto.nombre)}
+                  onClick={() => {
+                    setProductoSeleccionado(precio.producto)
+                    setPantalla('agregarComentario');
+                  }}
                 >
-                  {producto.nombre}
+                  {precio.producto}
                 </div>
               ))}
             </div>
           </>
         )}
 
+        <button className="buttonStyle volverBtn" onClick={() => limpiarTodo()}>Volver</button>
+      </div>
+    );
+  }
+  
+  if (pantalla === 'agregarComentario') {
+    return (
+      <div className="contenedor">
+        <h1 className="titulo">Reportar inconsistencia</h1>
+
+        {/* comercio seleccionado arriba */}
+        {supermercadoSeleccionado && (
+          <div className="seleccionActual">
+            <strong>Supermercado:</strong> {supermercadoSeleccionado}
+          </div>
+        )}
+
+        {/* producto seleccionado */}
         {productoSeleccionado && (
+          <div className="seleccionActual">
+            <strong>Producto:</strong> {productoSeleccionado}
+          </div>
+        )}
+
+        {/* añadir comentario */}
+        {(
+          <>
+            <input
+              type="text"
+              placeholder="Añada un comentario..."
+              value={comentario}
+              onChange={(e) => setComentario(e.target.value)}
+              className="inputStyle"
+            />
+          </>
+        )}
+
+        {comentario && (
           <div className="botonesAccion">
             <button className="buttonStyle" onClick={confirmarReporte}>Confirmar reporte</button>
             <button className="buttonStyle" onClick={limpiarTodo}>Cancelar</button>

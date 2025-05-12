@@ -25,9 +25,10 @@ public class ReporteController {
     @Autowired
     private ReporteService servicio;
 
-    @PostMapping
-    public ResponseEntity<Reporte> crearReporte(@RequestBody Reporte reporte) {
-        return ResponseEntity.ok(servicio.crearReporte(reporte));
+    @PostMapping("/agregar")
+    public ResponseEntity<Reporte> crearReporte(@RequestBody ReporteDTO reporte) {
+        Reporte dto = convertidor.convertFromDto(reporte);
+        return ResponseEntity.ok(servicio.crearReporte(dto));
     }
 
     @GetMapping("/consumidor/{idConsumidor}")

@@ -6,7 +6,7 @@ public class ReporteDTO {
 
     private ComercioDTO comercio;
 
-    private PrecioProductoDTO Producto;
+    private PrecioProductoDTO producto;
 
     private String contenido;
 
@@ -25,11 +25,11 @@ public class ReporteDTO {
     }
 
     public PrecioProductoDTO getProducto() {
-        return Producto;
+        return producto;
     }
 
     public void setProducto(PrecioProductoDTO producto) {
-        Producto = producto;
+        this.producto = producto;
     }
 
     public String getContenido() {

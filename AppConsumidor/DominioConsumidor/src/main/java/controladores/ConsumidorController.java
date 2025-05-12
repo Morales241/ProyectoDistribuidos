@@ -35,12 +35,12 @@ public class ConsumidorController {
         return ResponseEntity.ok(servicio.registrar(consumidor));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
     public ResponseEntity<ConsumidorDTO> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(convertidorConsumidor.convertFromEntity(servicio.obtener(id).get()));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         servicio.eliminar(id);
         return ResponseEntity.noContent().build();

@@ -3,6 +3,7 @@ package dtos;
 public class ComercioDTO {
 
     private Long id;
+
     private String nombre;
 
     public ComercioDTO() {}
