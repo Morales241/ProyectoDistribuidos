@@ -1,55 +1,69 @@
 package entidades;
 
+import dtos.ConsumidorDTO;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "Productos_De_WishList")
+@Table(name = "Productos_WishList")
 public class ProductoWishList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true)
-    private String productos;
-
-    @Column(nullable = true)
-    private String servicios;
+    @Column(nullable = false)
+    private String sugeriencia;
 
     @ManyToOne
-    @JoinColumn(nullable = false, name = "id_wishList")
-    private WishList wishList;
+    @JoinColumn(nullable = false)
+    private Consumidor consumidor;
+
+    @Column(nullable = false)
+    private Long idComercio;
+
+    @Column(nullable = false)
+    private LocalDateTime fecha;
 
     public ProductoWishList() {}
 
-    public String getProductos() {
-        return productos;
-    }
-
-    public void setProductos(String productos) {
-        this.productos = productos;
-    }
-
-    public String getServicios() {
-        return servicios;
-    }
-
-    public void setServicios(String servicios) {
-        this.servicios = servicios;
-    }
-
-    public WishList getWishList() {
-        return wishList;
-    }
-
-    public void setWishList(WishList wishList) {
-        this.wishList = wishList;
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    public String getSugeriencia() {
+        return sugeriencia;
+    }
+
+    public void setSugeriencia(String sugeriencia) {
+        this.sugeriencia = sugeriencia;
+    }
+
+    public Consumidor getConsumidor() {
+        return consumidor;
+    }
+
+    public void setConsumidor(Consumidor consumidor) {
+        this.consumidor = consumidor;
+    }
+
+    public Long getIdComercio() {
+        return idComercio;
+    }
+
+    public void setIdComercio(Long idComercio) {
+        this.idComercio = idComercio;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 }

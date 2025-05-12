@@ -1,44 +1,37 @@
 package servicios;
 
-import entidades.WishList;
-import excepciones.ConsumidorServiciosException;
+import entidades.Consumidor;
+import entidades.ProductoWishList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repositorios.WishListProductoRepository;
-import repositorios.WishListRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class WishListService {
 
     @Autowired
-    private WishListRepository wishListRepository;
+    private WishListProductoRepository wishListRepository;
 
-    @Autowired
-    private WishListProductoRepository WLPR;
-
-//    public WishList ObtenerWishListPorNombre(String nombre, Long consumidor) throws ConsumidorServiciosException {
-////        WishList wishList = wishListRepository.findByNombreDeMercadoAndConsumidor(nombre, consumidor);
-////
-////        if (wishList.getProductos().isEmpty()) {
-////            wishList.setProductos(WLPR.findByWishListId(wishList.getId()));
-////        }
-////        return wishList;
-//    }
-
-    public List<WishList> ObtenerWishListsPorConsumidor(Long consumidor) throws ConsumidorServiciosException {
-        List<WishList> wishLists = new ArrayList<>();
-        wishLists = wishListRepository.findByConsumidorId(consumidor);
-
-        wishLists.forEach(wishList -> {wishList.setProductos(WLPR.findByWishListId(wishList.getId()));});
-
-        return wishLists;
+    public List<ProductoWishList> getwishList() {
+        return wishListRepository.findAll();
     }
 
-    public WishList save(WishList wishList) throws ConsumidorServiciosException {
-        return wishListRepository.save(wishList);
+    public List<ProductoWishList> traerWishListPorConsumidor(Consumidor consumidor) {
+        return wishListRepository.findByConsumidor(consumidor);
+    }
+
+    public ProductoWishList traerWishListPorId(Long id) {
+        return wishListRepository.findById(id).get();
+    }
+
+    public List<ProductoWishList> traerPorComercioId(Long id) {
+        return wishListRepository.findByIdComercio(id);
+    }
+
+    public ProductoWishList guardarWishList(ProductoWishList productoWishList) {
+        return wishListRepository.save(productoWishList);
     }
 
 }

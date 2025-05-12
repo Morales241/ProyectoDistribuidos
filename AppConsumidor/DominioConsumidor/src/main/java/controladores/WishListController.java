@@ -28,7 +28,7 @@ public class WishListController {
 
     Convertidor<ConsumidorDTO, Consumidor> convertidorConsumidor = new ConvertidorConsumidor();
 
-    Convertidor<WishListDTO, WishList> convertidorWishList = new ConvertidorWishList();
+    Convertidor<ProductoWishListDTO, ProductoWishList> convertidorWishList = new ConvertidorWishList();
 
     @Autowired
     private WishListService servicio;
@@ -39,122 +39,50 @@ public class WishListController {
     @Autowired
     private ConsumidorService servicioConsumidor;
 
-    @PostMapping("/crearWishList/{idConsumidor}/{nombre}")
-    public ResponseEntity<WishListDTO> crearWishlist(@PathVariable Long idConsumidor, @PathVariable String nombre) {
+    @GetMapping("/obtenerWishListPorConsumidor/{idConsumidor}")
+    public ResponseEntity<List<ProductoWishListDTO>> obtenerWishlist(@PathVariable Long idConsumidor) {
         Optional<Consumidor> consumidor = servicioConsumidor.obtener(idConsumidor);
+        List<ProductoWishList> productoWishLists = servicio.traerWishListPorConsumidor(consumidor.get());
+        List<ProductoWishListDTO> dtos = new ArrayList<>();
+        dtos = traerInfoCompleta(productoWishLists);
 
-        WishListDTO dto = new WishListDTO();
-        dto.setConsumidor(convertidorConsumidor.convertFromEntity(consumidor.get()));
-        dto.setNombre(nombre);
-        servicio.save(convertidorWishList.convertFromDto(dto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/obtenerTodas/{idConsumidor}")
-    public ResponseEntity<List<WishListDTO>> obtenerWishlist(@PathVariable Long idConsumidor) {
-        Optional<Consumidor> consumidor = servicioConsumidor.obtener(idConsumidor);
+    @GetMapping("/obtenerWishListPorConsumidor/{comercio}")
+    public ResponseEntity<List<ProductoWishListDTO>> obtenerWishlist(@PathVariable String comercio) {
+        Long comercioId = clienteComercio.buscarComercioIdPorNombre(comercio).getBody();
+        List<ProductoWishList> productoWishLists = servicio.traerPorComercioId(comercioId);
+        List<ProductoWishListDTO> dtos = new ArrayList<>();
+        dtos = traerInfoCompleta(productoWishLists);
 
-        List<WishListDTO> dtos = new ArrayList<>();
-        dtos = convertidorWishList.createFromEntities(servicio.ObtenerWishListsPorConsumidor(consumidor.get().getId()));
-
-        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+        return ResponseEntity.ok(dtos);
     }
 
-//    @GetMapping("/obtenerEspecifica/{idConsumidor}/{nombre}")
-//    public ResponseEntity<WishListDTO> obtenerWishlistEspecifica(@PathVariable Long idConsumidor, @PathVariable String nombre) {
-//        Optional<Consumidor> consumidor = servicioConsumidor.obtener(idConsumidor);
-//
-//        WishListDTO dtos = new WishListDTO();
-//        dtos = convertidorWishList.convertFromEntity(servicio.ObtenerWishListPorNombre(nombre, consumidor.get().getId()));
-//
-//        return ResponseEntity.ok(dtos);
-//    }
+    @PostMapping("/guardarWishList")
+    public ResponseEntity<ProductoWishListDTO> guardarWishList(@RequestBody ProductoWishListDTO dto) {
+        Long comercioId = clienteComercio.buscarComercioIdPorNombre(dto.getNombreComercio()).getBody();
+        Consumidor consumidor = servicioConsumidor.obtener(dto.getConsumidor()).get();
 
-//    @DeleteMapping("/eliminar/{idConsumidor}/{nombre}")
-//    public ResponseEntity<Void> eliminarWishlistItem(@PathVariable Long idConsumidor, @PathVariable String nombre) {
-//
-//        Optional<Consumidor> consumidor = servicioConsumidor.obtener(idConsumidor);
-//
-//        servicio.remove(nombre, consumidor.get().getId());
-//
-//        return ResponseEntity.status(HttpStatus.OK).build();
-//    }
+        ProductoWishList productoWishList = new ProductoWishList();
+        productoWishList = convertidorWishList.convertFromDto(dto);
+        productoWishList.setConsumidor(consumidor);
+        productoWishList.setIdComercio(comercioId);
+        productoWishList.setFecha(LocalDateTime.now());
+        servicio.guardarWishList(productoWishList);
 
-//    @PostMapping("/agregarAWishList/{idConsumidor}/{nombre}")
-//    public ResponseEntity<Void> agregarProducto(
-//            @PathVariable Long idConsumidor,
-//            @PathVariable String nombre,
-//            @RequestBody ProductoWishListDTO productoDTO) {
-//
-//        WishList wishList = servicio.ObtenerWishListPorNombre(nombre, idConsumidor);
-//        if (wishList == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        for (ProductoWishList producto : wishList.getProductos()) {
-////            PrecioProductoDTO productoAux = clienteComercio.traerProductoEspecificoPorId(producto.getIdPrecioProducto()).getBody();
-////            if (productoAux == null) continue;
-////
-////            if (productoAux.getProducto().equals(productoDTO.getProducto().getProducto()) &&
-////                    productoAux.getComercio().equals(productoDTO.getProducto().getComercio())) {
-////
-//////                producto.setCantidad(producto.getCantidad() + productoDTO.getCantidad());
-////                servicio.save(wishList);
-////                return ResponseEntity.ok().build();
-////            }
-//        }
-//
-//        Long idPrecioProducto = clienteComercio
-//                .traerProductoEspecifico(productoDTO.getProducto().getProducto(), productoDTO.getProducto().getComercio())
-//                .getBody();
-//
-//        if (idPrecioProducto == null) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        ProductoWishList nuevoProducto = new ProductoWishList();
-////        nuevoProducto.setCantidad(productoDTO.getCantidad());
-////        nuevoProducto.setWishList(wishList);
-////        nuevoProducto.setIdPrecioProducto(idPrecioProducto);
-//
-//        wishList.getProductos().add(nuevoProducto);
-//        servicio.save(wishList);
-//
-//        return ResponseEntity.ok().build();
-//    }
+        return ResponseEntity.ok(dto);
+    }
 
+    private List<ProductoWishListDTO> traerInfoCompleta(List<ProductoWishList> productoWishLists){
+        List<ProductoWishListDTO> dtos = new ArrayList<>();
+        dtos = convertidorWishList.createFromEntities(productoWishLists);
+        for (int i = 0; i < productoWishLists.size(); i++) {
+            ComercioDTO comercioDTO = clienteComercio.obtener(productoWishLists.get(i).getIdComercio()).getBody();
+            dtos.get(i).setConsumidor(productoWishLists.get(i).getConsumidor().getId());
+            dtos.get(i).setNombreComercio(comercioDTO.getNombre());
+        }
+        return dtos;
+    }
 
-//    @PostMapping("/eliminarDeWishList/{idConsumidor}/{nombre}")
-//    public ResponseEntity<Void> eliminarProducto(
-//            @PathVariable Long idConsumidor,
-//            @PathVariable String nombre,
-//            @RequestBody CarritoProductoDTO productoDTO) {
-//
-//        WishList wishList = servicio.ObtenerWishListPorNombre(nombre, idConsumidor);
-//        if (wishList == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        Iterator<ProductoWishList> iterator = wishList.getProductos().iterator();
-//        while (iterator.hasNext()) {
-////            ProductoWishList producto = iterator.next();
-////            PrecioProductoDTO productoAux = clienteComercio.traerProductoEspecificoPorId(producto.getIdPrecioProducto()).getBody();
-////            if (productoAux == null) continue;
-////
-////            if (productoAux.getProducto().equals(productoDTO.getProducto().getProducto()) &&
-////                    productoAux.getComercio().equals(productoDTO.getProducto().getComercio())) {
-//
-////                if (producto.getCantidad() <= productoDTO.getCantidad()) {
-////                    iterator.remove();
-////                } else {
-////                    producto.setCantidad(producto.getCantidad() - productoDTO.getCantidad());
-////                }
-//
-////                servicio.save(wishList);
-////                return ResponseEntity.ok().build();
-////            }
-//           }
-//
-//        return ResponseEntity.badRequest().build();
-//    }
 }

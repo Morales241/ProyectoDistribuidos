@@ -1,9 +1,6 @@
 package servicios;
 
 import entidades.Carrito;
-import entidades.ProductoCarrito;
-import entidades.WishList;
-import entidades.ProductoWishList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repositorios.CarritoProductoRepository;

@@ -7,7 +7,7 @@ public class ProductoWishListDTO {
 
     private String sugeriencia;
 
-    private ConsumidorDTO consumidor;
+    private Long consumidor;
 
     private String nombreComercio;
 
@@ -23,11 +23,11 @@ public class ProductoWishListDTO {
         this.sugeriencia = sugeriencia;
     }
 
-    public ConsumidorDTO getConsumidor() {
+    public Long getConsumidor() {
         return consumidor;
     }
 
-    public void setConsumidor(ConsumidorDTO consumidor) {
+    public void setConsumidor(Long consumidor) {
         this.consumidor = consumidor;
     }
 

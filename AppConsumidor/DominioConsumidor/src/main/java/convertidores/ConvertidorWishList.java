@@ -3,7 +3,6 @@ package convertidores;
 import dtos.*;
 import entidades.Consumidor;
 import entidades.ProductoWishList;
-import entidades.WishList;
 import feings.ComercioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
 @Component
-public class ConvertidorWishList extends Convertidor<WishListDTO, WishList> {
+public class ConvertidorWishList extends Convertidor<ProductoWishListDTO, ProductoWishList> {
 
     private static Convertidor<ConsumidorDTO, Consumidor> convertidorConsumidor = new ConvertidorConsumidor();
 
@@ -19,45 +18,21 @@ public class ConvertidorWishList extends Convertidor<WishListDTO, WishList> {
         super(ConvertidorWishList::convertToEntity, ConvertidorWishList::convertToDTO);
     }
 
-    private static WishListDTO convertToDTO(WishList wishList) {
-        //tienes que buscar el producto para rellenar la info, pero no se como hacerlo en un metodo estatico jsjs
-        WishListDTO wishListDTO = new WishListDTO();
-        wishListDTO.setNombre(wishList.getNombreDeMercado());
-        wishListDTO.setConsumidor(convertidorConsumidor.convertFromEntity(wishList.getConsumidor()));
-        wishListDTO.setProductos(wishList.getProductos().stream().map(ConvertidorWishListProducto::convertToDto).collect(Collectors.toList()));
+    private static ProductoWishListDTO convertToDTO(ProductoWishList wishList) {
+
+        ProductoWishListDTO wishListDTO = new ProductoWishListDTO();
+        wishListDTO.setFecha(wishList.getFecha());
+        wishListDTO.setSugeriencia(wishList.getSugeriencia());
         return wishListDTO;
     }
 
-    private static WishList convertToEntity(WishListDTO dto){
-        //lo mismo
-        WishList wishList = new WishList();
-        wishList.setConsumidor(convertidorConsumidor.convertFromDto(dto.getConsumidor()));
-        wishList.setNombreDeMercado(dto.getNombre());
-        wishList.setProductos(dto.getProductos().stream().map(ConvertidorWishListProducto::convertToEntity).collect(Collectors.toList()));
+    private static ProductoWishList convertToEntity(ProductoWishListDTO dto){
+
+        ProductoWishList wishList = new ProductoWishList();
+        wishList.setFecha(dto.getFecha());
+        wishList.setSugeriencia(dto.getSugeriencia());
         return wishList;
 
     }
 
-    @Component
-    private class ConvertidorWishListProducto extends Convertidor<ProductoWishListDTO, ProductoWishList>{
-
-        @Autowired
-        private static ComercioClient comercioClient;
-
-
-        public ConvertidorWishListProducto() {
-            super(ConvertidorWishListProducto::convertToEntity, ConvertidorWishListProducto::convertToDto);
-
-        }
-
-        private static ProductoWishList convertToEntity(ProductoWishListDTO dto){
-            ProductoWishList productoWishList = new ProductoWishList();
-            return productoWishList;
-        }
-
-        private static ProductoWishListDTO convertToDto(ProductoWishList entity){
-            ProductoWishListDTO productoWishListDTO = new ProductoWishListDTO();
-            return productoWishListDTO;
-        }
-    }
 }

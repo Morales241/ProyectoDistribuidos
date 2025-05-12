@@ -24,13 +24,13 @@ function Wishlist() {
   const enviarSugerencia = async () => {
     const data = {
       sugeriencia: sugerencia,
+      consumidor: consumidorID,
       nombreComercio: comercioSeleccionado.nombre,
-      consumidor: { id: consumidorID },
       fecha: null
     };
 
     try {
-      await axios.post('http://localhost:8082/wishlist/guardarSugerencia', data, {
+      await axios.post('http://localhost:8082/wishList/guardarWishList', data, {
         headers: { 'Content-Type': 'application/json' }
       });
       alert('¡Sugerencia enviada con éxito!');
