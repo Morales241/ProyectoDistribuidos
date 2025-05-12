@@ -23,7 +23,7 @@ function Reportar({ onVolver }) {
   
   const cargarDatosConsumidor = async() => {
     try {
-      const response = await axios.get(`http://localhost:8082/consumidores/obtener/1`);
+      const response = await axios.get(`http://localhost:8082/consumidores/obtener/${localStorage.getItem("consumidorId")}`);
       setConsumidor(response.data);
       console.log("Consumidor:", response.data);
     } catch (error) {

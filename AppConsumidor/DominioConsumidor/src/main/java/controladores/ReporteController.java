@@ -5,6 +5,7 @@ import convertidores.ConvertidorReporte;
 import dtos.ConsumidorDTO;
 import dtos.ReporteDTO;
 import entidades.Reporte;
+import feings.ComercioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +26,15 @@ public class ReporteController {
     @Autowired
     private ReporteService servicio;
 
+    @Autowired
+    private ComercioClient comercioClient;
+
     @PostMapping("/agregar")
     public ResponseEntity<Reporte> crearReporte(@RequestBody ReporteDTO reporte) {
-        Reporte dto = convertidor.convertFromDto(reporte);
-        return ResponseEntity.ok(servicio.crearReporte(dto));
+        Reporte reporteE = convertidor.convertFromDto(reporte);
+        Long idComercio = comercioClient.buscarComercioIdPorNombre(reporte.getComercio().getNombre()).getBody();
+        reporteE.setComercioId(idComercio);
+        return ResponseEntity.ok(servicio.crearReporte(reporteE));
     }
 
     @GetMapping("/consumidor/{idConsumidor}")
