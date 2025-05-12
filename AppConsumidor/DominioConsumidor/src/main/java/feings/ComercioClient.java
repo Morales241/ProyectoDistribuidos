@@ -1,13 +1,9 @@
 package feings;
 
-import dtos.ComercioDTO;
-import dtos.PrecioProductoDTO;
-import dtos.ProductoDTO;
+import dtos.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,9 +28,15 @@ public interface ComercioClient {
     @GetMapping("/precioProductos/traerProductoEspecificoPorId/{Idproducto}")
     public ResponseEntity<PrecioProductoDTO> traerProductoEspecificoPorId(@PathVariable Long Idproducto);
 
-    @GetMapping("/precioProductos/traerProductoEspecifico/{producto}/{comercio}")
-    public ResponseEntity<Long> traerProductoEspecifico(@PathVariable String producto, @PathVariable String comercio);
+    @GetMapping("/precioProductos/buscarIdEspecificamente/{producto}/{comercio}")
+    public ResponseEntity<Long> findEspecificIDPrecioProducto(@PathVariable String producto, @PathVariable String comercio);
 
     @GetMapping("/precioProductos/traerPrecios")
     public ResponseEntity<List<PrecioProductoDTO>> traerPrecios();
+
+    @PostMapping("/ofertas/cambiarPrecio")
+    public ResponseEntity<OfertaDTO> TerminarOferta(@RequestBody OfertaDTO ofertaDTO);
+
+    @GetMapping("/ofertas/Ofertasvigentes")
+    public ResponseEntity<List<OfertaDTO>> obtenerOfertasVigentes();
 }

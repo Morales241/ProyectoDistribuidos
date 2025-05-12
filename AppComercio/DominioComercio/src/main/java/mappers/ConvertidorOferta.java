@@ -31,9 +31,9 @@ public class ConvertidorOferta extends Convertidor<OfertaDTO, Oferta>{
 
         Oferta oferta = new Oferta();
         oferta.setDescripcion(ofertaDTO.getDescripcion());
-        oferta.setPrecioOferta(oferta.getPrecioOferta());
-        oferta.setFechaInicio(oferta.getFechaInicio());
-        oferta.setFechaFin(oferta.getFechaFin());
+        oferta.setPrecioOferta(ofertaDTO.getPrecioOferta());
+        oferta.setFechaInicio(ofertaDTO.getFechaInicio());
+        oferta.setFechaFin(ofertaDTO.getFechaFin());
         return oferta;
     }
 }

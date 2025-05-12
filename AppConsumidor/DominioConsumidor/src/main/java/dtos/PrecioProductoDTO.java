@@ -5,7 +5,6 @@ public class PrecioProductoDTO {
     private String comercio;
 
     private String producto;
-
     private double precio;
 
     public PrecioProductoDTO() {}

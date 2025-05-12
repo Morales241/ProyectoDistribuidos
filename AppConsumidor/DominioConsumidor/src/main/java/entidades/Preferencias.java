@@ -10,7 +10,7 @@ public class Preferencias {
     private Long id;
 
     @Column(nullable = false)
-    private Long idComercio;
+    private Long idPrecioProducto;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -18,17 +18,12 @@ public class Preferencias {
 
     public Preferencias() {}
 
-    public Preferencias(Long idComercio, Consumidor consumidor) {
-        this.idComercio = idComercio;
-        this.consumidor = consumidor;
+    public Long getIdPrecioProducto() {
+        return idPrecioProducto;
     }
 
-    public Long getIdComercio() {
-        return idComercio;
-    }
-
-    public void setIdComercio(Long idComercio) {
-        this.idComercio = idComercio;
+    public void setIdPrecioProducto(Long idPrecioProducto) {
+        this.idPrecioProducto = idPrecioProducto;
     }
 
     public Consumidor getConsumidor() {

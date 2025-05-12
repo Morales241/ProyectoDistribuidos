@@ -19,11 +19,7 @@ public class Carrito {
     private Consumidor consumidor;
 
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductoCarrito> productos;
-
-    public Carrito() {
-        productos = new ArrayList<>();
-    }
+    private List<ProductoCarrito> productos = new ArrayList<>();
 
     public List<ProductoCarrito> getProductos() {
         return productos;

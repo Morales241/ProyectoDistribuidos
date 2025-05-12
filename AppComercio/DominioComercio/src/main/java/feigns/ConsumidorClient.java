@@ -1,6 +1,7 @@
 package feigns;
 
 import dtos.CarritoDTO;
+import dtos.ConsumidorDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,6 @@ import java.util.List;
 @FeignClient("DOMINIOCONSUMIDOR")
 public interface ConsumidorClient {
 
-    @GetMapping("/carritos/obtenerPorProducto/{idProducto}")
-    public ResponseEntity<List<CarritoDTO>> obtenerCarritosPorProducto(@PathVariable Long idProducto);
+    @GetMapping("/consumidores/traerConsumidores")
+    public ResponseEntity<List<ConsumidorDTO>> traerConsumidores();
 }

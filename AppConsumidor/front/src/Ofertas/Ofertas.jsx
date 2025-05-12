@@ -1,57 +1,124 @@
 import React, { useState, useEffect } from 'react';
 import './Ofertas.css';
+import axios from 'axios';
 
 function Ofertas({ onVolver }) {
   const [busqueda, setBusqueda] = useState('');
+  const [ofertas, setOfertas] = useState([]);
   const [resultados, setResultados] = useState([]);
+  const [ofertaSeleccionada, setOfertaSeleccionada] = useState(null);
+  const [mostrarCantidadOferta, setMostrarCantidadOferta] = useState(false);
+  const [cantidadOferta, setCantidadOferta] = useState(1);
 
-  const ofertasSimuladas = [
-    { nombre: 'Leche', marca: 'Lala', presentacion: '1L', precioOriginal: 25, precioOferta: 20, tienda: 'Soriana' },
-    { nombre: 'Pan', marca: 'Bimbo', presentacion: '680g', precioOriginal: 35, precioOferta: 28, tienda: 'Walmart' },
-    { nombre: 'Refresco', marca: 'Coca-Cola', presentacion: '2L', precioOriginal: 42, precioOferta: 35, tienda: 'Chedraui' },
-    { nombre: 'Arroz', marca: 'La Merced', presentacion: '1kg', precioOriginal: 30, precioOferta: 25, tienda: 'Soriana' },
-  ];
 
   useEffect(() => {
-    setResultados(ofertasSimuladas);
+    const cargarOfertas = async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/notificaciones/verOfertas');
+        setOfertas(response.data);
+        setResultados(response.data);
+      } catch (error) {
+        console.error('Error al obtener las ofertas:', error);
+      }
+    };
+    cargarOfertas();
+    obtenerOfertas();
+  
+    const eventSource = new EventSource('http://localhost:8082/notificaciones/suscribirse');
+  
+    eventSource.addEventListener('nueva-oferta', () => {
+      window.location.reload();
+    });
+  
+    eventSource.onerror = (err) => {
+      console.error('Error en SSE:', err);
+      eventSource.close();
+    };
+  
+    return () => {
+      eventSource.close();
+    };
   }, []);
+  
 
-  const manejarBusqueda = (e) => {
-    const texto = e.target.value;
-    setBusqueda(texto);
-    const coincidencias = ofertasSimuladas.filter(p =>
-      p.nombre.toLowerCase().includes(texto.toLowerCase())
-    );
-    setResultados(coincidencias);
+  const obtenerOfertas = async() => {
+    try {
+      const response = await axios.get(`http://localhost:8082/notificaciones/verOfertas`);
+      setOfertas(response.data);
+      setResultados(response.data);
+      console.log("ofertas:", response.data);
+    } catch (error) {
+      console.error("Error al cargar los datos del consumidor:", error);
+    }
+  }
+
+  const confirmarAgregarOferta = () => {
+    const consumidorID = localStorage.getItem("consumidorId");
+    const productoCarrito = {
+      producto: {
+        comercio: ofertaSeleccionada.comercio,
+        producto: ofertaSeleccionada.producto,
+        precio: ofertaSeleccionada.precioOferta
+      },
+      cantidad: cantidadOferta
+    };
+  
+    axios.post(`http://localhost:8082/carritos/agregarACarrito/${consumidorID}`, productoCarrito, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  
+    // Reset
+    setOfertaSeleccionada(null);
+    setCantidadOferta(1);
+    setMostrarCantidadOferta(false);
   };
+  
 
   return (
     <div className="contenedor">
       <h1 className="titulo">Ofertas Especiales</h1>
 
-      <input
-        type="text"
-        placeholder="Buscar producto en oferta..."
-        value={busqueda}
-        onChange={manejarBusqueda}
-        className="inputStyle"
-      />
-
       <div className="cuadricula">
-        {resultados.map((producto, index) => (
+        {resultados.map((oferta, index) => (
           <div key={index} className="cardStyle">
-            <h3>{producto.nombre}</h3>
-            <p><strong>Marca:</strong> {producto.marca}</p>
-            <p><strong>Presentación:</strong> {producto.presentacion}</p>
-            <p><strong>Precio:</strong> 
-              <span className="tachado"> ${producto.precioOriginal} </span> 
-              <span className="oferta"> ${producto.precioOferta} MXN</span>
-            </p>
-            <p><strong>Tienda:</strong> {producto.tienda}</p>
-            <button className="buttonStyle"> Agregar a Wishlist</button>
-            <button className="buttonStyle"> Agregar a carrito </button>
+            <h3>{oferta.producto}</h3>
+            <p><strong>Descripción:</strong> {oferta.descripcion}</p>
+            <p><strong>Precio Oferta:</strong> ${oferta.precioOferta} MXN</p>
+            <p><strong>Disponible en:</strong> {oferta.comercio}</p>
+            <p><strong>Válida desde:</strong> {new Date(oferta.fechaInicio).toLocaleString()}</p>
+            <p><strong>Hasta:</strong> {new Date(oferta.fechaFin).toLocaleString()}</p>
+
+            {ofertaSeleccionada === oferta && mostrarCantidadOferta ? (
+              <div style={{ marginTop: "10px" }}>
+                <input
+                  type="number"
+                  className="inputStyle"
+                  min="1"
+                  max="15"
+                  value={cantidadOferta}
+                  onChange={(e) => {
+                    const val = Math.min(15, Math.max(1, parseInt(e.target.value) || 1));
+                    setCantidadOferta(val);
+                  }}
+                  placeholder="Cantidad (1-15)"
+                  style={{ marginRight: "10px" }}
+                />
+                <button className="buttonStyle" onClick={confirmarAgregarOferta}>Confirmar</button>
+              </div>
+            ) : (
+              <button
+                className="buttonStyle"
+                onClick={() => {
+                  setOfertaSeleccionada(oferta);
+                  setMostrarCantidadOferta(true);
+                }}
+              >
+                Agregar a carrito
+              </button>
+            )}
           </div>
         ))}
+
       </div>
 
       <button className="buttonStyle volverBtn" onClick={onVolver}>Volver</button>

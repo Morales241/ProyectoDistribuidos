@@ -149,7 +149,7 @@ public class PrecioProductoController {
 
         ppDTO.setProducto(traerProducto(precioProducto.getProducto()).getNombre());
         ppDTO.setComercio(traerComercio(precioProducto.getComercio()).getNombre());
-        return ResponseEntity.ok(convertidor.convertFromEntity(precioProducto));
+        return ResponseEntity.ok(ppDTO);
     }
 
     @GetMapping("/traerPrecios")
@@ -166,6 +166,20 @@ public class PrecioProductoController {
         }
 
         return ResponseEntity.ok(ppsdto);
+    }
+
+    @GetMapping("/buscarIdEspecificamente/{Nproducto}/{Ncomercio}")
+    public ResponseEntity<Long> findEspecificIDPrecioProducto(@PathVariable String Nproducto, @PathVariable String Ncomercio) {
+        Optional<Producto> productoAux = productoService.findByNombre(Nproducto);
+        Optional<Comercio> comercioAux = comercioService.buscarComercioPorNombre(Ncomercio);
+
+        Optional<PrecioProducto> pp = precioProductoService.findEspecificPrecioProducto(productoAux.get().getId(), comercioAux.get().getId());
+
+        if (pp.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(pp.get().getId());
     }
 
     private Comercio traerComercio(Object nombreOrId) {

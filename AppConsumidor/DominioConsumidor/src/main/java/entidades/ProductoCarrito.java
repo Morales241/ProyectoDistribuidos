@@ -12,13 +12,22 @@ public class ProductoCarrito {
     @Column(nullable = false)
     private Long idPrecioProducto;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "id_carrito")
-    private Carrito carrito;
-
     @Column(nullable = false)
     private int cantidad;
 
+    @ManyToOne
+    @JoinColumn(name = "carrito_id", nullable = false)
+    private Carrito carrito;
+
+    public Carrito getCarrito() {
+        return carrito;
+    }
+
+    public void setCarrito(Carrito carrito) {
+        this.carrito = carrito;
+    }
+
+    public ProductoCarrito() {}
     public int getCantidad() {
         return cantidad;
     }
@@ -41,13 +50,5 @@ public class ProductoCarrito {
 
     public void setIdPrecioProducto(Long idPrecioProducto) {
         this.idPrecioProducto = idPrecioProducto;
-    }
-
-    public Carrito getCarrito() {
-        return carrito;
-    }
-
-    public void setCarrito(Carrito carrito) {
-        this.carrito = carrito;
     }
 }

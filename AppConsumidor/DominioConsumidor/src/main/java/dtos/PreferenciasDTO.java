@@ -2,18 +2,28 @@ package dtos;
 
 public class PreferenciasDTO {
 
-    private String nombreComercio;
+    private String comercio;
+
+    private String producto;
 
     private ConsumidorDTO consumidor;
 
     public PreferenciasDTO() {}
 
-    public String getNombreComercio() {
-        return nombreComercio;
+    public String getComercio() {
+        return comercio;
     }
 
-    public void setNombreComercio(String nombreComercio) {
-        this.nombreComercio = nombreComercio;
+    public void setComercio(String comercio) {
+        this.comercio = comercio;
+    }
+
+    public String getProducto() {
+        return producto;
+    }
+
+    public void setProducto(String producto) {
+        this.producto = producto;
     }
 
     public ConsumidorDTO getConsumidor() {

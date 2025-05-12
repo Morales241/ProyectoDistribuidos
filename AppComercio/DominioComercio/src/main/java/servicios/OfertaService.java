@@ -92,6 +92,10 @@ public class OfertaService {
 
 
     public List<Oferta> listarOfertasDisponibles(LocalDateTime fecha){
-        return ofertaRepository.findByFechaFinLessThanEqual(fecha);
+        return ofertaRepository.findByFechaFinGreaterThanEqual(fecha);
+    }
+
+    public Oferta buscarOfertaPorTodaLaInfo(Double precioOferta, String descripcion, Long idPrecioProducto, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+        return ofertaRepository.findByPrecioOfertaAndDescripcionAndIdPrecioProductoAndFechaInicioAndFechaFin(precioOferta, descripcion, idPrecioProducto, fechaInicio, fechaFin).get();
     }
 }

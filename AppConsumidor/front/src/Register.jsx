@@ -25,6 +25,9 @@ const Register = () => {
             });
             console.log("Registro exitoso", response.data);
             alert("Registro exitoso");
+            const consumidor = response.data;
+            const responseCarrito = await axios.post(`http://localhost:8082/carritos/CrerCarrito/${consumidor.id}`);
+
             window.history.back();
         } catch (error) {
             console.error("Error al registrar:", error);

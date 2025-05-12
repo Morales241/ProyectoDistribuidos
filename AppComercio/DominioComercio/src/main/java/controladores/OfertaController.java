@@ -1,8 +1,6 @@
 package controladores;
 
-import dtos.CarritoDTO;
-import dtos.OfertaDTO;
-import dtos.PrecioProductoDTO;
+import dtos.*;
 import entidades.Comercio;
 import entidades.Oferta;
 import entidades.PrecioProducto;
@@ -17,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import servicios.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:5175"})
@@ -46,13 +46,41 @@ public class OfertaController {
 
         oferta.setIdPrecioProducto(traerPrecioProducto(ofertaDTO.getProducto(), ofertaDTO.getComercio()).getId());
 
+        PrecioProducto producto = traerPrecioProducto(ofertaDTO.getProducto(), ofertaDTO.getComercio());
+
+        double precio = producto.getPrecio();
+
+        producto.setPrecio(oferta.getPrecioOferta());
+
+        oferta.setPrecioAnterior(precio);
+
         ofertaService.crearOferta(oferta);
 
-        List<CarritoDTO> carritoAux = clienteConsumidor.obtenerCarritosPorProducto(oferta.getIdPrecioProducto()).getBody();
-        List<String> ids = carritoAux.stream()
-                .map(carrito -> carrito.getConsumidor().getId().toString())
+        List<ConsumidorDTO> consumidores = clienteConsumidor.traerConsumidores().getBody();
+        List<String> ids = consumidores.stream()
+                .map(consumidor -> consumidor.getId().toString())
                 .toList();
         notificacionService.enviarNotificacion(ids, ofertaDTO);
+        return ResponseEntity.ok(convertidor.convertFromEntity(oferta));
+    }
+
+    @PostMapping("/cambiarPrecio")
+    public ResponseEntity<OfertaDTO> TerminarOferta(@RequestBody OfertaDTO ofertaDTO) {
+        Oferta oferta = convertidor.convertFromDto(ofertaDTO);
+
+        oferta.setIdPrecioProducto(traerPrecioProducto(ofertaDTO.getProducto(), ofertaDTO.getComercio()).getId());
+
+        oferta = ofertaService.buscarOfertaPorTodaLaInfo(ofertaDTO.getPrecioOferta(), ofertaDTO.getDescripcion(), oferta.getIdPrecioProducto(), oferta.getFechaInicio(), oferta.getFechaFin());
+
+        Oferta finalOferta = oferta;
+
+        precioproductoService.findAllPrecioProducto().forEach(precioProducto -> {
+            if (precioProducto.getId() == finalOferta.getIdPrecioProducto() &&  precioProducto.getPrecio() == finalOferta.getPrecioOferta()) {
+                precioProducto.setPrecio(finalOferta.getPrecioAnterior());
+                precioproductoService.crearPrecioProducto(precioProducto);
+            }
+        });
+
         return ResponseEntity.ok(convertidor.convertFromEntity(oferta));
     }
 
@@ -106,6 +134,23 @@ public class OfertaController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/Ofertasvigentes")
+    public ResponseEntity<List<OfertaDTO>> obtenerOfertasVigentes() {
+        List<Oferta> ofertas = ofertaService.listarOfertas().stream().filter(oferta -> oferta.getFechaFin().isAfter(LocalDateTime.now()))
+                .toList();
+
+        List<OfertaDTO> ofertasDTO = new ArrayList<>();
+
+        if (ofertas.isEmpty()) {
+            return ResponseEntity.ok(ofertasDTO);
+        }
+
+        ofertasDTO = traerInfoDeOfertas(ofertas);
+
+        return ResponseEntity.ok(ofertasDTO);
+    }
+
+
     public PrecioProducto traerPrecioProducto(Object NombreOrIdProducto, Object NombreOrIdComercio) {
         if (NombreOrIdComercio == null && NombreOrIdProducto instanceof Long) {
             return precioproductoService.findPrecioProductoById((Long) NombreOrIdProducto);
@@ -138,7 +183,7 @@ public class OfertaController {
         for(int i = 0 ; i < ofertasDTO.size() ; i++){
             PrecioProducto precioProducto = traerPrecioProducto(ofertas.get(i).getIdPrecioProducto(), null);
 
-            ofertasDTO.get(i).setComercio(traerComercio(precioProducto.getProducto()).getNombre());
+            ofertasDTO.get(i).setComercio(traerComercio(precioProducto.getComercio()).getNombre());
             ofertasDTO.get(i).setProducto(traerProducto(precioProducto.getProducto()).getNombre());
         }
         return ofertasDTO;

@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import "./Productos.css"; 
+import "./Productos.css";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { BiPlusCircle, BiEdit, BiSearchAlt, BiStar, BiArrowBack } from 'react-icons/bi';
-
 
 function Productos() {
+  const navigate = useNavigate();
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [tienda, setTienda] = useState("");
   const [precioTienda, setPrecioTienda] = useState(null);
   const [comparacion, setComparacion] = useState({ a: "", b: "", resultado: null, mejor: null });
   const [productosBD, setProductos] = useState([]);
   const [preciosBD, setPrecios] = useState([]);
+  const [mostrarCantidad, setMostrarCantidad] = useState(false);
+  const [cantidad, setCantidad] = useState(1);
+  const [mostrarCantidadComparacion, setMostrarCantidadComparacion] = useState(false);
+  const [cantidadComparacion, setCantidadComparacion] = useState(1);
 
   useEffect(() => {
     obtenerProductos();
@@ -21,12 +24,9 @@ function Productos() {
     try {
       const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
       setProductos(response.data);
-      console.log('Productos:', response.data);
 
       const preciosresponse = await axios.get(`http://localhost:8082/consumidoresComercio/traerPrecios`);
       setPrecios(preciosresponse.data);
-      console.log('precios:', preciosresponse.data);
-
     } catch (error) {
       console.error('Error al obtener productos:', error);
     }
@@ -42,7 +42,7 @@ function Productos() {
     if (!productoSeleccionado || !tienda) return;
     const precio = preciosBD.find(
       (p) =>
-        p.productoId === productoSeleccionado.id &&
+        p.producto.toLowerCase() === productoSeleccionado.nombre.toLowerCase() &&
         p.comercio.toLowerCase() === tienda.toLowerCase()
     );
     setPrecioTienda(precio ? precio.precio : "No encontrado");
@@ -51,12 +51,12 @@ function Productos() {
   const compararPrecios = () => {
     const p1 = preciosBD.find(
       (p) =>
-        p.productoId === productoSeleccionado.id &&
+        p.producto.toLowerCase() === productoSeleccionado.nombre.toLowerCase() &&
         p.comercio.toLowerCase() === comparacion.a.toLowerCase()
     );
     const p2 = preciosBD.find(
       (p) =>
-        p.productoId === productoSeleccionado.id &&
+        p.producto.toLowerCase() === productoSeleccionado.nombre.toLowerCase() &&
         p.comercio.toLowerCase() === comparacion.b.toLowerCase()
     );
     if (!p1 || !p2) {
@@ -73,13 +73,51 @@ function Productos() {
   };
 
   const handleAgregarAlCarrito = () => {
-    console.log(`Agregado al carrito: ${productoSeleccionado.nombre} de ${tienda} por $${precioTienda}`);
+    const consumidorID = localStorage.getItem("consumidorId");
+
+    const precioProducto = {
+      comercio: tienda,
+      producto: productoSeleccionado.nombre,
+      precio: precioTienda
+    };
+
+    const productoCarrito = {
+      producto: precioProducto,
+      cantidad: cantidad
+    };
+
+    axios.post(`http://localhost:8082/carritos/agregarACarrito/${consumidorID}`,
+      productoCarrito,
+      { headers: { 'Content-Type': 'application/json' } });
+
+    setMostrarCantidad(false);
+    setCantidad(1);
+    setProductoSeleccionado(null);
   };
 
   const handleAgregarComparacionAlCarrito = () => {
     const { mejor } = comparacion;
     if (mejor) {
-      console.log(`Agregado al carrito (comparación): ${productoSeleccionado.nombre} de ${mejor.comercio} por $${mejor.precio}`);
+      const consumidorID = localStorage.getItem("consumidorId");
+
+      const precioProducto = {
+        comercio: mejor.comercio,
+        producto: productoSeleccionado.nombre,
+        precio: mejor.precio
+      };
+
+      const productoCarrito = {
+        producto: precioProducto,
+        cantidad: cantidadComparacion
+      };
+
+      axios.post(`http://localhost:8082/carritos/agregarACarrito/${consumidorID}`,
+        productoCarrito,
+        { headers: { 'Content-Type': 'application/json' } });
+
+      setMostrarCantidadComparacion(false);
+      setCantidadComparacion(1);
+      setProductoSeleccionado(null);
     }
   };
 
@@ -122,11 +160,41 @@ function Productos() {
               <button className="buttonStyle" onClick={buscarPrecio}>Buscar</button>
               {precioTienda !== null && (
                 <>
-                  <p><strong>Precio:</strong> {typeof precioTienda === "number" ? `$${precioTienda}` : precioTienda}</p>
+                  <p>
+                    <strong>Precio:</strong>{" "}
+                    {typeof precioTienda === "number" ? `$${precioTienda}` : precioTienda}
+                  </p>
+
                   {typeof precioTienda === "number" && (
-                    <button className="buttonStyle" onClick={handleAgregarAlCarrito}>
-                      Agregar al carrito
-                    </button>
+                    <>
+                      {!mostrarCantidad ? (
+                        <button
+                          className="buttonStyle"
+                          onClick={() => setMostrarCantidad(true)}
+                        >
+                          Agregar al carrito
+                        </button>
+                      ) : (
+                        <div style={{ marginTop: "10px" }}>
+                          <input
+                            type="number"
+                            className="inputStyle"
+                            min="1"
+                            max="15"
+                            value={cantidad}
+                            onChange={(e) => {
+                              const val = Math.min(15, Math.max(1, parseInt(e.target.value) || 1));
+                              setCantidad(val);
+                            }}
+                            placeholder="Cantidad (1-15)"
+                            style={{ marginRight: "10px" }}
+                          />
+                          <button className="buttonStyle" onClick={handleAgregarAlCarrito}>
+                            Confirmar
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -149,9 +217,38 @@ function Productos() {
               <button className="buttonStyle" onClick={compararPrecios}>Comparar</button>
               {comparacion.resultado && <p>{comparacion.resultado}</p>}
               {comparacion.mejor && (
-                <button className="buttonStyle" onClick={handleAgregarComparacionAlCarrito}>
-                  Agregar precio más bajo al carrito
-                </button>
+                <>
+                  {!mostrarCantidadComparacion ? (
+                    <button
+                      className="buttonStyle"
+                      onClick={() => setMostrarCantidadComparacion(true)}
+                    >
+                      Agregar precio más bajo al carrito
+                    </button>
+                  ) : (
+                    <div style={{ marginTop: "10px" }}>
+                      <input
+                        type="number"
+                        className="inputStyle"
+                        min="1"
+                        max="15"
+                        value={cantidadComparacion}
+                        onChange={(e) => {
+                          const val = Math.min(15, Math.max(1, parseInt(e.target.value) || 1));
+                          setCantidadComparacion(val);
+                        }}
+                        placeholder="Cantidad (1-15)"
+                        style={{ marginRight: "10px" }}
+                      />
+                      <button
+                        className="buttonStyle"
+                        onClick={handleAgregarComparacionAlCarrito}
+                      >
+                        Confirmar
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 

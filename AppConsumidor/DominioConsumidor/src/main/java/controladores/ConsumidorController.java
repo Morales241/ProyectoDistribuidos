@@ -14,9 +14,10 @@ import servicios.ConsumidorService;
 import servicios.EncriptamientoService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:5175"})
 @RestController
 @RequestMapping("/consumidores")
 public class ConsumidorController {
@@ -59,5 +60,10 @@ public class ConsumidorController {
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/traerConsumidores")
+    public ResponseEntity<List<ConsumidorDTO>> traerConsumidores() {
+        return ResponseEntity.ok(convertidorConsumidor.createFromEntities(servicio.obtenerTodas()));
     }
 }

@@ -23,18 +23,12 @@ public class CarritoService {
 
     public Carrito getCarrito(Long idConsumidor) {
         Carrito carrito = CarritoRepository.findByConsumidorId(idConsumidor);
-        if (carrito.getProductos().isEmpty()) {
-            carrito.setProductos(CPR.findByCarrito(carrito));
-        }
+
         return carrito;
     }
 
     public Carrito saveCarrito(Carrito carrito) {
         return CarritoRepository.save(carrito);
-    }
-
-    public void agregarProductoACarrito(ProductoCarrito productoCarrito) {
-        CPR.save(productoCarrito);
     }
 
     public List<Carrito> getCarritosPorProducto(long idProducto) {

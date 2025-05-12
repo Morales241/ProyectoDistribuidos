@@ -18,6 +18,9 @@ public class Oferta {
     private Double precioOferta;
 
     @Column(nullable = false)
+    private Double precioAnterior;
+
+    @Column(nullable = false)
     private LocalDateTime fechaInicio;
 
     @Column(nullable = false)
@@ -27,6 +30,14 @@ public class Oferta {
     private String descripcion;
 
     public Oferta() {}
+
+    public Double getPrecioAnterior() {
+        return precioAnterior;
+    }
+
+    public void setPrecioAnterior(Double precioAnterior) {
+        this.precioAnterior = precioAnterior;
+    }
 
     public Long getIdPrecioProducto() {
         return idPrecioProducto;

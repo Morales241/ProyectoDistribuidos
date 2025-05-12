@@ -302,9 +302,10 @@ function Mercado({ onVolver }) {
       alert('Faltan datos para registrar la oferta.');
       return;
     }
+    const Ncomercio = localStorage.getItem('nombreComercio');
 
     const body = {
-      comercio: localStorage.getItem("nombreComercio"),
+      comercio: Ncomercio,
       producto: productoSeleccionado.producto,
       precioOferta: parseFloat(precioOferta),
       fechaInicio: `${fechaInicio}T00:00:00`,

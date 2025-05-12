@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import repositorios.ConsumidorRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,10 @@ public class ConsumidorService {
 
     public Optional<Consumidor> obtenerPorCorreo(String correo) {
         return consumidorRepository.findByCorreo(correo);
+    }
+
+    public List<Consumidor> obtenerTodas() {
+        return consumidorRepository.findAll();
     }
 
     public void eliminar(Long id) {

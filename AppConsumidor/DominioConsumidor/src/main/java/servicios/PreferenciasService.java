@@ -15,10 +15,11 @@ public class PreferenciasService {
     private PreferenciasRepository preferenciasRepository;
 
     public Preferencias agregarPreferencia(Preferencias preferencia) throws ConsumidorServiciosException {
-        if (preferenciasRepository.existsByConsumidorIdAndIdComercio(
-                preferencia.getConsumidor().getId(),
-                preferencia.getIdComercio())) {
-            throw new ConsumidorServiciosException("El comercio ya se encuentra en la lista de preferencias");
+
+        if (preferenciasRepository.findByConsumidorAndIdPrecioProducto(
+                preferencia.getConsumidor(),
+                preferencia.getIdPrecioProducto()).isPresent()) {
+            throw new ConsumidorServiciosException("La preferencia ya se encuentra en la lista de preferencias");
         }
 
         return preferenciasRepository.save(preferencia);

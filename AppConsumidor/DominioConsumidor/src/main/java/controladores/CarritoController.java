@@ -3,10 +3,7 @@ package controladores;
 import convertidores.Convertidor;
 import convertidores.ConvertidorCarrito;
 import convertidores.ConvertidorConsumidor;
-import dtos.CarritoDTO;
-import dtos.CarritoProductoDTO;
-import dtos.ConsumidorDTO;
-import dtos.PrecioProductoDTO;
+import dtos.*;
 import entidades.Carrito;
 import entidades.Consumidor;
 import entidades.ProductoCarrito;
@@ -24,7 +21,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:5175"})
 @RestController
 @RequestMapping("/carritos")
 public class CarritoController {
@@ -90,12 +87,9 @@ public class CarritoController {
         boolean encontrado = false;
 
         for (ProductoCarrito producto : carrito.getProductos()) {
-            PrecioProductoDTO productoAux = comercioClient.traerProductoEspecificoPorId(producto.getIdPrecioProducto()).getBody();
-            if (productoAux == null) continue;
+            Long productoAux = comercioClient.findEspecificIDPrecioProducto(productoDTO.getProducto().getProducto(), productoDTO.getProducto().getComercio()).getBody();
 
-            if (productoAux.getProducto().equals(productoDTO.getProducto().getProducto()) &&
-                    productoAux.getComercio().equals(productoDTO.getProducto().getComercio())) {
-
+            if (productoAux != null && producto.getIdPrecioProducto() == productoAux) {
                 producto.setCantidad(producto.getCantidad() + productoDTO.getCantidad());
                 encontrado = true;
                 break;
@@ -103,19 +97,16 @@ public class CarritoController {
         }
 
         if (!encontrado) {
-            Long idPrecioProducto = comercioClient
-                    .traerProductoEspecifico(productoDTO.getProducto().getProducto(), productoDTO.getProducto().getComercio())
-                    .getBody();
+            Long productoAux = comercioClient.findEspecificIDPrecioProducto(productoDTO.getProducto().getProducto(), productoDTO.getProducto().getComercio()).getBody();
 
-            if (idPrecioProducto == null) {
+            if (productoAux == null) {
                 return ResponseEntity.badRequest().build();
             }
 
             ProductoCarrito nuevoProducto = new ProductoCarrito();
             nuevoProducto.setCantidad(productoDTO.getCantidad());
+            nuevoProducto.setIdPrecioProducto(productoAux);
             nuevoProducto.setCarrito(carrito);
-            nuevoProducto.setIdPrecioProducto(idPrecioProducto);
-
             carrito.getProductos().add(nuevoProducto);
         }
 
@@ -166,7 +157,7 @@ public class CarritoController {
     }
 
     @GetMapping("/carritos/obtenerPorProducto/{idProducto}")
-    public ResponseEntity<List<CarritoDTO>> obtenerCarritosPorProducto(@PathVariable Long idProducto){
+    public ResponseEntity<List<CarritoDTO>> obtenerCarritosPorProducto(@PathVariable Long idProducto) {
         return ResponseEntity.ok(convertidorCarrito.createFromEntities(servicio.getCarritosPorProducto(idProducto)));
     }
 }

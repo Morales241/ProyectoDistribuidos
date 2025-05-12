@@ -21,6 +21,7 @@ const Login = () => {
             const consumidor = response.data;
             localStorage.setItem("consumidorId", consumidor.id);
             localStorage.setItem("consumidorNombre", consumidor.nombre);
+
             console.info("id Consumidor: ", consumidor.id);
             navigate("/consumidor");
         } else {

@@ -11,33 +11,44 @@ function Preferencias({ onVolver }) {
   const [resultadosSupermercado, setResultadosSupermercado] = useState([]);
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
   const [productos, setProductos] = useState([]);
-  const [mercados, setMercados] = useState([]);
+  const [preferencias, setPreferencias] = useState(null);
+  const [carrito, setCarrito] = useState(null);
+
+  const idConsumidor = localStorage.getItem("consumidorId");
 
   useEffect(() => {
     obtenerProductos();
+    obtenerCarrito();
+    obtenerPreferencias();
   }, []);
-  
-  const productosSimulados = [
-    { nombre: 'Leche Lala 1L' },
-    { nombre: 'Pan Bimbo 680g' },
-    { nombre: 'Refresco Coca-Cola 2L' },
-    { nombre: 'Arroz La Merced 1kg' },
-    { nombre: 'Huevos San Juan 12pzas' },
-  ];
-
-  const supermercadosSimulados = ['Soriana', 'Walmart', 'Chedraui', 'Costco', 'Superama'];
 
   const obtenerProductos = async () => {
     try {
       const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
       setProductos(response.data);
-      console.log("Productos:", response.data);
     } catch (error) {
       console.error("Error al obtener productos:", error);
     }
   };
-  
-  // llamada a la api para obtener los productos
+
+  const obtenerCarrito = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8082/carritos/obtenerCarrito/${idConsumidor}`);
+      setCarrito(response.data);
+    } catch (error) {
+      console.error("Error al obtener carrito:", error);
+    }
+  };
+
+  const obtenerPreferencias = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8082/preferencias/obtenerPreferencias/${idConsumidor}`);
+      setPreferencias(response.data);
+    } catch (error) {
+      console.error("Error al obtener carrito:", error);
+    }
+  };
+
   const manejarBusquedaProducto = (e) => {
     if (e.key === 'Enter') {
       const coincidencias = productos.filter(p =>
@@ -47,125 +58,151 @@ function Preferencias({ onVolver }) {
     }
   };
 
-  // llamada a la api para obtener los comercios
   const manejarBusquedaSupermercado = (e) => {
     if (e.key === 'Enter') {
-      const response = axios.get(`http://localhost:8082/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSupermercado}`)
-      .then(function (response) {
-        const coincidencias = [response.data.nombre];
-        console.log("Mercados:", coincidencias);
-        setResultadosSupermercado(coincidencias);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      axios.get(`http://localhost:8082/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSupermercado}`)
+        .then((response) => {
+          const coincidencias = [response.data.nombre];
+          setResultadosSupermercado(coincidencias);
+        })
+        .catch((error) => console.log(error));
     }
   };
 
-  // aqui se actualizaria la lista de productos del usuario
-  /* Lo escribo porque luego se me olvida
-     la lista de productos que tiene ya guardada y se cargara cada que entre
-     pero esto creo que ni esta en la bd
-  */
-  const agregarProductoALista = (producto) => {
-    setProductosSeleccionados((prev) => [...prev, producto]);
-    setBusquedaProducto('');
-    setResultadosProducto([]);
+  const guardarPreferencias = async (e) => {
+    try {
+      await axios.post(
+        `http://localhost:8082/preferencias/agregarPreferencia/${idConsumidor}/${supermercadoFavorito}/${productoFavorito}`
+      );
+  
+      setSupermercadoFavorito(null);
+      setProductoFavorito(null);
+      obtenerPreferencias();
+    } catch (error) {
+      console.log("Error al guardar preferencia:", error);
+    }
   };
+  
 
   return (
     <div className="contenedor">
       <h2 className="titulo">Guardar Preferencias</h2>
-      
-      {/* barra de busqueda de producto favorito */}
-      {!productoFavorito && (
-        <>
-          <input
-            type="text"
-            placeholder="Buscar producto favorito..."
-            value={busquedaProducto}
-            onChange={(e) => setBusquedaProducto(e.target.value)}
-            onKeyDown={manejarBusquedaProducto}
-            className="inputStyle"
-          />
-          <div className="cuadricula">
-            {resultadosProducto.map((producto, index) => (
-              <div
-                key={index}
-                className="cardStyle"
-                onClick={() => {
-                  setProductoFavorito(producto.nombre);
-                  setBusquedaProducto('');
-                  setResultadosProducto([]);
-                }}
-              >
-                {producto.nombre}
+  
+      <div className="division">
+        {/* Columna izquierda: búsquedas y botones */}
+        <div className="ladoIzquierdo">
+          {!productoFavorito && (
+            <>
+              <input
+                type="text"
+                placeholder="Buscar producto favorito..."
+                value={busquedaProducto}
+                onChange={(e) => setBusquedaProducto(e.target.value)}
+                onKeyDown={manejarBusquedaProducto}
+                className="inputStyle"
+              />
+              <div className="cuadricula">
+                {resultadosProducto.map((producto, index) => (
+                  <div
+                    key={index}
+                    className="cardStyle"
+                    onClick={() => {
+                      setProductoFavorito(producto.nombre);
+                      setBusquedaProducto('');
+                      setResultadosProducto([]);
+                    }}
+                  >
+                    {producto.nombre}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* producto favorito seleccionado */}
-      {productoFavorito && (
-        <div className="cardStyle">
-          <strong>Producto favorito:</strong> {productoFavorito}
-        </div>
-      )}
-
-      {/* busqueda de comercio favorito */}
-      {!supermercadoFavorito && (
-        <>
-          <input
-            type="text"
-            placeholder="Buscar supermercado favorito..."
-            value={busquedaSupermercado}
-            onChange={(e) => setBusquedaSupermercado(e.target.value)}
-            onKeyDown={manejarBusquedaSupermercado}
-            className="inputStyle"
-          />
-          <div className="cuadricula">
-            {resultadosSupermercado.map((supermercado, index) => (
-              <div
-                key={index}
-                className="cardStyle"
-                onClick={() => {
-                  setSupermercadoFavorito(supermercado);
-                  setBusquedaSupermercado('');
-                  setResultadosSupermercado([]);
-                }}
-              >
-                {supermercado}
+            </>
+          )}
+  
+          {productoFavorito && (
+            <div className="seleccionActual">
+              <strong>Producto favorito:</strong> {productoFavorito}
+            </div>
+          )}
+  
+          {!supermercadoFavorito && (
+            <>
+              <input
+                type="text"
+                placeholder="Buscar supermercado favorito..."
+                value={busquedaSupermercado}
+                onChange={(e) => setBusquedaSupermercado(e.target.value)}
+                onKeyDown={manejarBusquedaSupermercado}
+                className="inputStyle"
+              />
+              <div className="cuadricula">
+                {resultadosSupermercado.map((supermercado, index) => (
+                  <div
+                    key={index}
+                    className="cardStyle"
+                    onClick={() => {
+                      setSupermercadoFavorito(supermercado);
+                      setBusquedaSupermercado('');
+                      setResultadosSupermercado([]);
+                    }}
+                  >
+                    {supermercado}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* comercio favorito seleccionado */}
-      {supermercadoFavorito && (
-        <div className="cardStyle">
-          <strong>Supermercado favorito:</strong> {supermercadoFavorito}
+            </>
+          )}
+  
+          {supermercadoFavorito && (
+            <div className="seleccionActual">
+              <strong>Supermercado favorito:</strong> {supermercadoFavorito}
+            </div>
+          )}
+  
+          {(productoFavorito && supermercadoFavorito) && (
+            <div className="botonesAccion">
+              <button className="buttonStyle" onClick={guardarPreferencias}>Guardar Preferencias</button>
+              <button className="buttonStyle" onClick={onVolver}>Volver</button>
+            </div>
+          )}
         </div>
-      )}
+  
+        <div className="ladoDerecho">
+          <h3>Lista de supermercado:</h3>
+          <div className="cardSeleccionada">
+            {carrito && carrito.productos.length > 0 ? (
+              carrito.productos.map((item, index) => (
+                <div key={index} style={{ marginBottom: '0.5rem', textAlign: 'center' }}>
+                  <strong>{item.producto.producto}</strong><br />
+                  <span>{item.cantidad} unidad(es) en {item.producto.comercio}</span><br />
+                  <span className="oferta">${item.producto.precio.toFixed(2)}</span>
+                </div>
+              ))
+            ) : (
+              <p>No has agregado productos.</p>
+            )}
+          </div>
+        </div>
 
-      {/* Aqui habria que jalar los que habia anteriormente */}
-      <h3>Lista de supermercado:</h3>
-      <div className="cardSeleccionada">
-        {productosSeleccionados.length > 0 ? (
-          productosSeleccionados.map((producto, index) => (
-            <p key={index}>{producto.nombre}</p>
-          ))
-        ) : (
-          <p>No has agregado productos.</p>
-        )}
+        <div className="ladoDerecho">
+          <h3>Lista de preferencias:</h3>
+          <div className="cardSeleccionada">
+            {preferencias && preferencias.length > 0? (
+              preferencias.map((item, index) => (
+                <div key={index} style={{ marginBottom: '0.5rem', textAlign: 'center' }}>
+                  <strong>Producto favorito: {item.producto}</strong><br />
+                  <span>Comercio para el producto: {item.comercio}</span><br />
+                </div>
+              ))
+            ) : (
+              <p>No has agregado Preferencias.</p>
+            )}
+          </div>
+        </div>
       </div>
-
-      {/* guardar preferencias */}
-      <button className="buttonStyle">Guardar Preferencias</button>
-      <button className="buttonStyle" onClick={onVolver}>Volver</button>
     </div>
   );
+  
 }
 
 export default Preferencias;
