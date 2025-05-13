@@ -45,4 +45,7 @@ public interface ComercioClient {
 
     @GetMapping("/comercios/buscarComercioIdPorNombre")
     public ResponseEntity<Long> buscarComercioIdPorNombre(@RequestParam String nombre);
+
+    @GetMapping("/buscarComercioPorNombre/{comercio}")
+    public ResponseEntity<List<PrecioProductoDTO>> findByComercioId(@PathVariable String comercio);
 }

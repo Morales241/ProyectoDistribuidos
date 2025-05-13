@@ -23,9 +23,6 @@ public class ConvertidorReporte extends Convertidor<ReporteDTO, Reporte> {
         ReporteDTO dto = new ReporteDTO();
         dto.setFecha(reporte.getFecha());
         dto.setContenido(reporte.getContenido());
-        dto.setComercio(clienteComercio.obtener(reporte.getComercioId()).getBody());
-        dto.setConsumidor(convertidorConsumidor.convertFromEntity(reporte.getConsumidor()));
-        dto.setProducto(clienteComercio.findByProductoId(reporte.getProducto()).getBody().getFirst());
 
         return dto;
     }
@@ -34,9 +31,6 @@ public class ConvertidorReporte extends Convertidor<ReporteDTO, Reporte> {
         Reporte reporte = new Reporte();
         reporte.setFecha(dto.getFecha());
         reporte.setContenido(dto.getContenido());
-        reporte.setConsumidor(convertidorConsumidor.convertFromDto(dto.getConsumidor()));
-
-        reporte.setProducto(2L);
 
         return reporte;
     }

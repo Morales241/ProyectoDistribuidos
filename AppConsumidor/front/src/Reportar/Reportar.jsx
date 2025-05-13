@@ -13,52 +13,42 @@ function Reportar({ onVolver }) {
   const [productos, setProductos] = useState([]);
   const [precios, setPrecios] = useState([]);
   const [comentario, setComentario] = useState('');
-  const [consumidor, setConsumidor] = useState('');
   const [comercio, setComercio] = useState('');
+  const consumidor = localStorage.getItem("consumidorId");
 
   useEffect(() => {
     obtenerProductos();
-    cargarDatosConsumidor();
   }, []);
-  
-  const cargarDatosConsumidor = async() => {
-    try {
-      const response = await axios.get(`http://localhost:8082/consumidores/obtener/1`);
-      setConsumidor(response.data);
-      console.log("Consumidor:", response.data);
-    } catch (error) {
-      console.error("Error al cargar los datos del consumidor:", error);
-    }
-  }
+
 
   const obtenerProductos = async () => {
     try {
       const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
       setProductos(response.data);
       console.log("Productos:", response.data);
-      
+
       const preciosresponse = await axios.get(`http://localhost:8082/consumidoresComercio/traerPrecios`);
       setPrecios(preciosresponse.data);
       console.log('precios:', preciosresponse.data);
-      
+
     } catch (error) {
       console.error("Error al obtener productos:", error);
     }
   };
-  
+
   // llamada a la api para obtener los comercios
   const manejarBusquedaSupermercado = (e) => {
     if (e.key === 'Enter') {
       const response = axios.get(`http://localhost:8082/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSuper}`)
-      .then(function (response) {
-        setComercio(response.data)
-        const coincidencias = [response.data.nombre];
-        console.log("Mercados:", coincidencias);
-        setResultadosSuper(coincidencias);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(function (response) {
+          setComercio(response.data)
+          const coincidencias = [response.data.nombre];
+          console.log("Mercados:", coincidencias);
+          setResultadosSuper(coincidencias);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   };
 
@@ -78,24 +68,35 @@ function Reportar({ onVolver }) {
       p.comercio === supermercadoSeleccionado &&
       p.producto.includes(productoSeleccionado)
     );
+
+    const PPData = {
+      comercio: supermercadoSeleccionado,
+      producto: productoSeleccionado,
+      precio: null
+    }
+
+    const reporteData = {
+      producto:PPData,
+      contenido: comentario,
+      fecha:null,
+      consumidor:consumidor
+
+    }
+
     console.log(JSON.stringify({
-      comercio: comercio,
-      producto: producto,
-      contenido : comentario,
-      fecha : new Date(),
-      consumidor : consumidor
+      comercio: supermercadoSeleccionado,
+      producto: productoSeleccionado,
+      contenido: comentario,
+      fecha: new Date(),
+      consumidor: consumidor
     }));
-    axios.post(`http://localhost:8082/reportes/agregar`, {
-      comercio: comercio,
-      producto: producto,
-      contenido : comentario,
-      fecha : new Date(),
-      consumidor : consumidor
-    }).then(function (response) {
-      console.log(response);
+    
+    axios.post(`http://localhost:8082/reportes/agregar`,
+      reporteData,
+      { headers: { 'Content-Type': 'application/json' } });
+      
       alert('¡Reporte enviado!');
       limpiarTodo();
-    });
   };
 
   const limpiarTodo = () => {
@@ -190,7 +191,7 @@ function Reportar({ onVolver }) {
       </div>
     );
   }
-  
+
   if (pantalla === 'agregarComentario') {
     return (
       <div className="contenedor">
@@ -230,7 +231,6 @@ function Reportar({ onVolver }) {
           </div>
         )}
 
-        <button className="buttonStyle volverBtn" onClick={() => limpiarTodo()}>Volver</button>
       </div>
     );
   }

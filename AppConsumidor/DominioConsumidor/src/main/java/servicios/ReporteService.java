@@ -36,8 +36,8 @@ public class ReporteService {
         return reporteRepository.findByConsumidorId(idConsumidor);
     }
 
-    public List<Reporte> obtenerPorComercio(Long idComercio) {
-        return reporteRepository.findByComercioId(idComercio);
+    public List<Reporte> obtenerPorPrecioProducto(Long idPP) {
+        return reporteRepository.findByPrecioProducto(idPP);
     }
 
     public Optional<Reporte> obtener(Long id) {

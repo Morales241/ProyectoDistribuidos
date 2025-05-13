@@ -14,10 +14,6 @@ public class Reporte implements Serializable {
     @JsonProperty("id")
     private Long id;
 
-    @Column(nullable = false)
-    @JsonProperty("comercioId")
-    private Long comercioId;
-
     @ManyToOne
     @JoinColumn(nullable = false)
     @JsonProperty("consumidor")
@@ -25,7 +21,7 @@ public class Reporte implements Serializable {
 
     @Column(nullable = false)
     @JsonProperty("producto")
-    private Long producto;
+    private Long precioProducto;
 
     @Column(nullable = false)
     @JsonProperty("contenido")
@@ -37,23 +33,6 @@ public class Reporte implements Serializable {
 
     public Reporte() {
     }
-
-    public Reporte(Long comercioId, Consumidor consumidor, Long producto, String contenido) {
-        this.comercioId = comercioId;
-        this.consumidor = consumidor;
-        this.producto = producto;
-        this.contenido = contenido;
-        this.fecha = LocalDateTime.now();
-    }
-
-    public Long getComercioId() {
-        return comercioId;
-    }
-
-    public void setComercioId(Long comercioId) {
-        this.comercioId = comercioId;
-    }
-
     public String getContenido() {
         return contenido;
     }
@@ -78,12 +57,12 @@ public class Reporte implements Serializable {
         return id;
     }
 
-    public Long getComercio() {
-        return comercioId;
+    public Long getPrecioProducto() {
+        return precioProducto;
     }
 
-    public void setComercio(Long comercio) {
-        this.comercioId = comercio;
+    public void setPrecioProducto(Long precioProducto) {
+        this.precioProducto = precioProducto;
     }
 
     public Consumidor getConsumidor() {
@@ -94,12 +73,5 @@ public class Reporte implements Serializable {
         this.consumidor = consumidor;
     }
 
-    public Long getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Long producto) {
-        this.producto = producto;
-    }
 
 }
