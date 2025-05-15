@@ -2,8 +2,10 @@ package config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +14,7 @@ public class RabbitConfig {
 
     @Bean
     public Queue cola(){
-        return new Queue("colaReportes");
+        return QueueBuilder.durable("colaReportes").build();
     }
 
     @Bean
@@ -27,6 +29,18 @@ public class RabbitConfig {
                 .to(exchange())
                 .with("reportesKey");
     }
+
+    @Bean
+    public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
+    }
+    @Bean
+    public CommandLineRunner initAdmin(AmqpAdmin amqpAdmin) {
+        return args -> {
+            amqpAdmin.initialize();
+        };
+    }
+
 
     @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {

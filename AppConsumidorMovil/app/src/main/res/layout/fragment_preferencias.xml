@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.notifications.NotificationsFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar Preferencias"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#007bff"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+
+            <!-- Columna izquierda -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingEnd="8dp">
+
+                <EditText
+                    android:id="@+id/inputBuscarProducto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Buscar producto favorito..."
+                    android:background="@drawable/input_background"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutResultadosProducto"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/textProductoSeleccionado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Producto favorito:"
+                    android:textColor="#333"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp"/>
+
+                <EditText
+                    android:id="@+id/inputBuscarSupermercado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Buscar supermercado favorito..."
+                    android:background="@drawable/input_background"
+                    android:padding="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutResultadosSupermercado"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/textSupermercadoSeleccionado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Supermercado favorito:"
+                    android:textColor="#333"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutBotones"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginTop="12dp">
+
+                    <Button
+                        android:id="@+id/btnGuardarPreferencias"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Guardar Preferencias"
+                        android:backgroundTint="#28a745"
+                        android:textColor="#FFF" />
+
+                    <Button
+                        android:id="@+id/btnVolver"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Volver"
+                        android:backgroundTint="#6c757d"
+                        android:textColor="#FFF"
+                        android:layout_marginStart="8dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Columna derecha -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:text="Lista de supermercado:"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutCarrito"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_background"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:text="Lista de preferencias:"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutPreferencias"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_background"
+                    android:padding="12dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

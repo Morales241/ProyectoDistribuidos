@@ -1,6 +1,8 @@
 package servicios;
 
 import entidades.Reporte;
+import lombok.extern.java.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +12,12 @@ import repositorios.ReporteRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class ReporteService {
+
+    Logger log = Logger.getLogger(ReporteService.class.getName());
 
     @Autowired
     private ReporteRepository reporteRepository;
@@ -28,6 +33,7 @@ public class ReporteService {
 
     public Reporte crearReporte(Reporte reporte) {
         reporte.setFecha(LocalDateTime.now());
+        log.info("se va a enviar el reporte a la cola topic:"+topic+" llave:"+llave+" reporte:"+reporte);
         template.convertAndSend(topic, llave, reporte);
         return reporteRepository.save(reporte);
     }
