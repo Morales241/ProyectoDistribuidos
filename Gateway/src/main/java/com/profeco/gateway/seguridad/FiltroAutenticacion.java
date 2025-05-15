@@ -4,27 +4,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@Component
 public class FiltroAutenticacion extends AbstractGatewayFilterFactory<FiltroAutenticacion.Config> {
 
     @Autowired
-    private final ValidadorRouter routerValidator;
+    private final ValidadorRouter validadorRouter;
 
     @Autowired
     private final JwtTokenUtil jwtTokenUtil;
 
-    public FiltroAutenticacion(ValidadorRouter routerValidator, JwtTokenUtil jwtTokenUtil) {
+    public FiltroAutenticacion(ValidadorRouter validadorRouter, JwtTokenUtil jwtTokenUtil) {
         super(Config.class);
-        this.routerValidator = routerValidator;
+        this.validadorRouter = validadorRouter;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
-            if (routerValidator.esSeguro.test(exchange.getRequest())) {
+            if (validadorRouter.esSeguro.test(exchange.getRequest())) {
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     throw new RuntimeException("Missing Authorisation Header");
                 }
