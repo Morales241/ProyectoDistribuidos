@@ -9,9 +9,9 @@ import java.util.function.Predicate;
 @Component
 public class ValidadorRouter {
     public static final List<String> enpointsAbiertos = List.of(
-            "/register",
-            "/login",
-            "/eureka"
+            "/registro",
+            "/eureka",
+            "/inicioSesion"
     );
 
     public Predicate<ServerHttpRequest> esSeguro =

@@ -34,7 +34,7 @@ public class FiltroAutenticacion extends AbstractGatewayFilterFactory<FiltroAute
                 String authHeader = Objects.requireNonNull(exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION)).getFirst();
 
                 if (!jwtTokenUtil.validarToken(authHeader)) {
-                    throw new RuntimeException("");
+                    throw new RuntimeException("Autorizacion no valida");
                 }
             }
             return chain.filter(exchange);

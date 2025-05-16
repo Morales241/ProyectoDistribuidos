@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: APIGateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      default-filters:
+        - FiltroAutenticacion
+
+server:
+  port: 8766
+
