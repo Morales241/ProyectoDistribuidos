@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { BiPlusCircle, BiEdit, BiSearchAlt, BiStar, BiArrowBack } from 'react-icons/bi';
+import { BiPlusCircle, BiEdit, BiSearchAlt, BiStar, BiArrowBack, BiSolidReport  } from 'react-icons/bi';
 import './Mercado.css';
 
 function Mercado({ onVolver }) {
@@ -21,6 +21,7 @@ function Mercado({ onVolver }) {
   const [precioOferta, setPrecioOferta] = useState('');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
+  const [reportes, setReportes] = useState([]);
   // esto no puede estar bien ya hice 30mil de estos
 
   const categoriasDisponibles = [
@@ -47,6 +48,16 @@ function Mercado({ onVolver }) {
       console.log('Productos:', response.data);
     } catch (error) {
       console.error('Error al obtener productos:', error);
+    }
+  };
+  
+  const obtenerReportes = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/comercioReportes/buscar/${localStorage.getItem('comercioId')}`);
+      setReportes(response.data);
+      console.log('Reportes:', response.data);
+    } catch (error) {
+      console.error('Error al obtener reportes:', error);
     }
   };
 
@@ -154,6 +165,8 @@ function Mercado({ onVolver }) {
   useEffect(() => {
     if (pantalla === 'reseñas') {
       setReseñas(reseñasSimuladas);
+    } else if (pantalla === 'reportes') {
+      obtenerReportes();
     }
   }, [pantalla]);
 
@@ -175,6 +188,10 @@ function Mercado({ onVolver }) {
       <button className="register-button" onClick={() => setPantalla('publicarOferta')}>
         <BiPlusCircle style={{ marginRight: '8px' }} />
         Publicar Oferta
+      </button>
+      <button className="register-button" onClick={() => setPantalla('reportes')}>
+        <BiSearchAlt style={{ marginRight: '8px' }} />
+        Ver Reportes
       </button>
       <button className="login-button" style={{ marginTop: '20px' }} onClick={cerrarSesion}>
         Cerrar sesión
@@ -286,6 +303,26 @@ function Mercado({ onVolver }) {
             <p><strong>Producto:</strong> {r.producto}</p>
             <p><strong>Fecha:</strong> {r.fecha}</p>
             <p><strong>Calificación:</strong> {r.calificacion}</p>
+            <p><em>{r.contenido}</em></p>
+          </div>
+        ))}
+      </div>
+      <button className="login-button" onClick={() => setPantalla(null)}>
+        <BiArrowBack style={{ marginRight: "5px" }} />
+        Volver
+      </button>
+    </div>
+  );
+  
+  const renderReportes = () => (
+    <div className="register-container">
+      <h2>Reportes de los consumidores</h2>
+      <div>
+        {reportes.map((r, i) => (
+          <div key={i} className="producto-card">
+            <h3>{r.usuario}</h3>
+            <p><strong>Producto:</strong> {r.producto.producto}</p>
+            <p><strong>Fecha:</strong> {r.fecha}</p>
             <p><em>{r.contenido}</em></p>
           </div>
         ))}
@@ -417,6 +454,7 @@ function Mercado({ onVolver }) {
   else if (pantalla === 'reseñas') contenido = renderReseñas();
   else if (pantalla === 'modificarSoloPrecio') contenido = renderModificarSoloPrecio();
   else if (pantalla === 'publicarOferta') contenido = renderPublicarOferta();
+  else if (pantalla === 'reportes') contenido = renderReportes();
   else contenido = renderPrincipal();
 
   return (
@@ -436,6 +474,9 @@ function Mercado({ onVolver }) {
           </button>
           <button onClick={() => setPantalla('publicarOferta')}>
             <BiEdit /> <span>Oferta</span>
+          </button>
+          <button onClick={() => setPantalla('reportes')}>
+            <BiSolidReport  /> <span>Reportes</span>
           </button>
         </div>
       )}

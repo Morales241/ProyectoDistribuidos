@@ -15,12 +15,9 @@ public interface ConsumidorClient {
     @GetMapping("/consumidores/traerConsumidores")
     ResponseEntity<List<ConsumidorDTO>> traerConsumidores();
 
-    @GetMapping("/consumidor/{idConsumidor}")
-    ResponseEntity<List<ReporteDTO>> obtenerPorConsumidor(@PathVariable Long idConsumidor);
-
-    @GetMapping("/comercio/{idComercio}")
+    @GetMapping("reportes/comercio/{idComercio}")
     ResponseEntity<List<ReporteDTO>> obtenerPorComercio(@PathVariable Long idComercio);
 
-    @GetMapping("/{id}")
+    @GetMapping("reportes/{id}")
     ResponseEntity<ReporteDTO> obtener(@PathVariable Long id);
 }

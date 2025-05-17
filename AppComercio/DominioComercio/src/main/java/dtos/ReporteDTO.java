@@ -4,25 +4,16 @@ import java.time.LocalDateTime;
 
 public class ReporteDTO {
 
-    private ComercioDTO comercio;
-
     private PrecioProductoDTO producto;
 
     private String contenido;
 
     private LocalDateTime fecha;
 
-    private ConsumidorDTO consumidor;
+    private Long consumidor;
 
     public ReporteDTO() {}
 
-    public ComercioDTO getComercio() {
-        return comercio;
-    }
-
-    public void setComercio(ComercioDTO comercio) {
-        this.comercio = comercio;
-    }
 
     public PrecioProductoDTO getProducto() {
         return producto;
@@ -48,11 +39,11 @@ public class ReporteDTO {
         this.fecha = fecha;
     }
 
-    public ConsumidorDTO getConsumidor() {
+    public Long getConsumidor() {
         return consumidor;
     }
 
-    public void setConsumidor(ConsumidorDTO consumidor) {
+    public void setConsumidor(Long consumidor) {
         this.consumidor = consumidor;
     }
 }

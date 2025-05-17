@@ -49,7 +49,7 @@ public class WishListController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/obtenerWishListPorConsumidor/{comercio}")
+    @GetMapping("/obtenerWishListPorComercio/{comercio}")
     public ResponseEntity<List<ProductoWishListDTO>> obtenerWishlist(@PathVariable String comercio) {
         Long comercioId = clienteComercio.buscarComercioIdPorNombre(comercio).getBody();
         List<ProductoWishList> productoWishLists = servicio.traerPorComercioId(comercioId);

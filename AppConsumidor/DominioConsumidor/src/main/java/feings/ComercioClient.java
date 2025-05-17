@@ -22,7 +22,7 @@ public interface ComercioClient {
     @GetMapping("/precioProductos/buscarPorProductoId/{productoid}")
     ResponseEntity<List<PrecioProductoDTO>> findByProductoId(@PathVariable Long productoid);
 
-    @GetMapping("/comercios/{id}")
+    @GetMapping("/comercios/obtener/{id}")
     ResponseEntity<ComercioDTO> obtener(@PathVariable Long id);
 
     @GetMapping("/precioProductos/traerProductoEspecificoPorId/{Idproducto}")
@@ -46,6 +46,6 @@ public interface ComercioClient {
     @GetMapping("/comercios/buscarComercioIdPorNombre")
     public ResponseEntity<Long> buscarComercioIdPorNombre(@RequestParam String nombre);
 
-    @GetMapping("/buscarComercioPorNombre/{comercio}")
+    @GetMapping("/precioProductos/buscarComercioPorNombre/{comercio}")
     public ResponseEntity<List<PrecioProductoDTO>> findByComercioId(@PathVariable String comercio);
 }
