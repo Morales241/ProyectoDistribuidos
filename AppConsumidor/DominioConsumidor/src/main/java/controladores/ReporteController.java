@@ -17,6 +17,7 @@ import repositorios.ReporteRepository;
 import servicios.ConsumidorService;
 import servicios.ReporteService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,6 @@ public class ReporteController {
         reporteDTO.setConsumidor(reporte.getConsumidor().getId());
         PrecioProductoDTO precioProductoDTO = clienteComercio.traerProductoEspecificoPorId(reporte.getPrecioProducto()).getBody();
         reporteDTO.setProducto(precioProductoDTO);
-
         return ResponseEntity.ok(reporteDTO);
     }
 
@@ -109,9 +109,39 @@ public class ReporteController {
             PrecioProductoDTO precioProductoDTO = clienteComercio.traerProductoEspecificoPorId(reportes.get(i).getPrecioProducto()).getBody();
             reportesDTO.get(i).setConsumidor(reportes.get(i).getConsumidor().getId());
             reportesDTO.get(i).setProducto(precioProductoDTO);
+            reportesDTO.get(i).setConsumidor(null);
         }
 
         return reportesDTO;
+    }
+
+    @PostMapping("invalidarReporte/{precioProducto}/{contenido}/{fecha}")
+    private ResponseEntity<Void> invalidadReporte (@PathVariable Long precioProducto, @PathVariable String contenido,@PathVariable LocalDateTime fecha){
+
+        servicio.invalidarReporte(precioProducto, contenido, fecha);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/obtenerReportesPorNombreComercio/{comercio}")
+    public ResponseEntity<List<ReporteDTO>> obtenerPorNombreComercio(@PathVariable String comercio) {
+
+        ComercioDTO comercioDTO = clienteComercio.buscarComercioPornombre(comercio).getBody();
+
+        List<PrecioProductoDTO> PPs = new ArrayList<>();
+        PPs = clienteComercio.findByComercioId(comercioDTO.getNombre()).getBody();
+
+        List<Reporte> reportes = new ArrayList<>();
+
+        for (PrecioProductoDTO pP : PPs) {
+            Long ppId = clienteComercio.findEspecificIDPrecioProducto(pP.getProducto(), pP.getComercio()).getBody();
+            reportes.addAll(servicio.obtenerPorPrecioProducto(ppId));
+        }
+
+        List<ReporteDTO> reportesDTO = new ArrayList<>();
+        reportesDTO = traerInfo(reportes);
+
+        return ResponseEntity.ok(reportesDTO);
     }
 
 }

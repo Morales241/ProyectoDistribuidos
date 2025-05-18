@@ -2,26 +2,26 @@ package dtos;
 
 public class PrecioProductoDTO {
 
-    private ComercioDTO comercio;
-    private ProductoDTO producto;
+    private String comercio;
 
+    private String producto;
     private double precio;
 
     public PrecioProductoDTO() {}
 
-    public ComercioDTO getComercio() {
+    public String getComercio() {
         return comercio;
     }
 
-    public void setComercio(ComercioDTO comercio) {
+    public void setComercio(String comercio) {
         this.comercio = comercio;
     }
 
-    public ProductoDTO getProducto() {
+    public String getProducto() {
         return producto;
     }
 
-    public void setProducto(ProductoDTO producto) {
+    public void setProducto(String producto) {
         this.producto = producto;
     }
 

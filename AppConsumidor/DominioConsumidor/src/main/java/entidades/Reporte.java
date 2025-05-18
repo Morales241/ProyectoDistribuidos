@@ -31,8 +31,21 @@ public class Reporte implements Serializable {
     @JsonProperty("fecha")
     private LocalDateTime fecha;
 
+    @Column(nullable = false)
+    @JsonProperty("estado")
+    private Boolean estado;
+
     public Reporte() {
     }
+
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
+    }
+
     public String getContenido() {
         return contenido;
     }

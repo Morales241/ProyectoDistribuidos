@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Client } from '@stomp/stompjs';
 import {
   BiPlusCircle,
   BiSearchAlt,
@@ -7,61 +8,97 @@ import {
   BiArrowBack
 } from 'react-icons/bi';
 import './Profeco.css';
+import axios from 'axios';
 
 function Profeco({ onVolver }) {
   const [pantalla, setPantalla] = useState(null);
   const [busqueda, setBusqueda] = useState('');
   const [resultados, setResultados] = useState([]);
   const [tiendaSeleccionada, setTiendaSeleccionada] = useState(null);
-  const [busquedaProducto, setBusquedaProducto] = useState('');
   const [reporteSeleccionado, setReporteSeleccionado] = useState(null);
   const [multa, setMulta] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [mensajeModal, setMensajeModal] = useState('');
+  const [reportes, setReportes] = useState([]);
+  const [precioProducto, setPrecioProducto] = useState(null);
 
-  const tiendasSimuladas = [
-    'Tienda A', 'Tienda B', 'Tienda C',
-    'Supermercado B', 'Supermercado A', 'Supermercado C',
-    'Abarrotes A', 'Abarrotes B', 'Abarrotes C'
-  ];
+  useEffect(() => {
+    const stompClient = new Client({
+      brokerURL: 'ws://localhost:8085/ws-reportes',
+      onConnect: () => {
+        console.log('Conectado a WebSocket');
 
-  const productosPorTienda = {
-    'Tienda A': [{ nombre: 'Leche', precio: 25 }, { nombre: 'Pan', precio: 15 }, { nombre: 'Refresco', precio: 20 }],
-    'Tienda B': [{ nombre: 'Jabón', precio: 30 }, { nombre: 'Shampoo', precio: 45 }, { nombre: 'Papel Higiénico', precio: 50 }],
-    'Tienda C': [{ nombre: 'Queso', precio: 60 }, { nombre: 'Jamón', precio: 55 }, { nombre: 'Huevos', precio: 40 }],
-    'Supermercado A': [{ nombre: 'Agua', precio: 10 }, { nombre: 'Galletas', precio: 20 }, { nombre: 'Cereal', precio: 35 }],
-    'Supermercado B': [{ nombre: 'Arroz', precio: 22 }, { nombre: 'Frijol', precio: 24 }, { nombre: 'Aceite', precio: 50 }],
-    'Supermercado C': [{ nombre: 'Sopa', precio: 18 }, { nombre: 'Sal', precio: 12 }, { nombre: 'Azúcar', precio: 20 }],
-    'Abarrotes A': [{ nombre: 'Dulces', precio: 5 }, { nombre: 'Papas', precio: 10 }, { nombre: 'Jugos', precio: 15 }],
-    'Abarrotes B': [{ nombre: 'Detergente', precio: 40 }, { nombre: 'Suavizante', precio: 38 }, { nombre: 'Cloro', precio: 25 }],
-    'Abarrotes C': [{ nombre: 'Tomate', precio: 28 }, { nombre: 'Cebolla', precio: 20 }, { nombre: 'Chiles', precio: 30 }]
-  };
+        stompClient.subscribe('/topic/reportes', (mensaje) => {
+          try {
+            const reporte = JSON.parse(mensaje.body);
+            setMensajeModal(`Nuevo reporte recibido:\nProducto: ${reporte.producto}\nTienda: ${reporte.comercio}`);
+            setModalVisible(true);
+          } catch (err) {
+            console.error('Error al parsear el mensaje:', err);
+          }
+        });
+      }
+    });
 
-  const reportesSimulados = [
-    { usuario: 'usuario1', producto: 'Leche', tienda: 'Supermercado A' },
-    { usuario: 'usuario2', producto: 'Pan', tienda: 'Tienda B' },
-    { usuario: 'usuario3', producto: 'Refresco', tienda: 'Abarrotes C' },
-  ];
+    stompClient.activate();
 
-  const manejarBusquedaTienda = (e) => {
-    if (e.key === 'Enter') {
-      const coincidencias = tiendasSimuladas.filter(t =>
-        t.toLowerCase().includes(busqueda.toLowerCase())
-      );
-      setResultados(coincidencias);
+    return () => {
+      stompClient.deactivate();
+    };
+  }, []);
+
+  const cargarPrecioProducto = async (tienda, producto) => {
+    try {
+      const response = await axios.get(`http://localhost:8085/profeco/precioProducto/${tienda}/${producto}`);
+      setPrecioProducto(response.data.precio);
+    } catch (error) {
+      console.error('Error al obtener precio:', error);
+      setPrecioProducto(null);
     }
   };
 
-  const productosFiltrados = () => {
-    if (!tiendaSeleccionada) return [];
-    const productos = productosPorTienda[tiendaSeleccionada] || [];
-    return productos.filter(p =>
-      p.nombre.toLowerCase().includes(busquedaProducto.toLowerCase())
-    );
+  const manejarBusquedaTienda = async (e) => {
+    if (e.key === 'Enter') {
+      try {
+        const response = await axios.get('http://localhost:8085/consumidoresComercio/traerComercios');
+        const comercios = response.data;
+        const coincidencias = comercios.filter(c =>
+          c.nombre.toLowerCase().includes(busqueda.toLowerCase())
+        );
+        setResultados(coincidencias);
+      } catch (error) {
+        console.error('Error al obtener comercios:', error);
+      }
+    }
   };
 
-  const obtenerPrecioProducto = (tienda, productoNombre) => {
-    const productos = productosPorTienda[tienda] || [];
-    const producto = productos.find(p => p.nombre === productoNombre);
-    return producto ? producto.precio : 'No disponible';
+  const cargarReportesDeTienda = async (tienda) => {
+    try {
+      const response = await axios.get(`http://localhost:8085/reportesProfeco/buscarReportesPorNombreComercio/${tienda}`);
+      setReportes(response.data);
+    } catch (error) {
+      console.error('Error al cargar reportes:', error);
+      setReportes([]);
+    }
+  };
+
+  const enviarMulta = async () => {
+    try {
+      await axios.post('http://localhost:8085/profeco/multar', {
+        comercio: reporteSeleccionado.tienda,
+        producto: reporteSeleccionado.producto,
+        multa: parseFloat(multa)
+      });
+      alert(`Multa aplicada correctamente a ${reporteSeleccionado.tienda}`);
+      setPantalla('reportes');
+    } catch (error) {
+      console.error('Error al aplicar multa:', error);
+      alert('Error al aplicar la multa');
+    }
+  };
+
+  const cerrarSesion = () => {
+    if (onVolver) onVolver();
   };
 
   const renderMenu = () => (
@@ -75,7 +112,7 @@ function Profeco({ onVolver }) {
         <BiSearchAlt style={{ marginRight: '8px' }} />
         Buscar Tiendas
       </button>
-      <button className="login-button" style={{ marginTop: '20px' }} onClick={() => cerrarSesion}>
+      <button className="login-button" style={{ marginTop: '20px' }} onClick={cerrarSesion}>
         Cerrar sesión
       </button>
     </div>
@@ -95,9 +132,10 @@ function Profeco({ onVolver }) {
       <div className="cuadricula">
         {resultados.map((tienda, index) => (
           <div key={index} className="producto-card">
-            <p>{tienda}</p>
+            <p>{tienda.nombre}</p>
             <button className="register-button" onClick={() => {
               setTiendaSeleccionada(tienda);
+              cargarReportesDeTienda(tienda.nombre);
               setPantalla('detalleTienda');
             }}>
               Visualizar
@@ -111,56 +149,54 @@ function Profeco({ onVolver }) {
     </div>
   );
 
-  const renderDetalleTienda = () => {
-    const reportesTienda = reportesSimulados.filter(
-      r => r.tienda === tiendaSeleccionada
-    );
+  const renderDetalleTienda = () => (
+    <div className="register-container">
+      <h2>Reportes en {tiendaSeleccionada?.nombre}</h2>
 
-    return (
-      <div className="register-container">
-        <h2>Reportes en {tiendaSeleccionada}</h2>
-        {reportesTienda.length === 0 ? (
-          <p>No hay reportes para esta tienda.</p>
-        ) : (
-          <div className="cuadricula">
-            {reportesTienda.map((reporte, index) => (
-              <div key={index} className="producto-card">
-                <p><strong>Usuario:</strong> {reporte.usuario}</p>
-                <p><strong>Producto:</strong> {reporte.producto}</p>
-                <button className="register-button" onClick={() => {
-                  setReporteSeleccionado(reporte);
-                  setMulta('');
-                  setPantalla('atenderReporte');
-                }}>
-                  Atender
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-        <button className="login-button" onClick={() => {
-          setTiendaSeleccionada(null);
-          setPantalla('buscarTiendas');
-        }}>
-          <BiArrowBack style={{ marginRight: '5px' }} /> Volver
-        </button>
-      </div>
-    );
-  };
-
+      {reportes.length === 0 ? (
+        <p>No hay reportes para esta tienda.</p>
+      ) : (
+        <div className="cuadricula">
+          {reportes.map((reporte, index) => (
+            <div key={index} className="producto-card">
+              <p><strong>Usuario:</strong> {reporte.consumidor?.nombre}</p>
+              <p><strong>Producto:</strong> {reporte.producto?.producto?.nombre}</p>
+              <button className="register-button" onClick={() => {
+                setReporteSeleccionado({
+                  tienda: reporte.comercio?.nombre,
+                  producto: reporte.producto?.producto?.nombre,
+                });
+                setMulta('');
+                cargarPrecioProducto(reporte.comercio?.nombre, reporte.producto?.producto?.nombre);
+                setPantalla('atenderReporte');
+              }}>
+                Atender
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      <button className="login-button" onClick={() => {
+        setTiendaSeleccionada(null);
+        setPantalla('buscarTiendas');
+      }}>
+        <BiArrowBack style={{ marginRight: '5px' }} /> Volver
+      </button>
+    </div>
+  );
 
   const renderReportes = () => (
     <div className="register-container">
       <h2>Reportes</h2>
       <div className="cuadricula">
-        {reportesSimulados.map((reporte, index) => (
+        {reportes.map((reporte, index) => (
           <div key={index} className="producto-card">
-            <p><strong>Usuario:</strong> {reporte.usuario}</p>
             <p><strong>Producto:</strong> {reporte.producto}</p>
-            <p><strong>Tienda:</strong> {reporte.tienda}</p>
+            <p><strong>Contenido:</strong> {reporte.contenido}</p>
             <button className="register-button" onClick={() => {
               setReporteSeleccionado(reporte);
               setMulta('');
+              cargarPrecioProducto(reporte.tienda, reporte.producto);
               setPantalla('atenderReporte');
             }}>
               Atender
@@ -174,44 +210,35 @@ function Profeco({ onVolver }) {
     </div>
   );
 
-  const renderAtenderReporte = () => {
-    const precio = reporteSeleccionado
-      ? obtenerPrecioProducto(reporteSeleccionado.tienda, reporteSeleccionado.producto)
-      : '';
-
-    return (
-      <div className="register-container">
-        <h2>Atender Reporte</h2>
-        <p><strong>Tienda:</strong> {reporteSeleccionado?.tienda}</p>
-        <p><strong>Producto:</strong> {reporteSeleccionado?.producto}</p>
-        <p><strong>Precio:</strong> {precio !== 'No disponible' ? `$${precio} MXN` : 'No disponible'}</p>
-        <input
-          type="number"
-          placeholder="Monto de la multa"
-          value={multa}
-          onChange={e => setMulta(e.target.value)}
-          className="input-style"
-        />
-        <div className="formulario">
-          <button className="register-button" onClick={() => {
-            alert(`Multado con ${multa} a ${reporteSeleccionado.tienda}`);
-            setPantalla('reportes');
-          }}>
-            Multar
-          </button>
-          <button className="register-button" onClick={() => {
-            alert(`No multado ${reporteSeleccionado.tienda}`);
-            setPantalla('reportes');
-          }}>
-            Invalidar
-          </button>
-          <button className="login-button" onClick={() => setPantalla('reportes')}>
-            <BiArrowBack style={{ marginRight: '5px' }} /> Cancelar
-          </button>
-        </div>
+  const renderAtenderReporte = () => (
+    <div className="register-container">
+      <h2>Atender Reporte</h2>
+      <p><strong>Tienda:</strong> {reporteSeleccionado?.tienda}</p>
+      <p><strong>Producto:</strong> {reporteSeleccionado?.producto}</p>
+      <p><strong>Precio:</strong> {precioProducto !== null ? `$${precioProducto} MXN` : 'No disponible'}</p>
+      <input
+        type="number"
+        placeholder="Monto de la multa"
+        value={multa}
+        onChange={e => setMulta(e.target.value)}
+        className="input-style"
+      />
+      <div className="formulario">
+        <button className="register-button" onClick={enviarMulta}>
+          Multar
+        </button>
+        <button className="register-button" onClick={() => {
+          alert(`Reporte invalidado para ${reporteSeleccionado.tienda}`);
+          setPantalla('reportes');
+        }}>
+          Invalidar
+        </button>
+        <button className="login-button" onClick={() => setPantalla('reportes')}>
+          <BiArrowBack style={{ marginRight: '5px' }} /> Cancelar
+        </button>
       </div>
-    );
-  };
+    </div>
+  );
 
   const renderContenido = () => {
     switch (pantalla) {
@@ -231,8 +258,8 @@ function Profeco({ onVolver }) {
   return (
     <div>
       {renderContenido()}
-  
-      {pantalla !== null && pantalla !== '' && (
+
+      {pantalla && (
         <div className="barra-inferior">
           <button onClick={() => setPantalla('buscarTiendas')}>
             <BiSearchAlt /> <span>Buscar</span>
@@ -240,13 +267,25 @@ function Profeco({ onVolver }) {
           <button onClick={() => setPantalla('reportes')}>
             <BiStar /> <span>Reportes</span>
           </button>
-          <button onClick={() => setPantalla('menu')}>
+          <button onClick={() => setPantalla(null)}>
             <BiArrowBack /> <span>Volver</span>
           </button>
         </div>
       )}
+
+      {modalVisible && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Notificación</h3>
+            <p style={{ whiteSpace: 'pre-line' }}>{mensajeModal}</p>
+            <button className="register-button" onClick={() => setModalVisible(false)}>
+              Aceptar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
 export default Profeco;

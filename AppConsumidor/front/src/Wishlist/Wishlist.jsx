@@ -48,7 +48,7 @@ function Wishlist() {
 
   return (
     <div className="contenedor">
-      <h1 className="titulo">Wishlist: Sugerir Producto a un Comercio</h1>
+      <h1 className="titulo">Wishlist: Sugerir producto a un Comercio</h1>
 
       {!comercioSeleccionado && comercios.length > 0 && (
         <>
