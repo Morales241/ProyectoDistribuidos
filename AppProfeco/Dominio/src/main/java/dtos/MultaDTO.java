@@ -4,11 +4,7 @@ import java.time.LocalDate;
 
 public class MultaDTO {
 
-    private Long id;
-
-    private ComercioDTO comercio;
-
-    private String motivo;
+    private String comercio;
 
     private Double totalMulta;
 
@@ -16,28 +12,12 @@ public class MultaDTO {
 
     public MultaDTO() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ComercioDTO getComercio() {
+    public String getComercio() {
         return comercio;
     }
 
-    public void setComercio(ComercioDTO comercio) {
+    public void setComercio(String comercio) {
         this.comercio = comercio;
-    }
-
-    public String getMotivo() {
-        return motivo;
-    }
-
-    public void setMotivo(String motivo) {
-        this.motivo = motivo;
     }
 
     public Double getTotalMulta() {

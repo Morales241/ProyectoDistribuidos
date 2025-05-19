@@ -19,6 +19,7 @@ import servicios.ReporteService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,9 +117,11 @@ public class ReporteController {
     }
 
     @PostMapping("invalidarReporte/{precioProducto}/{contenido}/{fecha}")
-    private ResponseEntity<Void> invalidadReporte (@PathVariable Long precioProducto, @PathVariable String contenido,@PathVariable LocalDateTime fecha){
+    private ResponseEntity<Void> invalidadReporte (@PathVariable Long precioProducto, @PathVariable String contenido,@PathVariable String fecha){
 
-        servicio.invalidarReporte(precioProducto, contenido, fecha);
+        LocalDateTime fechaAux = LocalDateTime.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSS"));
+
+        servicio.invalidarReporte(precioProducto, contenido, fechaAux);
 
         return ResponseEntity.ok().build();
     }
@@ -137,6 +140,19 @@ public class ReporteController {
             Long ppId = clienteComercio.findEspecificIDPrecioProducto(pP.getProducto(), pP.getComercio()).getBody();
             reportes.addAll(servicio.obtenerPorPrecioProducto(ppId));
         }
+
+        List<ReporteDTO> reportesDTO = new ArrayList<>();
+        reportesDTO = traerInfo(reportes);
+
+        return ResponseEntity.ok(reportesDTO);
+    }
+
+    @GetMapping("/obtenerTodosLosReportes")
+    public ResponseEntity<List<ReporteDTO>> obtenerTodosLosReportes() {
+
+
+        List<Reporte> reportes = new ArrayList<>();
+        reportes = servicio.obtenerTodosLosReportes();
 
         List<ReporteDTO> reportesDTO = new ArrayList<>();
         reportesDTO = traerInfo(reportes);

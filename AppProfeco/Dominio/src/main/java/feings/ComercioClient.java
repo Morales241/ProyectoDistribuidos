@@ -1,6 +1,7 @@
 package feings;
 
 import dtos.ComercioDTO;
+import dtos.PrecioProductoDTO;
 import dtos.ProductoDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,10 @@ public interface ComercioClient {
     @GetMapping("/comercios/buscarComercioIdPorNombre")
     public ResponseEntity<Long> buscarComercioIdPorNombre(@RequestParam String nombre);
 
-    @PostMapping("invalidarReporte/{precioProducto}/{contenido}/{fecha}")
-    public ResponseEntity<Void> invalidadReporte (@PathVariable Long precioProducto, @PathVariable String contenido,@PathVariable LocalDateTime fecha);
+    @GetMapping("/precioProductos/traerProductoEspecificoPorId/{Idproducto}")
+    public ResponseEntity<PrecioProductoDTO> traerProductoEspecificoPorId(@PathVariable Long Idproducto);
+
+    @GetMapping("/precioProductos/buscarIdEspecificamente/{producto}/{comercio}")
+    public ResponseEntity<Long> findEspecificIDPrecioProducto(@PathVariable String producto, @PathVariable String comercio);
+
 }

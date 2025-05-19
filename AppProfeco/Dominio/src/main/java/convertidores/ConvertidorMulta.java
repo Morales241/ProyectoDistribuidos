@@ -18,17 +18,15 @@ public class ConvertidorMulta extends Convertidor<MultaDTO, Multa> {
 
     private static MultaDTO convertToDto(Multa multa) {
         MultaDTO dto = new MultaDTO();
-        dto.setMotivo(multa.getMotivo());
-        dto.setTotalMulta(multa.getTotalMulta());
         dto.setFecha(multa.getFecha());
-        dto.setComercio(clienteComercio.obtener(multa.getIdComercio()).getBody());
-
+        dto.setTotalMulta(multa.getTotalMulta());
         return dto;
     }
 
     private static Multa convertToEntity(MultaDTO dto) {
         Multa multa = new Multa();
-
+        multa.setFecha(dto.getFecha());
+        multa.setTotalMulta(dto.getTotalMulta());
         return multa;
     }
 }

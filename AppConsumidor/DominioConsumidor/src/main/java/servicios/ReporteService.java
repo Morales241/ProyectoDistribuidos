@@ -55,11 +55,15 @@ public class ReporteService {
     }
 
     public List<Reporte> obtenerPorConsumidor(Long idConsumidor) {
-        return reporteRepository.findByConsumidorId(idConsumidor);
+        return reporteRepository.findByConsumidorIdAndEstado(idConsumidor, true);
+    }
+
+    public List<Reporte> obtenerTodosLosReportes(){
+        return reporteRepository.findAllByEstado(true);
     }
 
     public List<Reporte> obtenerPorPrecioProducto(Long idPP) {
-        return reporteRepository.findByPrecioProducto(idPP);
+        return reporteRepository.findByPrecioProductoAndEstado(idPP, true);
     }
 
     public Optional<Reporte> obtener(Long id) {

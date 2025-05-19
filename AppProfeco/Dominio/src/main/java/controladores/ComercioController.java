@@ -36,4 +36,12 @@ public class ComercioController {
         return ResponseEntity.ok(comercios);
     }
 
+   @GetMapping("/obtenerPrecioProductoPorNombres/{nProducto}/{nComercio}")
+   public ResponseEntity<PrecioProductoDTO> obtenerPrecioProductoPorNombres(@PathVariable String nProducto, @PathVariable String nComercio) {
+        Long idPP = clienteComercio.findEspecificIDPrecioProducto(nProducto, nComercio).getBody();
+        PrecioProductoDTO precioProductoDTO = new PrecioProductoDTO();
+        precioProductoDTO = clienteComercio.traerProductoEspecificoPorId(idPP).getBody();
+
+        return ResponseEntity.ok(precioProductoDTO);
+   }
 }

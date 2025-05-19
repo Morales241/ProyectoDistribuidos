@@ -10,10 +10,11 @@ import java.util.List;
 @Repository
 public interface ReporteRepository extends JpaRepository<Reporte, Long> {
 
-    List<Reporte> findByConsumidorId(Long consumidorId);
+    List<Reporte> findByConsumidorIdAndEstado(Long consumidorId, Boolean estado);
 
-    List<Reporte> findByPrecioProducto(Long precioProducto);
+    List<Reporte> findByPrecioProductoAndEstado(Long precioProducto, Boolean estado);
 
     Reporte findByPrecioProductoAndContenidoAndFecha(Long precioProducto, String contenido, LocalDateTime fecha);
 
+    List<Reporte> findAllByEstado(Boolean estado);
 }

@@ -20,8 +20,11 @@ public interface ReporteClient {
     public ResponseEntity<List<ReporteDTO>> obtenerPorNombreComercio(@PathVariable String comercio);
 
     @PostMapping("/reportes/invalidarReporte/{precioProducto}/{contenido}/{fecha}")
-    public ResponseEntity<Void> invalidadReporte (@PathVariable Long precioProducto, @PathVariable String contenido,@PathVariable LocalDateTime fecha);
+    public ResponseEntity<Void> invalidadReporte (@PathVariable Long precioProducto, @PathVariable String contenido,@PathVariable String fecha);
 
     @GetMapping("reportes/{id}")
     public ResponseEntity<ReporteDTO> obtener(@PathVariable Long id);
+
+    @GetMapping("/reportes/obtenerTodosLosReportes")
+    public ResponseEntity<List<ReporteDTO>> obtenerTodosLosReportes();
 }

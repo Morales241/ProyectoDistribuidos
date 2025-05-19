@@ -49,7 +49,7 @@ function Profeco({ onVolver }) {
 
   const cargarPrecioProducto = async (tienda, producto) => {
     try {
-      const response = await axios.get(`http://localhost:8085/profeco/precioProducto/${tienda}/${producto}`);
+      const response = await axios.get(`http://localhost:8085/consumidoresComercio/obtenerPrecioProductoPorNombres/${producto}/${tienda}`);
       setPrecioProducto(response.data.precio);
     } catch (error) {
       console.error('Error al obtener precio:', error);
@@ -83,14 +83,20 @@ function Profeco({ onVolver }) {
   };
 
   const enviarMulta = async () => {
+    const body = {
+      comercio: reporteSeleccionado.tienda,
+      totalMulta: multa,
+      fecha: null
+    };
+
     try {
-      await axios.post('http://localhost:8085/profeco/multar', {
-        comercio: reporteSeleccionado.tienda,
-        producto: reporteSeleccionado.producto,
-        multa: parseFloat(multa)
+      const response = await fetch('http://localhost:8085/multas/guardar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
       });
-      alert(`Multa aplicada correctamente a ${reporteSeleccionado.tienda}`);
-      setPantalla('reportes');
     } catch (error) {
       console.error('Error al aplicar multa:', error);
       alert('Error al aplicar la multa');
@@ -101,13 +107,34 @@ function Profeco({ onVolver }) {
     if (onVolver) onVolver();
   };
 
+  const invalidarReporte = async () => {
+    try {
+      await axios.post(`http://localhost:8085/reportesProfeco/invalidarReporte/${reporteSeleccionado.producto}/${reporteSeleccionado.tienda}/${reporteSeleccionado.contenido}/${reporteSeleccionado.fecha}`);
+      alert(`Reporte invalidado correctamente para ${reporteSeleccionado.tienda}`);
+    } catch (error) {
+      console.error('Error al invalidar reporte:', error);
+    }
+  };
+
+
   const renderMenu = () => (
     <div className="register-container">
       <h1 className="titulo">PROFECO</h1>
-      <button className="register-button" onClick={() => setPantalla('reportes')}>
-        <BiStar style={{ marginRight: '8px' }} />
-        Gestionar Reportes
+      <button className="register-button" 
+        onClick={async () => {
+          try {
+            const response = await axios.get('http://localhost:8085/reportesProfeco/obtenerTodosLosReportes');
+            setReportes(response.data);
+            setPantalla('reportes');
+          } catch (error) {
+            console.error('Error al cargar todos los reportes:', error);
+            alert('No se pudieron cargar los reportes');
+          }
+        }}
+      >
+        <BiStar /> <span>Reportes</span>
       </button>
+
       <button className="register-button" onClick={() => setPantalla('buscarTiendas')}>
         <BiSearchAlt style={{ marginRight: '8px' }} />
         Buscar Tiendas
@@ -159,15 +186,16 @@ function Profeco({ onVolver }) {
         <div className="cuadricula">
           {reportes.map((reporte, index) => (
             <div key={index} className="producto-card">
-              <p><strong>Usuario:</strong> {reporte.consumidor?.nombre}</p>
-              <p><strong>Producto:</strong> {reporte.producto?.producto?.nombre}</p>
+              <p><strong>Producto:</strong> {reporte.producto?.producto}</p>
               <button className="register-button" onClick={() => {
                 setReporteSeleccionado({
-                  tienda: reporte.comercio?.nombre,
-                  producto: reporte.producto?.producto?.nombre,
+                  tienda: tiendaSeleccionada?.nombre,
+                  producto: reporte.producto?.producto,
+                  contenido: reporte.contenido,
+                  fecha: reporte.fecha
                 });
                 setMulta('');
-                cargarPrecioProducto(reporte.comercio?.nombre, reporte.producto?.producto?.nombre);
+                cargarPrecioProducto(reporte.producto?.comercio, reporte.producto?.producto);
                 setPantalla('atenderReporte');
               }}>
                 Atender
@@ -191,12 +219,17 @@ function Profeco({ onVolver }) {
       <div className="cuadricula">
         {reportes.map((reporte, index) => (
           <div key={index} className="producto-card">
-            <p><strong>Producto:</strong> {reporte.producto}</p>
+            <p><strong>Producto:</strong> {reporte.producto.producto}</p>
             <p><strong>Contenido:</strong> {reporte.contenido}</p>
             <button className="register-button" onClick={() => {
-              setReporteSeleccionado(reporte);
+              setReporteSeleccionado({
+                  tienda: reporte.producto?.comercio,
+                  producto: reporte.producto?.producto,
+                  contenido: reporte.contenido,
+                  fecha: reporte.fecha
+                });
               setMulta('');
-              cargarPrecioProducto(reporte.tienda, reporte.producto);
+              cargarPrecioProducto(reporte.producto.comercio, reporte.producto.producto);
               setPantalla('atenderReporte');
             }}>
               Atender
@@ -213,8 +246,9 @@ function Profeco({ onVolver }) {
   const renderAtenderReporte = () => (
     <div className="register-container">
       <h2>Atender Reporte</h2>
-      <p><strong>Tienda:</strong> {reporteSeleccionado?.tienda}</p>
+      <p><strong>Comercio:</strong> {reporteSeleccionado?.tienda}</p>
       <p><strong>Producto:</strong> {reporteSeleccionado?.producto}</p>
+      <p><strong>Contenido:</strong> {reporteSeleccionado?.contenido}</p>
       <p><strong>Precio:</strong> {precioProducto !== null ? `$${precioProducto} MXN` : 'No disponible'}</p>
       <input
         type="number"
@@ -227,13 +261,10 @@ function Profeco({ onVolver }) {
         <button className="register-button" onClick={enviarMulta}>
           Multar
         </button>
-        <button className="register-button" onClick={() => {
-          alert(`Reporte invalidado para ${reporteSeleccionado.tienda}`);
-          setPantalla('reportes');
-        }}>
+        <button className="register-button" onClick={invalidarReporte}>
           Invalidar
         </button>
-        <button className="login-button" onClick={() => setPantalla('reportes')}>
+        <button className="login-button" onClick={() => setPantalla('renderContenido')}>
           <BiArrowBack style={{ marginRight: '5px' }} /> Cancelar
         </button>
       </div>
@@ -264,9 +295,21 @@ function Profeco({ onVolver }) {
           <button onClick={() => setPantalla('buscarTiendas')}>
             <BiSearchAlt /> <span>Buscar</span>
           </button>
-          <button onClick={() => setPantalla('reportes')}>
+          <button
+            onClick={async () => {
+              try {
+                const response = await axios.get('http://localhost:8085/reportesProfeco/obtenerTodosLosReportes');
+                setReportes(response.data);
+                setPantalla('reportes');
+              } catch (error) {
+                console.error('Error al cargar todos los reportes:', error);
+                alert('No se pudieron cargar los reportes');
+              }
+            }}
+          >
             <BiStar /> <span>Reportes</span>
           </button>
+
           <button onClick={() => setPantalla(null)}>
             <BiArrowBack /> <span>Volver</span>
           </button>
