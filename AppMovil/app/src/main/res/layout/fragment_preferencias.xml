@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.preferencias.Preferencias">
+
+    <LinearLayout
+        android:id="@+id/division"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar Preferencias"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:marginBottom="16dp"/>
+
+        <!-- Búsqueda de Producto Favorito -->
+        <EditText
+            android:id="@+id/inputBusquedaProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Buscar producto favorito..."
+            android:inputType="text"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerResultadosProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Búsqueda de Supermercado Favorito -->
+        <EditText
+            android:id="@+id/inputBusquedaSupermercado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Buscar supermercado favorito..."
+            android:inputType="text"
+            android:layout_marginTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerResultadosSupermercado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Botones de Acción -->
+        <LinearLayout
+            android:id="@+id/botonesAccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/btnGuardarPreferencias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar Preferencias"/>
+
+            <Button
+                android:id="@+id/btnVolver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Volver"
+                android:layout_marginStart="16dp"/>
+        </LinearLayout>
+
+        <!-- Lista de Carrito -->
+        <TextView
+            android:id="@+id/tituloCarrito"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lista de supermercado:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCarrito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Lista de Preferencias -->
+        <TextView
+            android:id="@+id/tituloPreferencias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lista de preferencias:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPreferencias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</ScrollView >

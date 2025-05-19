@@ -22,4 +22,50 @@
         android:name="morales.jesus.appconsumidormovil.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_preferencias" />
+    <activity
+        android:id="@+id/register"
+        android:name="morales.jesus.appconsumidormovil.Register"
+        android:label="activity_register"
+        tools:layout="@layout/activity_register" />
+    <fragment
+        android:id="@+id/agregar_comentario"
+        android:name="morales.jesus.appconsumidormovil.agregar_comentario"
+        android:label="fragment_agregar_comentario"
+        tools:layout="@layout/fragment_agregar_comentario" >
+    </fragment>
+    <fragment
+        android:id="@+id/buscar_producto"
+        android:name="morales.jesus.appconsumidormovil.buscar_producto"
+        android:label="fragment_buscar_producto"
+        tools:layout="@layout/fragment_buscar_producto" />
+    <fragment
+        android:id="@+id/fragment_buscar_supermercado"
+        android:name="morales.jesus.appconsumidormovil.fragment_buscar_supermercado"
+        android:label="fragment_buscar_supermercado"
+        tools:layout="@layout/fragment_buscar_supermercado" />
+    <activity
+        android:id="@+id/login"
+        android:name="morales.jesus.appconsumidormovil.login"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <fragment
+        android:id="@+id/productoDetalle"
+        android:name="morales.jesus.appconsumidormovil.ProductoDetalle"
+        android:label="fragment_producto_detalle"
+        tools:layout="@layout/fragment_producto_detalle" />
+    <fragment
+        android:id="@+id/resenas"
+        android:name="morales.jesus.appconsumidormovil.resenas"
+        android:label="fragment_resenas"
+        tools:layout="@layout/fragment_resenas" />
+    <fragment
+        android:id="@+id/wishList"
+        android:name="morales.jesus.appconsumidormovil.wishList"
+        android:label="fragment_wish_list"
+        tools:layout="@layout/fragment_wish_list" />
+    <fragment
+        android:id="@+id/reportes"
+        android:name="morales.jesus.appconsumidormovil.reportes"
+        android:label="fragment_reportes"
+        tools:layout="@layout/fragment_reportes" />
 </navigation>

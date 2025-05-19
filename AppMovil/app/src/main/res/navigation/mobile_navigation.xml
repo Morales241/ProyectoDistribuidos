@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="morales.jesus.appmovil.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="morales.jesus.appmovil.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <activity
+        android:id="@+id/login"
+        android:name="morales.jesus.appmovil.ui.Login.login"
+        android:label="login" />
+    <activity
+        android:id="@+id/register"
+        android:name="morales.jesus.appmovil.ui.Registro.Register"
+        android:label="Register" />
+
+    <fragment
+        android:id="@+id/compararPrecios"
+        android:name="morales.jesus.appmovil.ui.compararPrecios.CompararPrecios"
+        tools:layout="@layout/fragment_comparar_precios">
+
+        <argument
+            android:name="nombreProducto"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/ofertasFragment"
+        android:name="morales.jesus.appmovil.ui.ofertas.OfertasFragment"
+        android:label="OfertasFragment" />
+    <fragment
+        android:id="@+id/navigation_Reportes"
+        android:name="morales.jesus.appmovil.ui.reportes.buscar_supermercado"
+        android:label="Buscar supermercado" >
+        <action
+            android:id="@+id/action_buscarSupermercado_to_buscarProducto"
+            app:destination="@id/buscarProductoFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/buscarProductoFragment"
+        android:name="morales.jesus.appmovil.ui.reportes.buscar_producto"
+        android:label="Buscar producto" >
+        <action
+            android:id="@+id/action_buscarProducto_to_agregarComentario"
+            app:destination="@id/agregarComentarioFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/agregarComentarioFragment"
+        android:name="morales.jesus.appmovil.ui.reportes.agregar_comentario"
+        android:label="Agregar comentario"/>
+
+</navigation>

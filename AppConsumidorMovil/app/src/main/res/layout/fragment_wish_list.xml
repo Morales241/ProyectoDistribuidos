@@ -21,7 +21,6 @@
         android:id="@+id/spinnerComercios"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:prompt="Seleccionar Comercio"
         app:layout_constraintTop_toBottomOf="@id/tituloWishlist"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

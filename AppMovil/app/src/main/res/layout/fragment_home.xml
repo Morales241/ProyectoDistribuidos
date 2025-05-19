@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:text="Selecciona un producto"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#007bff"
+            android:layout_marginBottom="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <GridLayout
+            android:id="@+id/gridProductos"
+            android:layout_width="wrap_content"
+            android:layout_height="509dp"
+            android:layout_gravity="center"
+            android:alignmentMode="alignMargins"
+            android:columnCount="3"
+            android:columnOrderPreserved="false"
+            android:useDefaultMargins="true" />
+        <Button
+            android:id="@+id/btnVerOfertas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ver Ofertas"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:id="@+id/btnSalir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salir"
+            android:layout_marginTop="12dp"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+</ScrollView>

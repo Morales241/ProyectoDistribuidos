@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.reportes.buscar_producto">
+
+    <TextView
+        android:id="@+id/tvSuperSeleccionado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Supermercado seleccionado"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etBusquedaProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:hint="Buscar producto..." />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvResultadosProducto"
+        android:layout_width="match_parent"
+        android:layout_height="536dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnVolver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Volver"/>
+
+</LinearLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.reportes.buscar_supermercado">
+
+    <TextView
+        android:text="Buscar supermercado"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etBusquedaSuper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionSearch"
+        android:hint="Nombre del supermercado"
+        android:importantForAccessibility="no"
+        android:paddingHorizontal="10dp"
+        android:textAlignment="viewStart"
+        android:inputType="text"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvResultadosSuper"
+        android:layout_width="match_parent"
+        android:layout_height="514dp"
+        android:layout_weight="1" />
+
+
+</LinearLayout>

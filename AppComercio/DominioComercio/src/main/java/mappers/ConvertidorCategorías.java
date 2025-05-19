@@ -51,7 +51,7 @@ public class ConvertidorCategorías {
 
         switch (categoria){
             case CategoriaProducto.Frutas_y_Verduras:
-                return "Frutas y VerdurasLácteos";
+                return "Frutas y Verduras";
 
             case CategoriaProducto.Lacteos:
                 return "Lácteos";
