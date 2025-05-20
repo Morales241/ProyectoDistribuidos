@@ -13,7 +13,7 @@ import java.util.Date;
 public class JwtTokenUtil {
 
     private final int MINUTOS_VALIDO = 30;
-    private final String claveSecreta = "secreto";
+    private final String claveSecreta = "dhntmnujnmrbhewrfvrrtuj57hbyb57uj4rfcwtg651evnoioento";
 
     public String generateToken(String id) {
         Claims claims = Jwts.claims().subject(id).build();

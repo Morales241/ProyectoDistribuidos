@@ -20,7 +20,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/auth")
 public class AutenticacionController {
-    private final String claveSecreta = "secreto";
+    private final String claveSecreta = "dhntmnujnmrbhewrfvrrtuj57hbyb57uj4rfcwtg651evnoioento";
 
     @Autowired
     private FeignComercio clienteComercio;
