@@ -20,7 +20,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/auth")
 public class AutenticacionController {
-    private static final Key claveSecreta = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final String claveSecreta = "secreto";
 
     @Autowired
     private FeignComercio clienteComercio;
@@ -56,6 +56,6 @@ public class AutenticacionController {
         long expiracion = tiempoMilis + MINUTOS_VALIDO * 1000 * 60;
         Date exp = new Date(expiracion);
         return Jwts.builder().claims(claims).issuedAt(new Date(tiempoMilis)).expiration(exp)
-                .signWith(claveSecreta).compact();
+                .signWith(SignatureAlgorithm.HS256, claveSecreta).compact();
     }
 }

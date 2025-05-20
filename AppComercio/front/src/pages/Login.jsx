@@ -29,13 +29,13 @@ const Login = () => {
   };
   
   const obtenerToken = async () => {
-    const response = await axios.post('http://localhost:8766/GENERADORJWT/auth/generarToken', null, {
-      params: {
+    const response = await axios.post('http://localhost:8766/GENERADORJWT/auth/generarToken', 
+      {
         tipoUsuario: "comercio",
         correo: correo,
         contrasena: password
       }
-    });
+    );
     if (response.status === 200) {
       const token = response.data;
       localStorage.setItem('token', token);

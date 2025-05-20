@@ -366,6 +366,7 @@ function Mercado({ onVolver }) {
           'headers': { Authorization: `Bearer ${localStorage.getItem('token')}` 
         },
         body: JSON.stringify(body)
+        }
       });
 
       if (response.ok) {

@@ -8,6 +8,5 @@ spring:
           enabled: true
       default-filters:
         - FiltroAutenticacion
-
 server:
   port: 8766

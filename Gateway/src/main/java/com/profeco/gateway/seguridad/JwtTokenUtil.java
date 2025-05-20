@@ -13,7 +13,7 @@ import java.util.Date;
 public class JwtTokenUtil {
 
     private final int MINUTOS_VALIDO = 30;
-    private static final Key claveSecreta = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final String claveSecreta = "secreto";
 
     public String generateToken(String id) {
         Claims claims = Jwts.claims().subject(id).build();
@@ -21,7 +21,7 @@ public class JwtTokenUtil {
         long expiracion = tiempoMilis + MINUTOS_VALIDO * 1000 * 60;
         Date exp = new Date(expiracion);
         return Jwts.builder().claims(claims).issuedAt(new Date(tiempoMilis)).expiration(exp)
-                .signWith(claveSecreta).compact();
+                .signWith(SignatureAlgorithm.HS256, claveSecreta).compact();
     }
 
     public boolean validarToken(final String header) {
