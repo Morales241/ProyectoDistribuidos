@@ -41,9 +41,11 @@ function Mercado({ onVolver }) {
 
   const obtenerProductos = async () => {
     try {
-      //cambiar
       const nombreComercio = localStorage.getItem('nombreComercio');
-      const response = await axios.get(`http://localhost:8080/precioProductos/buscarComercioPorNombre/${nombreComercio}`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOCOMERCIO/precioProductos/buscarComercioPorNombre/${nombreComercio}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
       setProductos(response.data);
       console.log('Productos:', response.data);
     } catch (error) {
@@ -53,7 +55,10 @@ function Mercado({ onVolver }) {
   
   const obtenerReportes = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/comercioReportes/buscar/${localStorage.getItem('comercioId')}`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOCOMERCIO/comercioReportes/buscar/${localStorage.getItem('comercioId')}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
       setReportes(response.data);
       console.log('Reportes:', response.data);
     } catch (error) {
@@ -141,7 +146,10 @@ function Mercado({ onVolver }) {
         const Ncomercio = localStorage.getItem('nombreComercio');
 
         const productoResponse = await axios.post(
-          `http://localhost:8080/precioProductos/modificarPrecio/${Ncomercio}/${productoSeleccionado?.producto}/${nuevoPrecio}`
+          `http://localhost:8766/DOMINIOCOMERCIO/precioProductos/modificarPrecio/${Ncomercio}/${productoSeleccionado?.producto}/${nuevoPrecio}`,
+          {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      }
         );
 
         alert('El precio del producto se ha cambiado correctamente.');
@@ -351,10 +359,11 @@ function Mercado({ onVolver }) {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/ofertas/guardar', {
+      const response = await fetch('http://localhost:8766/DOMINIOCOMERCIO/ofertas/guardar', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'headers': { Authorization: `Bearer ${localStorage.getItem('token')}` 
         },
         body: JSON.stringify(body)
       });

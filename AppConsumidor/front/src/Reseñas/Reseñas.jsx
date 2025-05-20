@@ -15,7 +15,7 @@ function Reseñas() {
 
   const obtenerComercios = async () => {
     try {
-      const response = await axios.get('http://localhost:8082/consumidoresComercio/traerComercios');
+      const response = await axios.get('http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/traerComercios');
       setComercios(response.data);
     } catch (error) {
       console.error('Error al obtener comercios:', error);
@@ -39,7 +39,7 @@ function Reseñas() {
       fecha: null
     }
 
-    await axios.post(`http://localhost:8082/resenas/guardarResena`,
+    await axios.post(`http://localhost:8766/DOMINIOCONSUMIDOR/resenas/guardarResena`,
       resenaData,
       { headers: { 'Content-Type': 'application/json' } });
 

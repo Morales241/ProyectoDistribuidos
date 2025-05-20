@@ -14,7 +14,7 @@ function Ofertas({ onVolver }) {
   useEffect(() => {
     const cargarOfertas = async () => {
       try {
-        const response = await axios.get('http://localhost:8082/notificaciones/verOfertas');
+        const response = await axios.get('http://localhost:8766/DOMINIOCONSUMIDOR/notificaciones/verOfertas');
         setOfertas(response.data);
         setResultados(response.data);
       } catch (error) {
@@ -24,7 +24,7 @@ function Ofertas({ onVolver }) {
     cargarOfertas();
     obtenerOfertas();
   
-    const eventSource = new EventSource('http://localhost:8082/notificaciones/suscribirse');
+    const eventSource = new EventSource('http://localhost:8766/DOMINIOCONSUMIDOR/notificaciones/suscribirse');
   
     eventSource.addEventListener('nueva-oferta', () => {
       window.location.reload();
@@ -43,7 +43,7 @@ function Ofertas({ onVolver }) {
 
   const obtenerOfertas = async() => {
     try {
-      const response = await axios.get(`http://localhost:8082/notificaciones/verOfertas`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/notificaciones/verOfertas`);
       setOfertas(response.data);
       setResultados(response.data);
       console.log("ofertas:", response.data);
@@ -63,7 +63,7 @@ function Ofertas({ onVolver }) {
       cantidad: cantidadOferta
     };
   
-    axios.post(`http://localhost:8082/carritos/agregarACarrito/${consumidorID}`, productoCarrito, {
+    axios.post(`http://localhost:8766/DOMINIOCONSUMIDOR/carritos/agregarACarrito/${consumidorID}`, productoCarrito, {
       headers: { 'Content-Type': 'application/json' }
     });
   

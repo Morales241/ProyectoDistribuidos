@@ -23,7 +23,7 @@ const Register = () => {
             };
 
             const response = await axios.post(
-                'http://localhost:8080/comercios/guardar',
+                'http://localhost:8766/DOMINIOCOMERCIO/comercios/registrar',
                 comercioData,
                 { headers: { 'Content-Type': 'application/json' } }
             );

@@ -10,7 +10,7 @@ const Login = () => {
 
   const handleLogin = async () => {
 
-    const response = await axios.post('http://localhost:8080/comercios/inicioSesion', null, {
+    const response = await axios.post('http://localhost:8766/DOMINIOCOMERCIO/comercios/inicioSesion', null, {
       params: {
         correo: correo,
         contrasena: password
@@ -21,12 +21,30 @@ const Login = () => {
       const comercio = response.data;
       localStorage.setItem('nombreComercio', comercio.nombre);
       console.info('nombre Comercio:', comercio.nombre);
-      navigate('/mercado');
+      obtenerToken();
     } else {
       alert('Credenciales incorrectas');
     }
 
   };
+  
+  const obtenerToken = async () => {
+    const response = await axios.post('http://localhost:8766/GENERADORJWT/auth/generarToken', null, {
+      params: {
+        tipoUsuario: "comercio",
+        correo: correo,
+        contrasena: password
+      }
+    });
+    if (response.status === 200) {
+      const token = response.data;
+      localStorage.setItem('token', token);
+      console.info('token', token);
+      navigate('/mercado');
+    } else {
+      alert('No se autentico la sesión');
+    }
+  }
 
   const irARegistro = () => {
     navigate('/register');

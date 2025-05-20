@@ -1,6 +1,5 @@
 package dtos;
 
-
 public class RegistroDTO {
     private String nombre;
 

@@ -24,7 +24,7 @@ function Preferencias({ onVolver }) {
 
   const obtenerProductos = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarProductos`);
       setProductos(response.data);
     } catch (error) {
       console.error("Error al obtener productos:", error);
@@ -33,7 +33,7 @@ function Preferencias({ onVolver }) {
 
   const obtenerCarrito = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/carritos/obtenerCarrito/${idConsumidor}`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/carritos/obtenerCarrito/${idConsumidor}`);
       setCarrito(response.data);
     } catch (error) {
       console.error("Error al obtener carrito:", error);
@@ -42,7 +42,7 @@ function Preferencias({ onVolver }) {
 
   const obtenerPreferencias = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/preferencias/obtenerPreferencias/${idConsumidor}`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/preferencias/obtenerPreferencias/${idConsumidor}`);
       setPreferencias(response.data);
     } catch (error) {
       console.error("Error al obtener carrito:", error);
@@ -60,7 +60,7 @@ function Preferencias({ onVolver }) {
 
   const manejarBusquedaSupermercado = (e) => {
     if (e.key === 'Enter') {
-      axios.get(`http://localhost:8082/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSupermercado}`)
+      axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSupermercado}`)
         .then((response) => {
           const coincidencias = [response.data.nombre];
           setResultadosSupermercado(coincidencias);
@@ -72,7 +72,7 @@ function Preferencias({ onVolver }) {
   const guardarPreferencias = async (e) => {
     try {
       await axios.post(
-        `http://localhost:8082/preferencias/agregarPreferencia/${idConsumidor}/${supermercadoFavorito}/${productoFavorito}`
+        `http://localhost:8766/DOMINIOCONSUMIDOR/preferencias/agregarPreferencia/${idConsumidor}/${supermercadoFavorito}/${productoFavorito}`
       );
   
       setSupermercadoFavorito(null);

@@ -23,11 +23,11 @@ function Reportar({ onVolver }) {
 
   const obtenerProductos = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarProductos`);
       setProductos(response.data);
       console.log("Productos:", response.data);
 
-      const preciosresponse = await axios.get(`http://localhost:8082/consumidoresComercio/traerPrecios`);
+      const preciosresponse = await axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/traerPrecios`);
       setPrecios(preciosresponse.data);
       console.log('precios:', preciosresponse.data);
 
@@ -39,7 +39,7 @@ function Reportar({ onVolver }) {
   // llamada a la api para obtener los comercios
   const manejarBusquedaSupermercado = (e) => {
     if (e.key === 'Enter') {
-      const response = axios.get(`http://localhost:8082/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSuper}`)
+      const response = axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarComercioPorNombre?nombre=${busquedaSuper}`)
         .then(function (response) {
           setComercio(response.data)
           const coincidencias = [response.data.nombre];
@@ -91,7 +91,7 @@ function Reportar({ onVolver }) {
       consumidor: consumidor
     }));
     
-    axios.post(`http://localhost:8082/reportes/agregar`,
+    axios.post(`http://localhost:8766/DOMINIOCONSUMIDOR/reportes/agregar`,
       reporteData,
       { headers: { 'Content-Type': 'application/json' } });
       

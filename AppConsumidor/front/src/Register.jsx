@@ -20,13 +20,13 @@ const Register = () => {
                 contrasena: contraEncriptada
             };
 
-            const response = await axios.post("http://localhost:8082/consumidores/guardar", consumidorData, {
+            const response = await axios.post("http://localhost:8766/DOMINIOCONSUMIDOR/consumidores/registrar", consumidorData, {
                 headers: { "Content-Type": "application/json" }
             });
             console.log("Registro exitoso", response.data);
             alert("Registro exitoso");
             const consumidor = response.data;
-            const responseCarrito = await axios.post(`http://localhost:8082/carritos/CrerCarrito/${consumidor.id}`);
+            const responseCarrito = await axios.post(`http://localhost:8766/DOMINIOCONSUMIDOR/carritos/CrerCarrito/${consumidor.id}`);
 
             window.history.back();
         } catch (error) {

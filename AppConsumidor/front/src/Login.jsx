@@ -10,7 +10,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleLogin = async () => {
-        const response = await axios.post("http://localhost:8082/consumidores/inicioSesion", null, {
+        const response = await axios.post("http://localhost:8766/DOMINIOCONSUMIDOR/consumidores/inicioSesion", null, {
             params: {
                 correo: correo,
                 contrasena: password
@@ -23,12 +23,30 @@ const Login = () => {
             localStorage.setItem("consumidorNombre", consumidor.nombre);
 
             console.info("id Consumidor: ", consumidor.id);
-            navigate("/consumidor");
+            obtenerToken();
         } else {
             alert("Credenciales incorrectas");
         }
     };
 
+    const obtenerToken = async () => {
+    const response = await axios.post('http://localhost:8766/GENERADORJWT/auth/generarToken', null, {
+      params: {
+        tipoUsuario: "consumidor",
+        correo: correo,
+        contrasena: password
+      }
+    });
+    if (response.status === 200) {
+      const token = response.data;
+      localStorage.setItem('token', token);
+      console.info('token', token);
+      navigate("/consumidor");
+    } else {
+      alert('No se autentico la sesión');
+    }
+  }
+    
     const irARegistro = () => {
         navigate("/register");
     };

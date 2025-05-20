@@ -35,9 +35,8 @@ public class ComercioController {
     @Autowired
     private EncriptamientoService encriptamientoService;
 
-    @PostMapping("/guardar")
-    public ResponseEntity<RegistroDTO> crearComercio(@RequestBody RegistroDTO comercio) {
-
+    @PostMapping("/registrar")
+    public ResponseEntity<RegistroDTO> registrar(@RequestBody RegistroDTO comercio) {
         logger.info("Datos recibidos: {}", comercio);
         return ResponseEntity.ok(convertidorRegistro.convertFromEntity(comercioService.crearComercio(convertidorRegistro.convertFromDto(comercio))));
     }

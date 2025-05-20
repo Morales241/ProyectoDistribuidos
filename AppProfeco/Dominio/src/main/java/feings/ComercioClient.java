@@ -26,15 +26,15 @@ public interface ComercioClient {
     ResponseEntity<ProductoDTO> buscarProductoPornombre(@RequestParam String nombre);
 
     @GetMapping("/comercios/traerComercios")
-    public ResponseEntity<List<ComercioDTO>> traerComercios();
+    ResponseEntity<List<ComercioDTO>> traerComercios();
 
     @GetMapping("/comercios/buscarComercioIdPorNombre")
-    public ResponseEntity<Long> buscarComercioIdPorNombre(@RequestParam String nombre);
+    ResponseEntity<Long> buscarComercioIdPorNombre(@RequestParam String nombre);
 
     @GetMapping("/precioProductos/traerProductoEspecificoPorId/{Idproducto}")
-    public ResponseEntity<PrecioProductoDTO> traerProductoEspecificoPorId(@PathVariable Long Idproducto);
+    ResponseEntity<PrecioProductoDTO> traerProductoEspecificoPorId(@PathVariable Long Idproducto);
 
     @GetMapping("/precioProductos/buscarIdEspecificamente/{producto}/{comercio}")
-    public ResponseEntity<Long> findEspecificIDPrecioProducto(@PathVariable String producto, @PathVariable String comercio);
+    ResponseEntity<Long> findEspecificIDPrecioProducto(@PathVariable String producto, @PathVariable String comercio);
 
 }

@@ -14,7 +14,7 @@ function Wishlist() {
 
   const obtenerComercios = async () => {
     try {
-      const response = await axios.get('http://localhost:8082/consumidoresComercio/traerComercios');
+      const response = await axios.get('http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/traerComercios');
       setComercios(response.data);
     } catch (error) {
       console.error('Error al obtener comercios:', error);
@@ -30,7 +30,7 @@ function Wishlist() {
     };
 
     try {
-      await axios.post('http://localhost:8082/wishList/guardarWishList', data, {
+      await axios.post('http://localhost:8766/DOMINIOCONSUMIDOR/wishList/guardarWishList', data, {
         headers: { 'Content-Type': 'application/json' }
       });
       alert('¡Sugerencia enviada con éxito!');

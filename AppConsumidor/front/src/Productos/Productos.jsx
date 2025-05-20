@@ -22,10 +22,10 @@ function Productos() {
 
   const obtenerProductos = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/consumidoresComercio/buscarProductos`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarProductos`);
       setProductos(response.data);
 
-      const preciosresponse = await axios.get(`http://localhost:8082/consumidoresComercio/traerPrecios`);
+      const preciosresponse = await axios.get(`http://localhost:8766/DOMINIOCONSUMIDOR/consumidoresComercio/traerPrecios`);
       setPrecios(preciosresponse.data);
     } catch (error) {
       console.error('Error al obtener productos:', error);
@@ -86,7 +86,7 @@ function Productos() {
       cantidad: cantidad
     };
 
-    axios.post(`http://localhost:8082/carritos/agregarACarrito/${consumidorID}`,
+    axios.post(`http://localhost:8766/DOMINIOCONSUMIDOR/carritos/agregarACarrito/${consumidorID}`,
       productoCarrito,
       { headers: { 'Content-Type': 'application/json' } });
 
@@ -111,7 +111,7 @@ function Productos() {
         cantidad: cantidadComparacion
       };
 
-      axios.post(`http://localhost:8082/carritos/agregarACarrito/${consumidorID}`,
+      axios.post(`http://localhost:8766/DOMINIOCONSUMIDOR/carritos/agregarACarrito/${consumidorID}`,
         productoCarrito,
         { headers: { 'Content-Type': 'application/json' } });
 

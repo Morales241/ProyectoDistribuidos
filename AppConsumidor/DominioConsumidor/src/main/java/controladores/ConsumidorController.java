@@ -30,7 +30,7 @@ public class ConsumidorController {
 
     private Convertidor<ConsumidorDTO, Consumidor> convertidorConsumidor = new ConvertidorConsumidor();
 
-    @PostMapping("/guardar")
+    @PostMapping("/registrar")
     public ResponseEntity<Consumidor> registrar(@RequestBody Consumidor consumidor) {
         consumidor.setFechaRegistro(LocalDate.now());
         return ResponseEntity.ok(servicio.registrar(consumidor));
