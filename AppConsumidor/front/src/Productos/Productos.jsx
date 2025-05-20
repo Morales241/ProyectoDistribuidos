@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./Productos.css";
 import axios from 'axios';
+axios.defaults.headers.common = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
 import { useNavigate } from 'react-router-dom';
 
 function Productos() {

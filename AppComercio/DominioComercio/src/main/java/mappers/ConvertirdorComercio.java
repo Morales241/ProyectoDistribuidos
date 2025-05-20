@@ -13,6 +13,7 @@ public class ConvertirdorComercio extends Convertidor<ComercioDTO, Comercio> {
         ComercioDTO dto = new ComercioDTO();
         dto.setNombre(comercio.getNombre());
         dto.setTipo(comercio.getTipo());
+        dto.setId(comercio.getId());
         return dto;
     }
 

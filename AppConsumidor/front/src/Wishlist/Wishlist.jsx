@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+axios.defaults.headers.common = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
 import './Wishlist.css';
 
 function Wishlist() {

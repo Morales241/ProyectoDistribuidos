@@ -20,7 +20,9 @@ const Login = () => {
     if (response.status === 200) {
       const comercio = response.data;
       localStorage.setItem('nombreComercio', comercio.nombre);
+      localStorage.setItem('comercioId', comercio.id);
       console.info('nombre Comercio:', comercio.nombre);
+      console.info('comercioId:', comercio.id);
       obtenerToken();
     } else {
       alert('Credenciales incorrectas');

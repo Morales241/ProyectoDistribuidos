@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Ofertas.css';
 import axios from 'axios';
+axios.defaults.headers.common = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
 
 function Ofertas({ onVolver }) {
   const [busqueda, setBusqueda] = useState('');

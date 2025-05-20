@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+axios.defaults.headers.common = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
 import { useNavigate } from 'react-router-dom';
 import { BiPlusCircle, BiEdit, BiSearchAlt, BiStar, BiArrowBack, BiSolidReport  } from 'react-icons/bi';
 import './Mercado.css';

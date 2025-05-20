@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+axios.defaults.headers.common = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
 import './Reportar.css';
 
 function Reportar({ onVolver }) {
