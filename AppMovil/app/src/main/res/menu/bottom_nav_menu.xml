@@ -14,10 +14,10 @@
         android:title="Preferencias" />
 
     <item
-        android:id="@+id/navigation_reseñas"
+        android:id="@+id/navigation_Resenas"
         android:title="Reseñas" />
 
     <item
-        android:id="@+id/navigation_wishlist"
+        android:id="@+id/navigation_Wishlist"
         android:title="WishList" />
 </menu>

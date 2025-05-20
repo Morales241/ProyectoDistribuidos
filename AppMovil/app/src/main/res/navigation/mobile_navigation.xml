@@ -64,5 +64,18 @@
         android:id="@+id/agregarComentarioFragment"
         android:name="morales.jesus.appmovil.ui.reportes.agregar_comentario"
         android:label="Agregar comentario"/>
+    <fragment
+        android:id="@+id/navigation_Preferencias"
+        android:name="morales.jesus.appmovil.ui.preferencias.PreferenciasFragment"
+        android:label="PreferenciasFragment" />
+    <fragment
+        android:id="@+id/navigation_Resenas"
+        android:name="morales.jesus.appmovil.ui.reseñas.Resenas"
+        android:label="ResenasFragment" />
+    <fragment
+        android:id="@+id/navigation_Wishlist"
+        android:name="morales.jesus.appmovil.ui.wishlist.Wishlist"
+        android:label="fragment_wishlist"
+        tools:layout="@layout/fragment_wishlist" />
 
 </navigation>

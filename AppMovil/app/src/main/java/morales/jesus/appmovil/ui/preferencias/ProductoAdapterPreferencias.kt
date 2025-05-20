@@ -7,17 +7,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import morales.jesus.appmovil.R
 
-class ProductoAdapter(
+class ProductoAdapterPreferencias(
     private val productos: List<String>,
     private val onItemClick: (String) -> Unit
-) : RecyclerView.Adapter<ProductoAdapter.ProductoViewHolder>() {
+) : RecyclerView.Adapter<ProductoAdapterPreferencias.ProductoViewHolder>() {
 
     inner class ProductoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val txtProducto: TextView = itemView.findViewById(R.id.txtProducto)
+        val txtProducto: TextView = itemView.findViewById(R.id.tvProducto)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_producto, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_producto3, parent, false)
         return ProductoViewHolder(view)
     }
 
