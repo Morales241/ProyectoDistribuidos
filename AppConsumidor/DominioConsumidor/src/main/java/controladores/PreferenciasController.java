@@ -21,7 +21,7 @@ import servicios.PreferenciasService;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/preferencias")
 public class PreferenciasController {

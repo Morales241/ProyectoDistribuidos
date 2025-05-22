@@ -54,7 +54,7 @@ class Resenas : Fragment() {
     private fun obtenerComercios() {
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("http://192.168.0.101:8082/consumidoresComercio/traerComercios")
+            .url("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidoresComercio/traerComercios")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -120,7 +120,7 @@ class Resenas : Fragment() {
         )
 
         val request = Request.Builder()
-            .url("http://192.168.0.101:8082/resenas/guardarResena")
+            .url("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/resenas/guardarResena")
             .post(body)
             .build()
 

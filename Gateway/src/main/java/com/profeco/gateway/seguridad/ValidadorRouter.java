@@ -13,7 +13,11 @@ public class ValidadorRouter {
             "/eureka",
             "/inicioSesion",
             "/generarToken",
-            "/CrerCarrito"
+            "/CrerCarrito",
+            "/consumidoresComercio",
+            "/multas",
+            "/reportesProfeco",
+            "/reviciones"
     );
 
     public Predicate<ServerHttpRequest> esSeguro =

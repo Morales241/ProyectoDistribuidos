@@ -24,10 +24,10 @@ class ProductosViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val productosResponse = withContext(Dispatchers.IO) {
-                    URL("http://192.168.0.101:8082/consumidoresComercio/buscarProductos").readText()
+                    URL("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarProductos").readText()
                 }
                 val preciosResponse = withContext(Dispatchers.IO) {
-                    URL("http://192.168.0.101:8082/consumidoresComercio/traerPrecios").readText()
+                    URL("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidoresComercio/traerPrecios").readText()
                 }
 
                 val gson = Gson()

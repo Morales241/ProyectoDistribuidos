@@ -49,7 +49,7 @@ function Profeco({ onVolver }) {
 
   const cargarPrecioProducto = async (tienda, producto) => {
     try {
-      const response = await axios.get(`http://localhost:8085/consumidoresComercio/obtenerPrecioProductoPorNombres/${producto}/${tienda}`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOPROFECO/consumidoresComercio/obtenerPrecioProductoPorNombres/${producto}/${tienda}`);
       setPrecioProducto(response.data.precio);
     } catch (error) {
       console.error('Error al obtener precio:', error);
@@ -60,7 +60,7 @@ function Profeco({ onVolver }) {
   const manejarBusquedaTienda = async (e) => {
     if (e.key === 'Enter') {
       try {
-        const response = await axios.get('http://localhost:8085/consumidoresComercio/traerComercios');
+        const response = await axios.get('http://localhost:8766/DOMINIOPROFECO/consumidoresComercio/traerComercios');
         const comercios = response.data;
         const coincidencias = comercios.filter(c =>
           c.nombre.toLowerCase().includes(busqueda.toLowerCase())
@@ -74,7 +74,7 @@ function Profeco({ onVolver }) {
 
   const cargarReportesDeTienda = async (tienda) => {
     try {
-      const response = await axios.get(`http://localhost:8085/reportesProfeco/buscarReportesPorNombreComercio/${tienda}`);
+      const response = await axios.get(`http://localhost:8766/DOMINIOPROFECO/reportesProfeco/buscarReportesPorNombreComercio/${tienda}`);
       setReportes(response.data);
     } catch (error) {
       console.error('Error al cargar reportes:', error);
@@ -90,13 +90,15 @@ function Profeco({ onVolver }) {
     };
 
     try {
-      const response = await fetch('http://localhost:8085/multas/guardar', {
+      const response = await fetch('http://localhost:8766/DOMINIOPROFECO/multas/guardar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(body)
       });
+      alert('multa enviada');
+      setPantalla('renderContenido')
     } catch (error) {
       console.error('Error al aplicar multa:', error);
       alert('Error al aplicar la multa');
@@ -109,8 +111,9 @@ function Profeco({ onVolver }) {
 
   const invalidarReporte = async () => {
     try {
-      await axios.post(`http://localhost:8085/reportesProfeco/invalidarReporte/${reporteSeleccionado.producto}/${reporteSeleccionado.tienda}/${reporteSeleccionado.contenido}/${reporteSeleccionado.fecha}`);
+      await axios.post(`http://localhost:8766/DOMINIOPROFECO/reportesProfeco/invalidarReporte/${reporteSeleccionado.producto}/${reporteSeleccionado.tienda}/${reporteSeleccionado.contenido}/${reporteSeleccionado.fecha}`);
       alert(`Reporte invalidado correctamente para ${reporteSeleccionado.tienda}`);
+      setPantalla('renderContenido')
     } catch (error) {
       console.error('Error al invalidar reporte:', error);
     }
@@ -123,7 +126,7 @@ function Profeco({ onVolver }) {
       <button className="register-button" 
         onClick={async () => {
           try {
-            const response = await axios.get('http://localhost:8085/reportesProfeco/obtenerTodosLosReportes');
+            const response = await axios.get('http://localhost:8766/DOMINIOPROFECO/reportesProfeco/obtenerTodosLosReportes');
             setReportes(response.data);
             setPantalla('reportes');
           } catch (error) {
@@ -138,9 +141,6 @@ function Profeco({ onVolver }) {
       <button className="register-button" onClick={() => setPantalla('buscarTiendas')}>
         <BiSearchAlt style={{ marginRight: '8px' }} />
         Buscar Tiendas
-      </button>
-      <button className="login-button" style={{ marginTop: '20px' }} onClick={cerrarSesion}>
-        Cerrar sesión
       </button>
     </div>
   );
@@ -298,7 +298,7 @@ function Profeco({ onVolver }) {
           <button
             onClick={async () => {
               try {
-                const response = await axios.get('http://localhost:8085/reportesProfeco/obtenerTodosLosReportes');
+                const response = await axios.get('http://localhost:8766/DOMINIOPROFECO/reportesProfeco/obtenerTodosLosReportes');
                 setReportes(response.data);
                 setPantalla('reportes');
               } catch (error) {

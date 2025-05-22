@@ -124,7 +124,7 @@ function Mercado({ onVolver }) {
           precio: precio
         };
 
-        await axios.post('http://localhost:8080/precioProductos/guardar',
+        await axios.post('http://localhost:8766/DOMINIOCOMERCIO/precioProductos/guardar',
           precioproductoData,
           { headers: { 'Content-Type': 'application/json' } });
 

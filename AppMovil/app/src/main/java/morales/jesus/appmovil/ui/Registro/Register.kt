@@ -65,7 +65,7 @@ class Register : AppCompatActivity() {
         val requestBody = json.toString().toRequestBody("application/json".toMediaType())
 
         val request = Request.Builder()
-            .url("http://10.0.2.2:8082/consumidores/guardar")
+            .url("http://10.0.2.2:8766/DOMINIOCONSUMIDOR/consumidores/guardar")
             .post(requestBody)
             .build()
 

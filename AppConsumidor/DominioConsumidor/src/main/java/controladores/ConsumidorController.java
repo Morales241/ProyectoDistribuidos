@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins ="*")
+//@CrossOrigin(origins ="*")
 @RestController
 @RequestMapping("/consumidores")
 public class ConsumidorController {

@@ -54,7 +54,7 @@ class Wishlist : Fragment() {
 
     private fun obtenerComercios() {
         val request = Request.Builder()
-            .url("http://192.168.0.101:8082/consumidoresComercio/traerComercios")
+            .url("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidoresComercio/traerComercios")
             .build()
 
         OkHttpClient().newCall(request).enqueue(object : Callback {
@@ -99,7 +99,7 @@ class Wishlist : Fragment() {
         val body = RequestBody.create("application/json".toMediaType(), json)
 
         val request = Request.Builder()
-            .url("http://192.168.0.101:8082/wishList/guardarWishList")
+            .url("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/wishList/guardarWishList")
             .post(body)
             .build()
 

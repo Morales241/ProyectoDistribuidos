@@ -23,7 +23,7 @@ import servicios.CarritoService;
 
 @RestController
 @RequestMapping("/notificaciones")
-@CrossOrigin(origins ="*")
+//@CrossOrigin(origins ="*")
 public class NotificacionController {
 
     private final List<OfertaDTO> ofertasRecibidas = new ArrayList<>();

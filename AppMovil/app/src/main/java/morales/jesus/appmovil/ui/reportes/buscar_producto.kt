@@ -63,7 +63,7 @@ class buscar_producto : Fragment() {
 
     private fun buscarProducto() {
         val termino = etBusquedaProducto.text.toString().lowercase()
-        val url = "http://192.168.0.101:8082/consumidoresComercio/traerPrecios"
+        val url = "http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidoresComercio/traerPrecios"
         val queue = Volley.newRequestQueue(requireContext())
         val request = JsonArrayRequest(
             Request.Method.GET, url, null,

@@ -45,7 +45,7 @@ class OfertasFragment : Fragment() {
     private fun obtenerOfertas() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val json = URL("http://192.168.0.101:8082/notificaciones/verOfertas").readText()
+                val json = URL("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/notificaciones/verOfertas").readText()
                 val gson = Gson()
                 val lista = gson.fromJson(json, Array<OfertaDTO>::class.java).toList()
 

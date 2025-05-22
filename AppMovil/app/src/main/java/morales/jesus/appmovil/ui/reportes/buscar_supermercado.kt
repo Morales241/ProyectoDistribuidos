@@ -54,7 +54,7 @@ class buscar_supermercado : Fragment() {
 
     private fun buscarSupermercado(nombre:String) {
         Log.e("reporte buscar comercio", "entro al metodo de buscar comercio")
-        val url = "http://192.168.0.101:8082/consumidoresComercio/buscarComercioPorNombre?nombre=$nombre"
+        val url = "http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarComercioPorNombre?nombre=$nombre"
         val queue = Volley.newRequestQueue(requireContext())
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->

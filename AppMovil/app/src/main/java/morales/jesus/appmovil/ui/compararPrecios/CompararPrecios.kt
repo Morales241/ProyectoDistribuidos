@@ -134,7 +134,7 @@ class CompararPrecios : Fragment() {
             put("cantidad", cantidad)
         }
 
-        val url = "http://192.168.0.101:PUERTO/carritos/agregarACarrito/$consumidorId"
+        val url = "http://192.168.0.101:8766/DOMINIOCONSUMIDOR/carritos/agregarACarrito/$consumidorId"
         val requestQueue = Volley.newRequestQueue(requireContext())
 
         val request = JsonObjectRequest(

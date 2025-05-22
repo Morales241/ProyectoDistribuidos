@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/wishList")
 public class WishListController {

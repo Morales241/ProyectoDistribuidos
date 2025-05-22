@@ -60,7 +60,7 @@ class agregar_comentario : Fragment() {
 
         val request = JsonObjectRequest(
             Request.Method.POST,
-            "http://192.168.0.101:8082/reportes/agregar", json,
+            "http://192.168.0.101:8766/DOMINIOCONSUMIDOR/reportes/agregar", json,
             {
                 Toast.makeText(requireContext(), "¡Reporte enviado!", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack(R.id.navigation_Reportes, false)

@@ -58,7 +58,7 @@ class login : AppCompatActivity() {
             .build()
 
         val request = Request.Builder()
-            .url("http://192.168.0.101:8082/consumidores/inicioSesion")
+            .url("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidores/inicioSesion")
             .post(formBody)
             .build()
 
@@ -82,6 +82,8 @@ class login : AppCompatActivity() {
                         apply()
                     }
 
+                    obtenerToken(correo,contrasena )
+
                     val intent = Intent(this@login, MainActivity::class.java)
                     startActivity(intent)
 
@@ -98,4 +100,45 @@ class login : AppCompatActivity() {
             }
         })
     }
+
+    private fun obtenerToken(correo: String, contrasena: String) {
+        val url = "http://192.168.0.101:8766/GENERADORJWT/auth/generarToken"
+
+        val formBody = FormBody.Builder()
+            .add("tipoUsuario", "consumidor")
+            .add("correo", correo)
+            .add("contrasena", contrasena)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build()
+
+        OkHttpClient().newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("auth", "Error de conexión", e)
+                runOnUiThread {
+                    Toast.makeText(this@login, "Error de red", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val token = response.body?.string()
+                    Log.d("auth", "Token recibido: $token")
+
+                    if (token != null) {
+                        val prefs = getSharedPreferences("datos_usuario", MODE_PRIVATE)
+                        prefs.edit().apply {
+                            putString("token", token)
+                            apply()
+                        }
+                    }
+                } else {
+                }
+            }
+        })
+    }
+
 }

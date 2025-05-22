@@ -11,12 +11,6 @@ const Login = () => {
 
   const handleLogin = async () => {
 
-    const response = await axios.post('http://localhost:8080/comercios/inicioSesion', null, {
-      params: {
-        correo: correo,
-        contrasena: password
-      }
-    });
 
     if (response.status === 200) {
       const comercio = response.data;

@@ -23,11 +23,6 @@ const Register = () => {
 
             };
 
-            const response = await axios.post(
-                'http://localhost:8080/comercios/guardar',
-                comercioData,
-                { headers: { 'Content-Type': 'application/json' } }
-            );
             console.log('Registro exitoso', response.data);
             alert('Registro exitoso');
             window.history.back();

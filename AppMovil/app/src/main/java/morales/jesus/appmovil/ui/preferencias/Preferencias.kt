@@ -95,7 +95,7 @@ class PreferenciasFragment : Fragment() {
 
     private fun obtenerProductos() {
         val request = Request.Builder()
-            .url("http://192.168.0.101:8082/consumidoresComercio/buscarProductos")
+            .url("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarProductos")
             .build()
 
         OkHttpClient().newCall(request).enqueue(object : Callback {
@@ -121,7 +121,7 @@ class PreferenciasFragment : Fragment() {
 
     private fun obtenerCarrito(idConsumidor: Int) {
         val request = Request.Builder()
-            .url("http://192.168.0.101:8082/carritos/obtenerCarrito/$idConsumidor")
+            .url("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/carritos/obtenerCarrito/$idConsumidor")
             .build()
 
         OkHttpClient().newCall(request).enqueue(object : Callback {
@@ -142,7 +142,7 @@ class PreferenciasFragment : Fragment() {
 
     private fun obtenerPreferencias(idConsumidor: Int) {
         val request = Request.Builder()
-            .url("http://192.168.0.101:8082/preferencias/obtenerPreferencias/$idConsumidor")
+            .url("http://192.168.0.101:8766/DOMINIOCONSUMIDOR/preferencias/obtenerPreferencias/$idConsumidor")
             .build()
 
         OkHttpClient().newCall(request).enqueue(object : Callback {
@@ -152,7 +152,10 @@ class PreferenciasFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
                 response.body?.string()?.let {
-                    val prefs = Gson().fromJson(it, Array<PreferenciasDTO>::class.java).toList()
+                    val json = response.body?.string()
+                    Log.d("preferencias", "JSON recibido: $json")
+
+                    val prefs = Gson().fromJson(json, Array<PreferenciasDTO>::class.java).toList()
                     activity?.runOnUiThread {
                         // actualizar UI con prefs
                     }
@@ -162,7 +165,7 @@ class PreferenciasFragment : Fragment() {
     }
 
     private fun buscarSupermercado(nombre: String, callback: (String?) -> Unit) {
-        val url = "http://192.168.0.101:8082/consumidoresComercio/buscarComercioPorNombre?nombre=$nombre"
+        val url = "http://192.168.0.101:8766/DOMINIOCONSUMIDOR/consumidoresComercio/buscarComercioPorNombre?nombre=$nombre"
         val request = Request.Builder().url(url).build()
 
         OkHttpClient().newCall(request).enqueue(object : Callback {
@@ -178,7 +181,7 @@ class PreferenciasFragment : Fragment() {
     }
 
     private fun guardarPreferencias(idConsumidor: Int, supermercado: String, producto: String) {
-        val url = "http://192.168.0.101:8082/preferencias/agregarPreferencia/$idConsumidor/$supermercado/$producto"
+        val url = "http://192.168.0.101:8766/DOMINIOCONSUMIDOR/preferencias/agregarPreferencia/$idConsumidor/$supermercado/$producto"
         val request = Request.Builder().url(url).post(FormBody.Builder().build()).build()
 
         OkHttpClient().newCall(request).enqueue(object : Callback {
