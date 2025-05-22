@@ -60,7 +60,7 @@ function Profeco({ onVolver }) {
   const manejarBusquedaTienda = async (e) => {
     if (e.key === 'Enter') {
       try {
-        const response = await axios.get('http://localhost:8766/DOMINIOPROFECO/consumidoresComercio/traerComercios');
+        const response = await axios.get('http://registro-servicios:8766/DOMINIOPROFECO/consumidoresComercio/traerComercios');
         const comercios = response.data;
         const coincidencias = comercios.filter(c =>
           c.nombre.toLowerCase().includes(busqueda.toLowerCase())
@@ -74,7 +74,7 @@ function Profeco({ onVolver }) {
 
   const cargarReportesDeTienda = async (tienda) => {
     try {
-      const response = await axios.get(`http://localhost:8766/DOMINIOPROFECO/reportesProfeco/buscarReportesPorNombreComercio/${tienda}`);
+      const response = await axios.get(`http://registro-servicios:8766/DOMINIOPROFECO/reportesProfeco/buscarReportesPorNombreComercio/${tienda}`);
       setReportes(response.data);
     } catch (error) {
       console.error('Error al cargar reportes:', error);
@@ -90,7 +90,7 @@ function Profeco({ onVolver }) {
     };
 
     try {
-      const response = await fetch('http://localhost:8766/DOMINIOPROFECO/multas/guardar', {
+      const response = await fetch('http://registro-servicios:8766/DOMINIOPROFECO/multas/guardar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

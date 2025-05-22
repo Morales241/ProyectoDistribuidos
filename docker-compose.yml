@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   
+      - "15672:15672"  
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  registro-servicios:
+    build:
+      context: ./RegistroServicios
+      dockerfile: Dockerfile
+    container_name: registro-servicios
+    ports:
+      - "8761:8761"
+    depends_on:
+      - rabbitmq
+
+  generador-jwt:
+    build:
+      context: ./GeneradorJWT
+      dockerfile: Dockerfile
+    container_name: generadorjwt
+    ports:
+      - "8091:8091"
+    depends_on:
+      - registro-servicios
+
+  api-gateway:
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8766:8766"
+    depends_on:
+      - registro-servicios
+
+#esto es el back
+  dominio-comercio:
+    build:
+      context: ./AppComercio/DominioComercio
+      dockerfile: Dockerfile
+    container_name: backcomercio
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - registro-servicios
+      - rabbitmq
+
+  dominio-consumidor:
+    build:
+      context: ./AppConsumidor/DominioConsumidor
+      dockerfile: Dockerfile
+    container_name: backconsumidor
+    ports:
+      - "8082:8082"
+    restart: always
+    depends_on:
+      - registro-servicios
+      - rabbitmq
+
+  dominio-profeco:
+    build:
+      context: ./AppProfeco/Dominio
+      dockerfile: Dockerfile
+    container_name: backprofeco
+    ports:
+      - "8085:8085"
+    restart: always
+    depends_on:
+      - registro-servicios
+      - rabbitmq
+
+#esto es el front
+  front-profeco:
+    build:
+      context: ./AppProfeco/Front
+      dockerfile: Dockerfile
+    container_name: frontprofeco
+    ports:
+      - "3000:80"
+
+  front-consumidor:
+    build:
+      context: ./AppConsumidor/Front
+      dockerfile: Dockerfile
+    container_name: frontconsumidor
+    ports:
+      - "3001:80"
+
+  front-comercio:
+    build:
+      context: ./AppComercio/Front
+      dockerfile: Dockerfile
+    container_name: frontcomercio
+    ports:
+      - "3002:80"
